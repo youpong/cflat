@@ -11,7 +11,9 @@
 %%
 \"                  { BEGIN IN_STRING; }
 <IN_STRING>[^\\\n"] { yymore(); }
+<IN_STRING>\\.      { yymore(); }
 <IN_STRING>\n       { error("missing terminating '\"' character"); }
+
 <IN_STRING>\"       { 
                       BEGIN 0; 
                       yytext[yyleng-1] = '\0';
