@@ -30,6 +30,7 @@ noreturn void error(char *, ...);
 
 void expect(int, int, int);
 void expect_ptr(int, void *, void *);
+void expect_str(int, char *, char *);
 
 /* util_test.c */
 void run_util_test();

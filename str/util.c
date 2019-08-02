@@ -83,3 +83,9 @@ void expect_ptr(int line, void *expected, void *actual) {
     return;
   error("%d: %d expected, but got %d\n", line, expected, actual);
 }
+
+void expect_str(int line, char *expected, char *actual) {
+  if(!strcmp(expected, actual))
+    return;
+  error("%d: \"%s\" expected, but got \"%s\"\n", line, expected, actual);
+}

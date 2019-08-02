@@ -17,6 +17,10 @@ char *str_decode(char *literal) {
     
     /* 以降は '\' でつづく文字列を処理する */
     p++;
+    if(*p == '\0') {
+      *q++ = '\\';
+      break;
+    }
     
     /* \127 */    
     if ('0' <= *(p + 0) && '7' >= *(p + 0) &&
@@ -54,6 +58,7 @@ char *str_decode(char *literal) {
       break;
     default:
       *q++ = *p++;
+      break;
     }
   }
   
