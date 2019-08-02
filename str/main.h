@@ -4,3 +4,4 @@ enum {
 
 char *str_decode(char *);
 void test_str_decode();
+void test_lex();

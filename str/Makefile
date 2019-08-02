@@ -2,7 +2,7 @@ TARGET = tokenizer
 
 LIBS = -ll
 LEX = flex
-SRCS = main.c str_decode.c util.c test_str_decode.c
+SRCS = main.c str_decode.c util.c test_str_decode.c test.c
 OBJS = $(SRCS:.c=.o) lex.yy.o
 
 .PHONY: all clean check

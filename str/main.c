@@ -6,6 +6,7 @@ int main(int argc, char **argv) {
 
   if(argc == 2 && !strcmp(argv[1], "--test")) {
     test_str_decode();
+    test_lex();
     return 0;
   }
 
@@ -16,3 +17,4 @@ int main(int argc, char **argv) {
 
   return 0;
 }
+
