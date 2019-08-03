@@ -12,7 +12,18 @@ void test_lex() {
 
   expect(__LINE__, TOKEN_STRING, yylex());
   expect_str(__LINE__, "\"\t\n\127\\", str_decode(yytext));
-}
-  
 
+  expect(__LINE__, TOKEN_CHAR, yylex());
+  expect_str(__LINE__, "a", str_decode(yytext));
+
+  expect(__LINE__, TOKEN_CHAR, yylex());
+  expect_str(__LINE__, "W", str_decode(yytext));
+}
+/*
+errors
+''   - empty character
+'ab' - multi-character
+"    - missing terminating
+'    - missing terminating
+*/
 
