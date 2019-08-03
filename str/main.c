@@ -16,10 +16,10 @@ int main(int argc, char **argv) {
   while ((ret = yylex()) != 0) {
     switch(ret) {
     case TOKEN_STRING:
-      printf("TOKEN_STRING(%s:%s)", yytext, str_decode(yytext));
+      printf("TOKEN_STRING(%s:%s)\n", yytext, str_decode(yytext));
       break;
     case TOKEN_CHAR:
-      printf("TOKEN_CHAR(%s:%s)", yytext, str_decode(yytext));
+      printf("TOKEN_CHAR(%s:%s)\n", yytext, str_decode(yytext));
       break;
     }
   }

@@ -1,11 +1,12 @@
 %{
-/*
-returns tokens.
-- string literal(TOKEN_STRING)
-- character literal (TOKEN_CHAR)
-throw away
-- block comment
-*/
+
+// returns tokens.
+// - string literal(TOKEN_STRING) "string"
+// - character literal (TOKEN_CHAR) 'c'
+// throw away
+// - block comment /* comment */
+// - line comment  // comment
+
 #include "main.h"
 #include "util.h"
 %}
@@ -13,6 +14,8 @@ throw away
 %x IN_STRING IN_CHAR TERM_CHAR IN_BLOCK_COMMENT
 
 %%
+"//".*                    { /* throw away */; }
+
 "/*"                      { BEGIN IN_BLOCK_COMMENT; }
 <IN_BLOCK_COMMENT>.
 <IN_BLOCK_COMMENT><<EOF>> { error("unterminated /* comment"); }
