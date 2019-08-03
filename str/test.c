@@ -21,9 +21,12 @@ void test_lex() {
 }
 /*
 errors
-''   - empty character
-'ab' - multi-character
-"    - missing terminating
-'    - missing terminating
+/*<<EOF>> - missing terminating
+''        - empty character
+'ab'      - multi-character
+"\n       - missing terminating
+"<<EOF>>  - missing terminating
+'\n       - missing terminating
+'<<EOF>>  - missing terminating
 */
 
