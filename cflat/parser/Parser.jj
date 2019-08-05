@@ -7,7 +7,11 @@ package parser;
 import java.io.*;
 
 class Parser {
-  
+
+  private boolean isType(String name) {
+    // TODO:
+    return false;
+  }  
 }
 PARSER_END(Parser)
 
@@ -36,5 +40,413 @@ MORE: { <"'"> : IN_CHARACTER }
 <CHARACTER_TERM> TOKEN: { <CHARACTER: "'"> : DEFAULT }
 
 TOKEN: {
-       <INTEGER: (["0"-"9"])+>
+    <BREAK    : "break"   >
+  | <CASE     : "case"    >
+  | <CHAR     : "char"    >
+  | <CONST    : "const"   >
+  | <CONTINUE : "continue">
+  | <DEFAULT_ : "default" >
+  | <DO       : "do"      >
+  | <ELSE     : "else"    >
+  | <FOR      : "for"     >
+  | <GOTO     : "goto"    >
+  | <IF       : "if"      >
+  | <INT      : "int"     >
+  | <IMPORT   : "import"  >
+  | <LONG     : "long"    >
+  | <RETURN   : "return"  >
+  | <SHORT    : "short"   >
+  | <SIZEOF   : "sizeof"  >
+  | <STATIC   : "static"  >
+  | <STRUCT   : "struct"  >
+  | <SWITCH   : "switch"  >
+  | <TYPEDEF  : "typedef" >
+  | <UNION    : "union"   >
+  | <UNSIGNED : "unsigned">
+  | <VOID     : "void"    >
+  | <WHILE    : "while"   >
+}
+
+TOKEN: {
+    <INTEGER: (["0"-"9"])+>
+}
+
+TOKEN: {
+    <IDENTIFIER: ["a"-"z", "A"-"Z", "_"](["a"-"z", "A"-"Z", "_", "0"-"9"])*>
+}
+
+void compilation_unit(): {}
+{
+  import_stmts() top_defs() <EOF>
+}
+
+void import_stmts() : {}
+{
+  (import_stmt())*		
+}
+
+void import_stmt() : {}
+{
+  <IMPORT> name() ("." name())* ";"
+}
+
+void top_defs() : {}
+{
+  ( LOOKAHEAD(storage() typeref() <IDENTIFIER> "(")
+    defun()
+  | LOOKAHEAD(3)
+    defvars()
+  | defconst()
+  | defstruct()
+  | defunion()
+  | typedef()
+  )*
+}
+
+void defun() : {}
+{
+  storage() typeref() name() "(" params() ")" block()
+}
+
+void params() : {}
+{
+  LOOKAHEAD(<VOID> ")")
+  <VOID>
+  | fixedparams() ["," "..."]
+}
+
+void fixedparams() : {}
+{
+  param() (LOOKAHEAD(2) "," param())*
+}
+
+void param() : {}
+{
+  type() name()
+}
+
+void block() : {}
+{
+  "{" defvar_list() stmts() "}"
+}
+
+void defvars() : {}
+{
+  storage() type() name() ["=" expr()]
+              ("," name() ["=" expr()])* ";"
+}
+void storage() : {}
+{
+  [<STATIC>]
+}
+
+void defconst(): {}
+{
+  <CONST> type() name() "=" expr() ";"
+}
+
+void defstruct(): {}
+{
+  <STRUCT> name() member_list() ";"
+}
+
+void defunion(): {}
+{
+  <UNION> name() member_list() ";"
+}
+
+void typedef(): {}
+{
+  <TYPEDEF> typeref() <IDENTIFIER> ";"
+}
+
+void name() : {}
+{
+  <IDENTIFIER>
+}
+
+void type() : {}
+{
+  typeref()
+}
+
+void typeref() : {}
+{
+  typeref_base()
+  ( LOOKAHEAD(2) "[" "]"
+  | "[" <INTEGER> "]"
+  | "*"
+  | "(" param_typerefs() ")"
+  )*
+}
+
+void typeref_base() : {}
+{
+  <VOID>
+  | <CHAR>
+  | <SHORT>
+  | <INT>
+  | <LONG>
+  | LOOKAHEAD(2) <UNSIGNED> <CHAR>
+  | LOOKAHEAD(2) <UNSIGNED> <SHORT>
+  | LOOKAHEAD(2) <UNSIGNED> <INT>
+  | <UNSIGNED> <LONG>
+  | <STRUCT> <IDENTIFIER>
+  | <UNION> <IDENTIFIER>
+  | LOOKAHEAD({isType(getToken(1).image)}) <IDENTIFIER>
+}
+
+void param_typerefs() : {}
+{
+  LOOKAHEAD(<VOID> ")")
+  <VOID>
+  | fixedparam_typerefs() [ "," "..." ]
+}
+
+void fixedparam_typerefs() : {}
+{
+  typeref() ( LOOKAHEAD(2) "," typeref() )*
+}
+
+void defvar_list() : {}
+{
+  defvars()
+}
+
+void stmts() : {}
+{
+  (stmt())*
+}
+
+void stmt() : {}
+{
+  (";"
+  | LOOKAHEAD(2) labeled_stmt()
+  | expr() ";"
+  | block()
+  | if_stmt()
+  | while_stmt()
+  | dowhile_stmt()
+  | for_stmt()
+  | switch_stmt()
+  | break_stmt()
+  | continue_stmt()
+  | goto_stmt()
+  | return_stmt()
+  )
+}
+
+void labeled_stmt() : {}
+{
+  <IDENTIFIER> ":" stmt()
+}
+
+void if_stmt() : {}
+{
+  <IF> "(" expr() ")" stmt() [LOOKAHEAD(1) <ELSE> stmt()]
+}
+
+void while_stmt() : {}
+{
+  <WHILE> "(" expr() ")" stmt()
+}
+
+void dowhile_stmt() : {}
+{
+  <DO> stmt() <WHILE> "(" expr() ")" ";"
+}
+
+void for_stmt() : {}
+{
+  <FOR> "(" [expr()] ";" [expr()] ";" [expr()] ")" stmt()
+}
+
+void switch_stmt() : {}
+{
+  <SWITCH> "(" expr() ")" "{" case_clauses() "}"
+}
+
+void case_clauses() : {}
+{
+  (case_clause())*
+  [default_clause()]
+}
+
+void case_clause() : {}
+{
+  cases() case_body()
+}
+
+void cases() : {}
+{
+  (<CASE> primary() ":")+
+}
+
+void default_clause() : {}
+{
+  <DEFAULT_> ":" case_body()
+}
+
+void case_body() : {}
+{
+  (stmt())+
+}
+
+void break_stmt() : {}
+{
+  <BREAK> ";"
+}
+
+void continue_stmt() : {}
+{
+  <CONTINUE> ";"
+}
+
+void return_stmt() : {}
+{
+  LOOKAHEAD(2) <RETURN> ";"
+  | <RETURN> expr() ";"
+}  
+
+void goto_stmt() : {}
+{
+  <GOTO> <IDENTIFIER> ";"
+}
+
+void member_list() : {}
+{
+  "{" (slot() ";")* "}"
+}
+
+void slot() : {}
+{
+  type() name()
+}
+
+void expr() : {}
+{
+  LOOKAHEAD(term() "=")
+  term() "=" expr()
+  | LOOKAHEAD(term() opassign_op())
+  term() opassign_op() expr()
+  | expr10()
+}
+
+void opassign_op() : {}
+{
+  ( "+="
+  | "-="
+  | "*="
+  | "/="
+  | "%="
+  | "&="
+  | "|="
+  | "^="
+  | "<<="
+  | ">>="
+  )
+}
+
+void expr10() : {}
+{
+  expr9() [ "?" expr() ":" expr10()]
+}
+
+void expr9() : {}
+{
+  expr8() ("||" expr8())*
+}
+
+void expr8() : {}
+{
+  expr7() ("&&" expr7())*
+}
+
+void expr7() : {}
+{
+  expr6() ( ">" expr6()
+          | "<" expr6()
+          | ">=" expr6()
+          | "<=" expr6()
+          | "==" expr6()
+          | "!=" expr6())*
+}
+
+void expr6() : {}
+{
+  expr5() ("|" expr5())*
+}
+void expr5() : {}
+{
+  expr4() ("^" expr4())*
+}
+
+void expr4() : {}
+{
+  expr3() ("&" expr3())*
+}
+
+void expr3() : {}
+{
+  expr2() ( ">>" expr2()
+          | "<<" expr2())*
+}
+
+void expr2() : {}
+{
+  expr1() ( "+" expr1()
+          | "-" expr1())*
+}
+
+void expr1() : {}
+{
+  term() ( "*" term()
+         | "/" term()
+	 | "%" term())* 
+}
+
+void term() : {}
+{
+  LOOKAHEAD("(" type()) "(" type() ")" term()
+  | unary()
+}
+
+void unary() : {}
+{
+    "++" unary()
+  | "--" unary()
+  | "+" unary()
+  | "-" unary()
+  | "!" unary()
+  | "~" unary()
+  | "*" unary()
+  | "&" unary()
+  | LOOKAHEAD(3) <SIZEOF> "(" type() ")"
+  | <SIZEOF> unary()
+  | postfix()
+}
+
+void postfix() : {}
+{
+  primary() ( "++"
+            | "--"
+	    | "[" expr() "]"
+	    | "." name()
+	    | "->" name()
+	    | "(" args() ")"
+	    )*
+}
+
+void args() : {}
+{
+  [ expr() ("," expr())* ]
+}
+
+void primary() : {}
+{
+    <INTEGER>
+  | <CHARACTER>
+  | <STRING>
+  | <IDENTIFIER>
+  | "(" expr() ")"
 }
