@@ -1,5 +1,20 @@
-AUTO_FILES = Adder.java AdderConstants.java AdderTokenManager.java \
-		ParseException.java SimpleCharStream.java \
-		Token.java TokenMgrError.java
+WORK_FILES = Adder.java  AdderConstants.java  AdderTokenManager.java \
+             Parser.java ParserConstants.java ParserTokenManager.java \
+	     ParseException.java SimpleCharStream.java \
+	     Token.java TokenMgrError.java
+TARGET = Adder.class
+JAVAC = javac
+JAVACC = javacc
+
+.PHONY: all clean
+.SUFFIXES: .class .java .jj
+
+
+all: $(TARGET)
 clean:
-	rm -f *.class $(AUTO_FILES)
+	rm -f *.class $(WORK_FILES)
+
+.java.class:
+	$(JAVAC) $<
+.jj.java:
+	$(JAVACC) $<
