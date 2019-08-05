@@ -1,0 +1,64 @@
+options {
+	STATIC = false;
+}
+
+PARSER_BEGIN(Parser)
+import java.io.*;
+
+class Parser {
+    static public void main(String[] args) {
+	for (String arg: args) {
+	    try {
+		System.out.println(evaluate(arg));
+	    }
+	    catch(ParseException ex) {
+		System.out.println(ex.getMessage());
+	    }
+	}
+    }	     
+
+    static public long evaluate(String src) throws ParseException {
+	Reader reader = new StringReader(src);
+	return new Parser(reader).expr();
+    }
+}
+PARSER_END(Parser)
+
+SPECIAL_TOKEN: { <LINE_COMMENT: "//.*"> }
+
+MORE: { <"/*"> : IN_BLOCK_COMMENT }
+<IN_BLOCK_COMMENT> MORE: { <~[]> }
+<IN_BLOCK_COMMENT> SPECIAL_TOKEN: { <BLOCK_COMMENT: "*/"> : DEFAULT }
+
+MORE: { <"\""> : IN_STRING }
+<IN_STRING> MORE: {
+    <(~["\"","\\","\n","\r"])+>
+  | <"\\"(["0"-"7"]){3}>
+  | <"\\"~[]>
+}
+<IN_STRING> TOKEN: { <STRING: "\""> : DEFAULT }
+
+MORE: { <"'"> : IN_CHARACTER }
+<IN_CHARACTER> MORE: {
+    <~["'","\\","\n","\r"]> : CHARACTER_TERM
+  | <"\\"(["0"-"7"]){3}>    : CHARACTER_TERM
+  | <"\\"~[]>               : CHARACTER_TERM
+}
+<CHARACTER_TERM> TOKEN: { <CHARACTER: "'"> : DEFAULT }
+
+SKIP: { <[" ","\t","\r","\n"]> }
+
+TOKEN: {
+       <INTEGER: (["0"-"9"])+>
+}
+
+long expr():
+{
+    Token x, y;
+}
+{
+    x=<INTEGER> "+" y=<INTEGER> <EOF>
+    {
+        return Long.parseLong(x.image) + Long.parseLong(y.image);
+    }
+}

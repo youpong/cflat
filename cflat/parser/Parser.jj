@@ -1,0 +1,40 @@
+options {
+  STATIC = false;
+}
+
+PARSER_BEGIN(Parser)
+package parser;
+import java.io.*;
+
+class Parser {
+  
+}
+PARSER_END(Parser)
+
+SKIP: { <[" ","\t","\r","\n"]> }
+
+SPECIAL_TOKEN: { <LINE_COMMENT: "//.*"> }
+
+MORE: { <"/*"> : IN_BLOCK_COMMENT }
+<IN_BLOCK_COMMENT> MORE: { <~[]> }
+<IN_BLOCK_COMMENT> SPECIAL_TOKEN: { <BLOCK_COMMENT: "*/"> : DEFAULT }
+
+MORE: { <"\""> : IN_STRING }
+<IN_STRING> MORE: {
+    <(~["\"","\\","\n","\r"])+>
+  | <"\\"(["0"-"7"]){3}>
+  | <"\\"~[]>
+}
+<IN_STRING> TOKEN: { <STRING: "\""> : DEFAULT }
+
+MORE: { <"'"> : IN_CHARACTER }
+<IN_CHARACTER> MORE: {
+    <~["'","\\","\n","\r"]> : CHARACTER_TERM
+  | <"\\"(["0"-"7"]){3}>    : CHARACTER_TERM
+  | <"\\"~[]>               : CHARACTER_TERM
+}
+<CHARACTER_TERM> TOKEN: { <CHARACTER: "'"> : DEFAULT }
+
+TOKEN: {
+       <INTEGER: (["0"-"9"])+>
+}
