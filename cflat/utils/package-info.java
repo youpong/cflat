@@ -1,0 +1,4 @@
+/**
+ * ユーティリティクラス
+ */
+package cflat.utils;

@@ -6,6 +6,9 @@ PARSER_BEGIN(Parser)
 package cflat.parser;
 import java.io.*;
 
+/**
+ * parser
+ */
 public class Parser {
 
   private boolean isType(String name) {
