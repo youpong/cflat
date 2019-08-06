@@ -11,4 +11,8 @@ public class ErrorHandler {
 	this.programId = programid;
 	stream = System.err;
     }
+
+    public void error(String msg) {
+	// TODO
+    }
 }
