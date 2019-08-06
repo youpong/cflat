@@ -17,7 +17,11 @@
       <compilerarg value="-Xlint:unchecked" />
       <include name="cflat/**/*.java" />
     </javac>
-    <jar jarfile="${build.jar}" basedir="${build.classes.dir}" />
+    <jar jarfile="${build.jar}" basedir="${build.classes.dir}">
+      <manifest>
+	<attribute name="Main-Class" value="cflat.Main" />
+      </manifest>
+    </jar>
   </target>
   
   <target name="clean" depends="init, clean-build">
