@@ -23,6 +23,12 @@
       </manifest>
     </jar>
   </target>
+
+  <target name="javadoc" depends="init, parser">
+    <javadoc destdir="javadoc">
+      <fileset dir="${src.dir}" />
+    </javadoc>
+  </target>
   
   <target name="clean" depends="init, clean-build">
     <delete file="${build.jar}" />
@@ -30,6 +36,7 @@
 
   <target name="clean-build" depends="init">
     <delete dir="${build.dir}" />
+    <delete dir="${javadoc.dir}" />
     <delete file="${build.parser.dir}/Parser.java" />
     <delete file="${build.parser.dir}/ParserConstants.java" />
     <delete file="${build.parser.dir}/ParserTokenManager.java" />
