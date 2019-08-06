@@ -21,7 +21,7 @@ PARSER_END(Parser)
 
 SKIP: { <[" ","\t","\r","\n"]> }
 
-SPECIAL_TOKEN: { <LINE_COMMENT: "//.*"> }
+SPECIAL_TOKEN: { <LINE_COMMENT: "//" (~["\n"])*> }
 
 MORE: { <"/*"> : IN_BLOCK_COMMENT }
 <IN_BLOCK_COMMENT> MORE: { <~[]> }
