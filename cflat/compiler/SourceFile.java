@@ -1,7 +1,13 @@
 package cflat.compiler;
 
 public class SourceFile implements LdArg {
-    String currentName;
+    private String currentName;
+    private final String originalName;
+
+    SourceFile(String name) {
+	this.originalName = name;
+	this.currentName = name;
+    }
     
     String path() {
 	return currentName;

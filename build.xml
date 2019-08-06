@@ -19,13 +19,14 @@
     </javac>
     <jar jarfile="${build.jar}" basedir="${build.classes.dir}">
       <manifest>
-	<attribute name="Main-Class" value="cflat.Main" />
+	<!--attribute name="Main-Class" value="cflat.Main" /-->
+	<attribute name="Main-Class" value="cflat.compiler.Compiler" />	
       </manifest>
     </jar>
   </target>
 
   <target name="javadoc" depends="init, parser">
-    <javadoc destdir="javadoc">
+    <javadoc destdir="$(javadoc.dir}">
       <fileset dir="${src.dir}" />
     </javadoc>
   </target>

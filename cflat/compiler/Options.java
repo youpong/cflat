@@ -1,10 +1,13 @@
 package cflat.compiler;
 
 import cflat.type.TypeTable;
-import java.util.List;
+import cflat.exception.OptionParseError;
+import java.util.*;
+import java.io.*;
 
 public class Options {
-    List<SourceFile> sourceFiles;
+    private List<LdArg> ldArgs;
+    private List<SourceFile> sourceFiles;
     
     public static Options parse(String[] args) {
 	Options opts = new Options();
@@ -31,5 +34,54 @@ public class Options {
     
     void parseArgs(String[] origArgs) {
 	// TODO: set sourceFiles
+	// sourceFiles = new ArrayList<SourceFile>();
+	ldArgs = new ArrayList<LdArg>();
+	ListIterator<String> args = Arrays.asList(origArgs).listIterator();
+	while(args.hasNext()) {
+	    String arg = args.next();
+	    if  (arg.equals("--")) {
+		// "--" stops command line processing
+		break;
+	    }
+	    else if(arg.startsWith("-")) {
+		if (arg.equals("--help")) {
+		    printUsage(System.out);
+		    System.exit(0);
+		}
+		else {
+		    parseError("unknown option: " + arg);
+		}
+	    }
+	    else {
+		ldArgs.add(new SourceFile(arg));
+	    }
+	}
+	// args has more arguments when "--" is appeard.
+	while(args.hasNext()) {
+	    ldArgs.add(new SourceFile(args.next()));
+	}
+
+	sourceFiles = selectSourceFiles(ldArgs);
+	if (sourceFiles.isEmpty()) {
+	    parseError("no input file");
+	}
+    }
+
+    private void parseError(String msg) {
+	throw new OptionParseError(msg);
+    }
+
+    private List<SourceFile> selectSourceFiles(List<LdArg> args) {
+	List<SourceFile> result = new ArrayList<SourceFile>();
+	for(LdArg arg : args) {
+	    if(arg.isSourceFile()) {
+		result.add((SourceFile)arg);
+	    }
+	}
+	return result;	
+    }
+    
+    void printUsage(PrintStream out) {
+	out.println("Usage: cbc [options] file...");
     }
 }
