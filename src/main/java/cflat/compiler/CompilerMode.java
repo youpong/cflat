@@ -10,19 +10,6 @@ enum CompilerMode {
     DumpIR ("--dump-ir"),
     DumpAsm ("--dump-asm");
 
-    static private Map<String, CompilerMode> modes;
-    static {
-	modes = new HashMap<String, CompilerMode>();
-	/* modes.put(CheckSyntax.option, CheckSyntax);	
-	modes.put(DumpTokens.option, DumpTokens);
-	modes.put(DumpAST.option, DumpAST);
-	modes.put(DumpIR.option, DumpIR);
-	modes.put(DumpAsm.option, DumpAsm);*/
-	for(CompilerMode mode : CompilerMode.values()) {
-	    modes.put(mode.option, mode);
-	}
-    }
-
     private final String option;
     
     CompilerMode(String option) {
