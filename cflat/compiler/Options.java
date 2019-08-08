@@ -44,7 +44,10 @@ public class Options {
 		break;
 	    }
 	    else if(arg.startsWith("-")) {
-		if (arg.equals("--help")) {
+		if (arg.equals("--check-syntax")) {
+		    // TODO: 
+		}
+		else if (arg.equals("--help")) {
 		    printUsage(System.out);
 		    System.exit(0);
 		}
@@ -83,5 +86,12 @@ public class Options {
     
     void printUsage(PrintStream out) {
 	out.println("Usage: cbc [options] file...");
+	out.println("Global Options:");
+	out.println("  --check-syntax  Check syntax and quit.");
+	out.println("  --dump-tokens   Dumps tokens and quit.");
+	out.println("  --dump-ast      Dumps AST and quit.");
+	out.println("  --dump-semantic Dump AST after semantic checks and quit.");
+	out.println("  --dump-ir       Dumps IR and quit.");
+	out.println("  --version       Shows compiler version.");
     }
 }

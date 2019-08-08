@@ -1,0 +1,9 @@
+/* 
+ * return 0
+ */
+int main(void) { // cannot omit params
+  char *msg = "hello";
+  char a = 'a';
+  
+  return 0; 
+}

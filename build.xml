@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="CFlatCompiler" default="compile" basedir=".">
+  <description>
+    cbc is simplified c compiler.
+  </description>
+
   <target name="init">
     <property file="${user.home}/.ant-global.properties" />
     <property file="build.properties" />
@@ -25,12 +29,18 @@
     </jar>
   </target>
 
+  <target name="junit" depends="init">
+    <junit>
+      <test name="cflat.compiler.CompilerModeTest" />
+    </junit>
+  </target>
+
   <target name="javadoc" depends="init, parser">
-    <javadoc destdir="$(javadoc.dir}">
+    <javadoc destdir="${javadoc.dir}">
       <fileset dir="${src.dir}" />
     </javadoc>
   </target>
-  
+
   <target name="clean" depends="init, clean-build">
     <delete file="${build.jar}" />
   </target>
