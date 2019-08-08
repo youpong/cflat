@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <!-- ParserGeneratorCC -->
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cflat</groupId>
+  <!-- TODO -->
+  <artifactId>cbc</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <!-- TODO -->
+  <name>cbc</name>
+  <!-- TODO -->
+  <url>http://maven.apache.org</url>
+  <properties>
+    <!-- TODO -->
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
+  </properties>
+
+  <!-- TODO -->
+  <build>
+    <plugins>
+      <!-- javacc -->
+      <plugin>
+	<groupId>com.helger.maven</groupId>
+	<artifactId>ph-javacc-maven-plugin</artifactId>
+	<version>4.1.2</version>
+	<executions>
+	  <execution>
+	    <id>jjc1</id>
+	    <phase>generate-sources</phase>
+	    <goals>
+	      <goal>javacc</goal>
+	    </goals>
+	    <!-- what? -->
+	    <configuration>
+	      <jdkVersion>1.8</jdkVersion>
+	    </configuration>
+	  </execution>
+	</executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- プロジェクトが依存するライブラリ -->
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <!-- TODO -->
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
