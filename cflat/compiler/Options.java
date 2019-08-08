@@ -45,7 +45,7 @@ public class Options {
 	    }
 	    else if(arg.startsWith("-")) {
 		if (arg.equals("--check-syntax")) {
-		    // TODO: 
+		    // TODO: instead of CompilerMode
 		}
 		else if (arg.equals("--help")) {
 		    printUsage(System.out);
