@@ -25,10 +25,8 @@ public class OptionsTest {
     @Test
     public void testParseArgs3() {
 	String[] args = {"--check-syntax"};
-	//Options.parse(args);
 	Error e = assertThrows(OptionParseError.class,
 			       () -> { Options.parse(args); });
-	//assertEquals("no input file", e.getMessage());
     }
 }
 

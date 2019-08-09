@@ -1,16 +1,89 @@
-options {
-  STATIC = false;
-}
-
 PARSER_BEGIN(Parser)
 package cflat.parser;
+
+import cflat.ast.AST;
+import cflat.exception.FileException;
+import cflat.exception.SyntaxException;
+import cflat.utils.ErrorHandler;
 import java.io.*;
+import java.util.*;
 
 /**
  * parser
  */
 public class Parser {
 
+  static public AST parseFile(File file, LibraryLoader loader,
+                              ErrorHandler errorHandler)
+			      throws SyntaxException, FileException {
+    return parseFile(file, loader, errorHandler, false);
+  }
+
+  static public AST parseFile(File file, LibraryLoader loader,
+                              ErrorHandler errorHandler, boolean debug)
+			      throws SyntaxException, FileException {
+    return newFileParser(file, loader, errorHandler, debug).parse();
+  }
+
+  static final public String SOURCE_ENCODING = "UTF-8";
+  
+  static public Parser newFileParser(File file, LibraryLoader loader,
+                                     ErrorHandler errorHandler, boolean debug)
+				     throws FileException {
+    try {
+      BufferedReader r =
+        new BufferedReader(
+	  new InputStreamReader(new FileInputStream(file), SOURCE_ENCODING));
+      return new Parser(r, file.getPath(), loader, errorHandler, debug);
+    }
+    catch (FileNotFoundException ex) {
+      throw new FileException(ex.getMessage());
+    }
+    catch (UnsupportedEncodingException ex) {
+      throw new Error(SOURCE_ENCODING + " is not supported??: " +
+                      ex.getMessage());
+    }
+  }  
+
+  public Parser(Reader s, String name, LibraryLoader loader,
+                ErrorHandler errorHandler) {
+    this(s, name, loader, errorHandler, false);		
+  }
+  
+  private String sourceName;
+  private LibraryLoader loader;
+  private ErrorHandler errorHandler;
+  private Set<String>knownTypedefs;
+  
+  public Parser(Reader s, String name, LibraryLoader loader,
+                ErrorHandler errorHandler, boolean debug) {
+    this(s);
+    this.sourceName = name;
+    this.loader = loader;
+    this.errorHandler = errorHandler;
+    this.knownTypedefs = new HashSet<String>();
+    if(debug) {
+      enable_tracing();
+    } else {
+      disable_tracing();
+    }
+  }
+
+  public AST parse() throws SyntaxException {
+    try {
+      return compilation_unit();
+    }
+    catch (TokenMgrException ex) {
+      throw new SyntaxException(ex.getMessage());
+    }  
+    catch (ParseException ex) {
+      throw new SyntaxException(ex.getMessage());
+    }
+    catch (LookaheadSuccess err) {
+      throw new SyntaxException("syntax error");
+    }
+  }  
+		
   private boolean isType(String name) {
     // TODO:
     return false;
@@ -82,9 +155,13 @@ TOKEN: {
     <IDENTIFIER: ["a"-"z", "A"-"Z", "_"](["a"-"z", "A"-"Z", "_", "0"-"9"])*>
 }
 
-void compilation_unit(): {}
+AST compilation_unit(): {}
 {
   import_stmts() top_defs() <EOF>
+    {
+      // TODO
+      return null;
+    }  
 }
 
 void import_stmts() : {}

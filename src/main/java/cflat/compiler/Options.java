@@ -2,6 +2,7 @@ package cflat.compiler;
 
 import cflat.type.TypeTable;
 import cflat.exception.OptionParseError;
+import cflat.parser.LibraryLoader;
 import java.util.*;
 import java.io.*;
 
@@ -10,6 +11,7 @@ public class Options {
     private List<LdArg> ldArgs;
     private List<SourceFile> sourceFiles;
     private CompilerMode mode;
+    private LibraryLoader loader = new LibraryLoader();
     private boolean debugParser = false;
     
     public static Options parse(String[] args) {
@@ -18,6 +20,10 @@ public class Options {
 	return opts;
     }
 
+    boolean doesDebugParser() {
+	return this.debugParser;
+    }
+    
     List<SourceFile> sourceFiles() {
 	return sourceFiles;
     }
@@ -92,6 +98,13 @@ public class Options {
 	    }
 	}
 	return result;	
+    }
+
+    public CompilerMode mode() {
+	return mode;
+    }
+    LibraryLoader loader() {
+	return loader;
     }
     
     void printUsage(PrintStream out) {

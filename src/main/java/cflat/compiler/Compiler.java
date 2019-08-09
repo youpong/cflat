@@ -3,17 +3,21 @@ package cflat.compiler;
 import cflat.type.TypeTable;
 import cflat.ast.AST;
 import cflat.exception.CompileException;
+import cflat.exception.SyntaxException;
+import cflat.exception.FileException;
 import cflat.utils.ErrorHandler;
 import cflat.ir.IR;
 import cflat.sysdep.x86.AssemblyCode;
+import cflat.parser.Parser;
 import java.util.List;
+import java.io.*;
 
 /**
  *
  */
 public class Compiler {
     static final public String ProgramName = "cbc";
-    static final public String Version = "1.0.0";
+    static final public String Version = "0.1";
 
     static public void main(String[] args) {
 	new Compiler(ProgramName).commandMain(args);
@@ -28,6 +32,9 @@ public class Compiler {
     public void commandMain(String[] args) {
 	// TODO:
 	Options opts = Options.parse(args);
+	if(opts.mode() == CompilerMode.CheckSyntax) {
+	    System.exit(checkSyntax(opts) ? 0 : 1);
+	}
 	try {
 	    List<SourceFile> srcs = opts.sourceFiles();
 	    build(srcs, opts);
@@ -38,6 +45,33 @@ public class Compiler {
 	}
     }
 
+    private boolean checkSyntax(Options opts) {
+	boolean failed = false;
+	for(SourceFile src : opts.sourceFiles()) {
+	    if(isValidSyntax(src.path(), opts)) {
+		System.out.println(src.path() + ": Syntax OK");
+	    } else {
+		System.out.println(src.path() + ": Syntax Error");
+		failed = true;
+	    }
+	}
+	return !failed;
+    }
+
+    private boolean isValidSyntax(String path, Options opts) {
+	try {
+	    parseFile(path, opts);
+	    return true;
+	}
+	catch(SyntaxException ex) {
+	    return false;
+	}
+	catch(FileException ex) {
+	    errorHandler.error(ex.getMessage());
+	    return false;
+	}
+    }
+    
     public void build(List<SourceFile> srcs, Options opts)
 	throws CompileException {
 	for(SourceFile src : srcs) {
@@ -57,9 +91,11 @@ public class Compiler {
 	writeFile(destPath, asm);
     }
 
-    public AST parseFile(String srcPath, Options opts) {
+    public AST parseFile(String path, Options opts)
+	throws SyntaxException, FileException {
 	// TODO
-	return null;
+	return Parser.parseFile(new File(path), opts.loader(), errorHandler,
+			 opts.doesDebugParser());
     }
     public AST semanticAnalyze(AST ast, TypeTable types, Options opts) {
 	// TODO
