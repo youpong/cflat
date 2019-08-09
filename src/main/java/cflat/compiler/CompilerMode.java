@@ -2,6 +2,9 @@ package cflat.compiler;
 
 import java.util.*;
 
+/**
+ * enum of compiler modes.
+ */
 enum CompilerMode {
     CheckSyntax ("--check-syntax"),
     DumpTokens ("--dump-tokens"),
@@ -35,6 +38,7 @@ enum CompilerMode {
     public String toOption() {
 	return option;
     }
+
     boolean requires(CompilerMode m) {
 	return ordinal() >= m.ordinal();
     }

@@ -6,8 +6,11 @@ import java.util.*;
 import java.io.*;
 
 public class Options {
+
     private List<LdArg> ldArgs;
     private List<SourceFile> sourceFiles;
+    private CompilerMode mode;
+    private boolean debugParser = false;
     
     public static Options parse(String[] args) {
 	Options opts = new Options();
@@ -44,8 +47,15 @@ public class Options {
 		break;
 	    }
 	    else if(arg.startsWith("-")) {
-		if (arg.equals("--check-syntax")) {
-		    // TODO: instead of CompilerMode
+		if (CompilerMode.isModeOption(arg)) {
+		    if (mode != null) {
+			parseError(mode.toOption() + " option and "
+				   + arg + " option is exclusive");
+		    }
+		    mode = CompilerMode.fromOption(arg);
+		}
+		else if (arg.equals("--debug-parser")) {
+		    debugParser = true;
 		}
 		else if (arg.equals("--help")) {
 		    printUsage(System.out);
