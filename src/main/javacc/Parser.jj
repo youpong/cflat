@@ -101,7 +101,7 @@ public class Parser {
 }
 PARSER_END(Parser)
 
-SKIP: { <[" ","\t","\r","\n"]> }
+SPECIAL_TOKEN: { <SPACES: ([" ","\t","\r","\n","\f"])+> }
 
 SPECIAL_TOKEN: { <LINE_COMMENT: "//" (~["\n"])*> }
 
