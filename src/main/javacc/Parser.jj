@@ -8,11 +8,13 @@ PARSER_BEGIN(Parser)
 package cflat.parser;
 
 import cflat.ast.AST;
+import cflat.ast.CastNode;
 import cflat.ast.ExprNode;
 import cflat.ast.IntegerLiteralNode;
-import cflat.ast.StringLiteralNode;
-import cflat.ast.VariableNode;
 import cflat.ast.Location;
+import cflat.ast.StringLiteralNode;
+import cflat.ast.TypeNode;
+import cflat.ast.VariableNode;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
 import cflat.type.IntegerTypeRef;
@@ -373,9 +375,13 @@ void name() : {}
   <IDENTIFIER>
 }
 
-void type() : {}
+// TODO: implement
+TypeNode type() : {}
 {
   typeref()
+    {
+      return null;
+    }  
 }
 
 void typeref() : {}
@@ -617,15 +623,21 @@ void expr1() : {}
 	 | "%" term())* 
 }
 
-void term() : {}
+ExprNode term() :
 {
-  LOOKAHEAD("(" type()) "(" type() ")" term()
-  | unary()
+  TypeNode t;
+  ExprNode n;
+}
+{
+  LOOKAHEAD("(" type())
+  "(" t=type() ")" n=term() { return new CastNode(t, n); }
+  | n=unary()               { return n; }
 }
 
-void unary() : {}
+// TODO: implement
+ExprNode unary() : {}
 {
-    "++" unary()
+  ( "++" unary()
   | "--" unary()
   | "+" unary()
   | "-" unary()
@@ -635,7 +647,10 @@ void unary() : {}
   | "&" unary()
   | LOOKAHEAD(3) <SIZEOF> "(" type() ")"
   | <SIZEOF> unary()
-  | postfix()
+  | postfix())
+    {
+      return null;
+    }  
 }
 
 void postfix() : {}
