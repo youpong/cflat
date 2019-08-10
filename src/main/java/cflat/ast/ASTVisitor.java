@@ -4,10 +4,16 @@ public interface ASTVisitor<S,E> {
     // Statements
 
     // Expressions
+    public E visit(AddressNode node);    
     public E visit(BinaryOpNode node);
     public E visit(CastNode node);
-    public E visit(VariableNode node);    
+    public E visit(DereferenceNode node);
     public E visit(IntegerLiteralNode node);
-    public E visit(StringLiteralNode node);    
+    public E visit(PrefixOpNode node);
+    public E visit(SizeofTypeNode node);
+    public E visit(SizeofExprNode node);        
+    public E visit(StringLiteralNode node);
+    public E visit(UnaryArithmeticOpNode node);        
+    public E visit(UnaryOpNode node);
+    public E visit(VariableNode node);    
 }
-

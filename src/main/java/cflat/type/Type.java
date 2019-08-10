@@ -1,5 +1,9 @@
 package cflat.type;
 
-//public abstract class Type {
-public class Type {
+import cflat.exception.SemanticError;
+
+public abstract class Type {
+    public Type baseType() {
+	throw new SemanticError("#baseType called for undereferable type");
+    }
 }

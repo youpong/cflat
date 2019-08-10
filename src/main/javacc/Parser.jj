@@ -7,18 +7,25 @@ options {
 PARSER_BEGIN(Parser)
 package cflat.parser;
 
+import cflat.ast.AddressNode;
 import cflat.ast.AST;
 import cflat.ast.CastNode;
+import cflat.ast.DereferenceNode;
 import cflat.ast.ExprNode;
 import cflat.ast.IntegerLiteralNode;
 import cflat.ast.Location;
+import cflat.ast.PrefixOpNode;
+import cflat.ast.SizeofExprNode;
+import cflat.ast.SizeofTypeNode;
 import cflat.ast.StringLiteralNode;
 import cflat.ast.TypeNode;
+import cflat.ast.UnaryOpNode;
 import cflat.ast.VariableNode;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
 import cflat.type.IntegerTypeRef;
 import cflat.type.PointerTypeRef;
+import cflat.type.TypeRef;
 import cflat.utils.ErrorHandler;
 import java.io.*;
 import java.util.*;
@@ -172,6 +179,11 @@ public class Parser {
         buf.append(image.substring(pos, image.length()));
     }
     return buf.toString();		       
+  }
+
+  // TODO: test
+  private TypeRef size_t() {
+    return IntegerTypeRef.ulongRef();
   }
 
   private static final int charMax = 255;
@@ -635,25 +647,32 @@ ExprNode term() :
 }
 
 // TODO: implement
-ExprNode unary() : {}
+ExprNode unary() :
 {
-  ( "++" unary()
-  | "--" unary()
-  | "+" unary()
-  | "-" unary()
-  | "!" unary()
-  | "~" unary()
-  | "*" unary()
-  | "&" unary()
-  | LOOKAHEAD(3) <SIZEOF> "(" type() ")"
-  | <SIZEOF> unary()
-  | postfix())
-    {
-      return null;
-    }  
+  ExprNode n;
+  TypeNode t;
+}
+{
+    "++" n=unary() { return new PrefixOpNode("++", n); }
+  | "--" n=unary() { return new PrefixOpNode("--", n); }
+  | "+"  n=unary() { return new UnaryOpNode("+", n); }
+  | "-"  n=unary() { return new UnaryOpNode("-", n); }
+  | "!"  n=unary() { return new UnaryOpNode("!", n); }
+  | "~"  n=unary() { return new UnaryOpNode("~", n); }
+  | "*"  n=unary() { return new DereferenceNode(n); }
+  | "&"  n=unary() { return new AddressNode(n); }
+  | LOOKAHEAD(3) <SIZEOF> "(" t=type() ")"
+                   {
+                     return new SizeofTypeNode(t, size_t());
+		   }  
+  | <SIZEOF> n=unary()
+                   {
+		     return new SizeofExprNode(n, size_t());
+		   }
+  | n=postfix()    { return n; }
 }
 
-void postfix() : {}
+ExprNode postfix() : {}
 {
   primary() ( "++"
             | "--"
@@ -661,7 +680,9 @@ void postfix() : {}
 	    | "." name()
 	    | "->" name()
 	    | "(" args() ")"
-	    )*
+	    )* {
+	         return null;
+	       }	 
 }
 
 void args() : {}
