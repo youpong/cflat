@@ -2,6 +2,8 @@ package cflat.ast;
 
 import java.io.*;
 import cflat.utils.TextUtils;
+import cflat.type.TypeRef;
+import cflat.type.Type;
 
 public class Dumper {
     protected int nIndent;
@@ -25,7 +27,16 @@ public class Dumper {
 	    stream.print(indentString);
 	}
     }
-    
+    public void printMember(String name, long n) {
+	printPair(name, "" + n);
+    }
+	
+    public void printMember(String name, TypeRef ref) {
+	printPair(name, ref.toString());
+    }
+    public void printMember(String name, Type t) {
+	printPair(name, (t == null? "null":t.toString()));
+    }
     public void printMember(String name, String str, boolean isResolved) {
 	printPair(name, TextUtils.dumpString(str)
 		  + (isResolved ? "(resolved)" : ""));
@@ -37,6 +48,7 @@ public class Dumper {
 	printIndent();
 	stream.println(name + ": " + value);
     }
+
     public void printMember(String name, Dumpable n) {
 	printIndent();
 	if(n == null)
