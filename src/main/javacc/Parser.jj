@@ -39,9 +39,16 @@ import cflat.ast.WhileNode;
 import cflat.entity.DefinedVariable;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
+import cflat.type.ArrayTypeRef;
+import cflat.type.FunctionTypeRef;
 import cflat.type.IntegerTypeRef;
+import cflat.type.ParamTypeRefs;
 import cflat.type.PointerTypeRef;
+import cflat.type.StructTypeRef;
 import cflat.type.TypeRef;
+import cflat.type.UnionTypeRef;
+import cflat.type.UserTypeRef;
+import cflat.type.VoidTypeRef;
 import cflat.utils.ErrorHandler;
 import java.io.*;
 import java.util.*;
@@ -433,51 +440,96 @@ String name() :
   t=<IDENTIFIER> { return t.image; }  
 }
 
-// TODO: implement
-TypeNode type() : {}
+// TODO: test
+TypeNode type() :
+{ TypeRef ref; }
 {
-  typeref()
+  ref=typeref() { return new TypeNode(ref); }  
+}
+
+TypeRef typeref() :
+{
+  TypeRef ref;
+  Token t;
+  ParamTypeRefs params;
+}
+{
+  ref=typeref_base()
+  ( LOOKAHEAD(2)
+    "[" "]"
+      {
+        ref = new ArrayTypeRef(ref);
+      }
+  | "[" t=<INTEGER> "]"
+      {
+        ref = new ArrayTypeRef(ref, integerValue(t.image));
+      }
+  | "*"
+      {
+        ref = new PointerTypeRef(ref);
+      }
+  | "(" params=param_typerefs() ")"
+      {
+        ref = new FunctionTypeRef(ref, params);
+      }
+  )*
     {
-      return null;
+      return ref;
     }  
 }
 
-void typeref() : {}
+// TODO: test
+TypeRef typeref_base() :
 {
-  typeref_base()
-  ( LOOKAHEAD(2) "[" "]"
-  | "[" <INTEGER> "]"
-  | "*"
-  | "(" param_typerefs() ")"
-  )*
+  Token t, name;
+}
+{
+  t=<VOID>    { return new VoidTypeRef(location(t)); }
+  | t=<CHAR>  { return IntegerTypeRef.charRef(location(t)); }
+  | t=<SHORT> { return IntegerTypeRef.shortRef(location(t)); } 
+  | t=<INT>   { return IntegerTypeRef.intRef(location(t)); }
+  | t=<LONG>  { return IntegerTypeRef.longRef(location(t)); }
+  | LOOKAHEAD(2) t=<UNSIGNED> <CHAR>
+              { return IntegerTypeRef.ucharRef(location(t)); }
+  | LOOKAHEAD(2) t=<UNSIGNED> <SHORT>
+              { return IntegerTypeRef.ushortRef(location(t)); }
+  | LOOKAHEAD(2) t=<UNSIGNED> <INT>
+              { return IntegerTypeRef.uintRef(location(t)); }
+  | t=<UNSIGNED> <LONG>
+              { return IntegerTypeRef.ulongRef(location(t)); }
+  | t=<STRUCT> name=<IDENTIFIER>
+              { return new StructTypeRef(location(t), name.image); }
+  | t=<UNION> name=<IDENTIFIER>
+              { return new UnionTypeRef(location(t), name.image); }
+  | LOOKAHEAD({isType(getToken(1).image)}) name=<IDENTIFIER>
+              { return new UserTypeRef(location(name), name.image); }
 }
 
-void typeref_base() : {}
-{
-  <VOID>
-  | <CHAR>
-  | <SHORT>
-  | <INT>
-  | <LONG>
-  | LOOKAHEAD(2) <UNSIGNED> <CHAR>
-  | LOOKAHEAD(2) <UNSIGNED> <SHORT>
-  | LOOKAHEAD(2) <UNSIGNED> <INT>
-  | <UNSIGNED> <LONG>
-  | <STRUCT> <IDENTIFIER>
-  | <UNION> <IDENTIFIER>
-  | LOOKAHEAD({isType(getToken(1).image)}) <IDENTIFIER>
-}
-
-void param_typerefs() : {}
+ParamTypeRefs param_typerefs() :
+{ ParamTypeRefs params; }
 {
   LOOKAHEAD(<VOID> ")")
   <VOID>
-  | fixedparam_typerefs() [ "," "..." ]
+    {
+      return new ParamTypeRefs(new ArrayList<TypeRef>());
+    }  
+  | params=fixedparam_typerefs() [ "," "..." { params.acceptVarargs(); }]
+    {
+      return params;
+    }  
 }
 
-void fixedparam_typerefs() : {}
+ParamTypeRefs fixedparam_typerefs() :
 {
-  typeref() ( LOOKAHEAD(2) "," typeref() )*
+  List<TypeRef> refs = new ArrayList<TypeRef>();
+  TypeRef ref;
+}
+{
+  ref=typeref()                    { refs.add(ref); }
+  ( LOOKAHEAD(2) "," ref=typeref() { refs.add(ref); })*
+    {
+      return new ParamTypeRefs(refs);
+    }  
 }
 
 // TODO: implement
