@@ -3,6 +3,7 @@ package cflat.ast;
 public interface ASTVisitor<S,E> {
     // Statements
     public S visit(IfNode node);
+    public S visit(WhileNode node);    
     
     // Expressions
     public E visit(AddressNode node);

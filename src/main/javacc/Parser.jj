@@ -34,6 +34,7 @@ import cflat.ast.SuffixOpNode;
 import cflat.ast.TypeNode;
 import cflat.ast.UnaryOpNode;
 import cflat.ast.VariableNode;
+import cflat.ast.WhileNode;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
 import cflat.type.IntegerTypeRef;
@@ -497,9 +498,17 @@ IfNode if_stmt() :
     }  
 }
 
-void while_stmt() : {}
+WhileNode while_stmt() :
 {
-  <WHILE> "(" expr() ")" stmt()
+  Token t;
+  ExprNode cond;
+  StmtNode body;
+}
+{
+  t=<WHILE> "(" cond=expr() ")" body=stmt()
+    {
+      return new WhileNode(location(t), cond, body);
+    }  
 }
 
 void dowhile_stmt() : {}
