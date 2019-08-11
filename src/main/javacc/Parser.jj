@@ -18,6 +18,7 @@ import cflat.ast.FuncallNode;
 import cflat.ast.IntegerLiteralNode;
 import cflat.ast.Location;
 import cflat.ast.LogicalAndNode;
+import cflat.ast.LogicalOrNode;
 import cflat.ast.MemberNode;
 import cflat.ast.PrefixOpNode;
 import cflat.ast.PtrMemberNode;
@@ -592,9 +593,13 @@ void expr10() : {}
   expr9() [ "?" expr() ":" expr10()]
 }
 
-void expr9() : {}
+ExprNode expr9() :
+{ ExprNode l, r; }
 {
-  expr8() ("||" expr8())*
+  l=expr8() ("||" r=expr8() { l = new LogicalOrNode(l, r); })*
+    {
+      return l;
+    }  
 }
 
 // TODO: LogicalAnd 左結合?
