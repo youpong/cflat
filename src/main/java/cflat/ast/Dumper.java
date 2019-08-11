@@ -37,7 +37,10 @@ public class Dumper {
 	}
 	unindent();
     }
-    
+
+    public void printMember(String name, boolean b) {
+	printPair(name, "" + b);
+    }
     public void printMember(String name, long n) {
 	printPair(name, "" + n);
     }

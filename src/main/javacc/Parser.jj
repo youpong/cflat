@@ -12,6 +12,7 @@ import cflat.ast.AST;
 import cflat.ast.ArefNode;
 import cflat.ast.AssignNode;
 import cflat.ast.BinaryOpNode;
+import cflat.ast.BlockNode;
 import cflat.ast.CastNode;
 import cflat.ast.CondExprNode;
 import cflat.ast.DereferenceNode;
@@ -35,6 +36,7 @@ import cflat.ast.TypeNode;
 import cflat.ast.UnaryOpNode;
 import cflat.ast.VariableNode;
 import cflat.ast.WhileNode;
+import cflat.entity.DefinedVariable;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
 import cflat.type.IntegerTypeRef;
@@ -361,9 +363,17 @@ void param() : {}
   type() name()
 }
 
-void block() : {}
+BlockNode block() :
 {
-  "{" defvar_list() stmts() "}"
+  Token t;
+  List<DefinedVariable> vars;
+  List<StmtNode> stmts;
+}
+{
+  t="{" vars=defvar_list() stmts=stmts() "}"
+    {
+      return new BlockNode(location(t), vars, stmts);
+    }
 }
 
 void defvars() : {}
@@ -451,15 +461,27 @@ void fixedparam_typerefs() : {}
   typeref() ( LOOKAHEAD(2) "," typeref() )*
 }
 
-void defvar_list() : {}
+// TODO: implement
+List<DefinedVariable> defvar_list() : {}
 {
   (defvars())*
+    {
+      return null;
+    }  
 }
 
-void stmts() : {}
+List<StmtNode> stmts() :
 {
-  (stmt())*
+  List<StmtNode> ss = new ArrayList<StmtNode>();
+  StmtNode s;
 }
+{
+  (s=stmt() { if(s != null) ss.add(s); })*
+    {
+      return ss;
+    }  
+}
+
 // TODO: implement
 StmtNode stmt() : {}
 {
