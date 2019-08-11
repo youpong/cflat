@@ -601,23 +601,37 @@ void expr8() : {}
   expr7() ("&&" expr7())*
 }
 
-void expr7() : {}
+ExprNode expr7() :
+{ ExprNode l, r; }
 {
-  expr6() ( ">" expr6()
-          | "<" expr6()
-          | ">=" expr6()
-          | "<=" expr6()
-          | "==" expr6()
-          | "!=" expr6())*
+  l=expr6() ( ">"  r=expr6() { l = new BinaryOpNode(l, ">",  r); }
+            | "<"  r=expr6() { l = new BinaryOpNode(l, "<",  r); }
+            | ">=" r=expr6() { l = new BinaryOpNode(l, ">=", r); }
+            | "<=" r=expr6() { l = new BinaryOpNode(l, "<=", r); }
+            | "==" r=expr6() { l = new BinaryOpNode(l, "==", r); }
+            | "!=" r=expr6() { l = new BinaryOpNode(l, "!=", r); }
+	    )*
+    {
+      return l;
+    }  
 }
 
-void expr6() : {}
+ExprNode expr6() :
+{ ExprNode l, r; }
 {
-  expr5() ("|" expr5())*
+  l=expr5() ("|" r=expr5() { l = new BinaryOpNode(l, "|", r); })*
+    {
+      return l;
+    }  
 }
-void expr5() : {}
+
+ExprNode expr5() :
+{ ExprNode l, r; }
 {
-  expr4() ("^" expr4())*
+  l=expr4() ("^" r=expr4() { l = new BinaryOpNode(l, "^", r); })*
+    {
+      return l;
+    }  
 }
 
 ExprNode expr4() :
