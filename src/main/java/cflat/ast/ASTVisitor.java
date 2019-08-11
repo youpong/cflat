@@ -11,6 +11,7 @@ public interface ASTVisitor<S,E> {
     public E visit(DereferenceNode node);
     public E visit(FuncallNode node);    
     public E visit(IntegerLiteralNode node);
+    public E visit(LogicalAndNode node);    
     public E visit(MemberNode node);
     public E visit(PrefixOpNode node);
     public E visit(PtrMemberNode node);    
