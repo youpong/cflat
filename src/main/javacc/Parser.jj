@@ -10,6 +10,7 @@ package cflat.parser;
 import cflat.ast.AddressNode;
 import cflat.ast.AST;
 import cflat.ast.ArefNode;
+import cflat.ast.BinaryOpNode;
 import cflat.ast.CastNode;
 import cflat.ast.DereferenceNode;
 import cflat.ast.ExprNode;
@@ -630,17 +631,27 @@ void expr3() : {}
           | "<<" expr2())*
 }
 
-void expr2() : {}
+ExprNode expr2() :
+{ ExprNode l, r; }
 {
-  expr1() ( "+" expr1()
-          | "-" expr1())*
+  l=expr1() ( "+" r=expr1() { l = new BinaryOpNode(l, "+", r); }
+            | "-" r=expr1() { l = new BinaryOpNode(l, "-", r); }
+	    )*
+    {
+      return l;
+    }
 }
 
-void expr1() : {}
+ExprNode expr1() :
+{ ExprNode l, r; }
 {
-  term() ( "*" term()
-         | "/" term()
-	 | "%" term())* 
+  l=term() ( "*" r=term() { l = new BinaryOpNode(l, "*", r); }
+           | "/" r=term() { l = new BinaryOpNode(l, "/", r); }
+	   | "%" r=term() { l = new BinaryOpNode(l, "%", r); }
+	   )*
+    {
+      return l;
+    }  
 }
 
 ExprNode term() :

@@ -2,6 +2,9 @@ package cflat.ast;
 
 import cflat.type.Type;
 
+/**
+ *
+ */
 public class BinaryOpNode extends ExprNode {
     protected String operator;
     protected ExprNode left, right;
