@@ -2,7 +2,8 @@ package cflat.ast;
 
 public interface ASTVisitor<S,E> {
     // Statements
-
+    public S visit(IfNode node);
+    
     // Expressions
     public E visit(AddressNode node);
     public E visit(ArefNode node);

@@ -17,6 +17,7 @@ import cflat.ast.CondExprNode;
 import cflat.ast.DereferenceNode;
 import cflat.ast.ExprNode;
 import cflat.ast.FuncallNode;
+import cflat.ast.IfNode;
 import cflat.ast.IntegerLiteralNode;
 import cflat.ast.Location;
 import cflat.ast.LogicalAndNode;
@@ -27,6 +28,7 @@ import cflat.ast.PrefixOpNode;
 import cflat.ast.PtrMemberNode;
 import cflat.ast.SizeofExprNode;
 import cflat.ast.SizeofTypeNode;
+import cflat.ast.StmtNode;
 import cflat.ast.StringLiteralNode;
 import cflat.ast.SuffixOpNode;
 import cflat.ast.TypeNode;
@@ -457,8 +459,8 @@ void stmts() : {}
 {
   (stmt())*
 }
-
-void stmt() : {}
+// TODO: implement
+StmtNode stmt() : {}
 {
   (";"
   | LOOKAHEAD(2) labeled_stmt()
@@ -473,7 +475,7 @@ void stmt() : {}
   | continue_stmt()
   | goto_stmt()
   | return_stmt()
-  )
+  ) { return null; }
 }
 
 void labeled_stmt() : {}
@@ -481,9 +483,18 @@ void labeled_stmt() : {}
   <IDENTIFIER> ":" stmt()
 }
 
-void if_stmt() : {}
+IfNode if_stmt() :
 {
-  <IF> "(" expr() ")" stmt() [LOOKAHEAD(1) <ELSE> stmt()]
+  Token t;
+  ExprNode cond;
+  StmtNode thenBody, elseBody = null;
+}
+{
+  t=<IF> "(" cond=expr() ")" thenBody=stmt()
+          [LOOKAHEAD(1) <ELSE> elseBody=stmt()]
+    {
+      return new IfNode(location(t), cond, thenBody, elseBody);
+    }  
 }
 
 void while_stmt() : {}
@@ -563,7 +574,7 @@ void slot() : {}
   type() name()
 }
 
-// TODO: implement
+// TODO: test
 ExprNode expr() :
 {
   ExprNode lhs, rhs, expr;
