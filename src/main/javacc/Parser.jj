@@ -376,14 +376,33 @@ BlockNode block() :
     }
 }
 
-void defvars() : {}
+List<DefinedVariable> defvars() :
 {
-  storage() type() name() ["=" expr()]
-              ("," name() ["=" expr()])* ";"
+  List<DefinedVariable> defs = new ArrayList<DefinedVariable>();
+  boolean priv;
+  TypeNode type;
+  String name;
+  ExprNode init = null;
 }
-void storage() : {}
 {
-  [<STATIC>]
+  priv=storage() type=type() name=name() ["=" init=expr()]
+    {
+      defs.add(new DefinedVariable(priv, type, name, init));
+    }  
+  ("," name=name() ["=" init=expr()]
+    {
+      defs.add(new DefinedVariable(priv, type, name, init));
+    }  
+  )* ";"
+    {
+      return defs;
+    }  
+}
+
+boolean storage() :
+{ Token t = null; }
+{
+  [t=<STATIC>] { return (t == null ? false : true); }
 }
 
 void defconst(): {}
@@ -462,11 +481,15 @@ void fixedparam_typerefs() : {}
 }
 
 // TODO: implement
-List<DefinedVariable> defvar_list() : {}
+List<DefinedVariable> defvar_list() :
 {
-  (defvars())*
+  List<DefinedVariable> result = new ArrayList<DefinedVariable>();
+  List<DefinedVariable> vars;
+}
+{
+  (vars=defvars() { result.addAll(vars); })*
     {
-      return null;
+      return result;
     }  
 }
 
