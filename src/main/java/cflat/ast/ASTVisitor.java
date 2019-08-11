@@ -8,6 +8,7 @@ public interface ASTVisitor<S,E> {
     public E visit(ArefNode node);        
     public E visit(BinaryOpNode node);
     public E visit(CastNode node);
+    public E visit(CondExprNode node);
     public E visit(DereferenceNode node);
     public E visit(FuncallNode node);    
     public E visit(IntegerLiteralNode node);

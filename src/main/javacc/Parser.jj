@@ -12,6 +12,7 @@ import cflat.ast.AST;
 import cflat.ast.ArefNode;
 import cflat.ast.BinaryOpNode;
 import cflat.ast.CastNode;
+import cflat.ast.CondExprNode;
 import cflat.ast.DereferenceNode;
 import cflat.ast.ExprNode;
 import cflat.ast.FuncallNode;
@@ -588,9 +589,14 @@ void opassign_op() : {}
   )
 }
 
-void expr10() : {}
+ExprNode expr10() :
+{ ExprNode c, t, e; }
 {
-  expr9() [ "?" expr() ":" expr10()]
+  c=expr9() [ "?" t=expr() ":" e=expr10()
+              { return new CondExprNode(c, t, e); }]
+    {
+      return c;
+    }  
 }
 
 ExprNode expr9() :
