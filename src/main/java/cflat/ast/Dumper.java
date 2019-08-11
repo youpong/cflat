@@ -1,6 +1,7 @@
 package cflat.ast;
 
 import java.io.*;
+import java.util.*;
 import cflat.utils.TextUtils;
 import cflat.type.TypeRef;
 import cflat.type.Type;
@@ -27,10 +28,19 @@ public class Dumper {
 	    stream.print(indentString);
 	}
     }
+    public void printNodeList(String name, List<? extends Dumpable> nodes) {
+	printIndent();
+	stream.println(name + ":");
+	indent();
+	for(Dumpable n : nodes) {
+	    n.dump(this);
+	}
+	unindent();
+    }
+    
     public void printMember(String name, long n) {
 	printPair(name, "" + n);
     }
-	
     public void printMember(String name, TypeRef ref) {
 	printPair(name, ref.toString());
     }

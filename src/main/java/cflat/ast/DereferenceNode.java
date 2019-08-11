@@ -1,7 +1,10 @@
 package cflat.ast;
 
 import cflat.type.Type;
-    
+
+/**
+ * Dereference pointer "*"
+ */
 public class DereferenceNode extends LHSNode {
     private ExprNode expr;
     

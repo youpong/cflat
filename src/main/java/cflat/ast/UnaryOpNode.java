@@ -3,6 +3,9 @@ package cflat.ast;
 import cflat.type.Type;
     
 // TODO: implement
+/**
+ * unary operator "+", "-", "!", "~"
+ */
 public class UnaryOpNode extends ExprNode {
     protected String operator;
     protected ExprNode expr;

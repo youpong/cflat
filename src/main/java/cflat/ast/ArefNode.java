@@ -1,30 +1,28 @@
 package cflat.ast;
 
 import cflat.type.Type;
-
 /**
- * Address operator "&"
+ * Array 参照 ary[i]
  */
-public class AddressNode extends ExprNode {
-    final ExprNode expr;
-    Type type;
-    
-    public AddressNode(ExprNode expr) {
+public class ArefNode extends LHSNode {
+    private ExprNode expr, index;
+
+    public ArefNode(ExprNode expr, ExprNode idx) {
 	this.expr = expr;
+	this.index = idx;
     }
-    public Type type() {
-	if(type==null)
-	    throw new Error("type is null");
-	return type;
+
+    protected Type origType() {
+	return expr.origType().baseType();
     }
     public Location location() {
 	return expr.location();
     }
-
     protected void _dump(Dumper d) {
-	if(type != null)
+	if (type !=null)
 	    d.printMember("type", type);
 	d.printMember("expr", expr);
+	d.printMember("index",index);
     }
     public <S,E> E accept(ASTVisitor<S,E> visitor) {
 	return visitor.visit(this);

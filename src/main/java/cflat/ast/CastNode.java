@@ -2,6 +2,9 @@ package cflat.ast;
 
 import cflat.type.Type;
 
+/**
+ * Cast operator
+ */
 public class CastNode extends ExprNode {
     protected TypeNode typeNode;
     protected ExprNode expr;

@@ -3,6 +3,9 @@ package cflat.ast;
 import cflat.type.Type;
 import cflat.type.TypeRef;
 
+/**
+ * For expr operator "sizeof"
+ */
 public class SizeofExprNode extends ExprNode {
     protected ExprNode expr;
     protected TypeNode type;
