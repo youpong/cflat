@@ -625,10 +625,15 @@ void expr4() : {}
   expr3() ("&" expr3())*
 }
 
-void expr3() : {}
+ExprNode expr3() :
+{ ExprNode l, r; }
 {
-  expr2() ( ">>" expr2()
-          | "<<" expr2())*
+  l=expr2() ( ">>" r=expr2() { l = new BinaryOpNode(l, ">>", r); }
+            | "<<" r=expr2() { l = new BinaryOpNode(l, ">>", r); }
+            )*
+    {
+      return l;
+    }  
 }
 
 ExprNode expr2() :
