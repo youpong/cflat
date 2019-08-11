@@ -620,16 +620,20 @@ void expr5() : {}
   expr4() ("^" expr4())*
 }
 
-void expr4() : {}
+ExprNode expr4() :
+{ ExprNode l, r; }
 {
-  expr3() ("&" expr3())*
+  l=expr3() ("&" r=expr3() { l = new BinaryOpNode(l, "&", r); })*
+    {
+      return l;
+    }  
 }
 
 ExprNode expr3() :
 { ExprNode l, r; }
 {
   l=expr2() ( ">>" r=expr2() { l = new BinaryOpNode(l, ">>", r); }
-            | "<<" r=expr2() { l = new BinaryOpNode(l, ">>", r); }
+            | "<<" r=expr2() { l = new BinaryOpNode(l, "<<", r); }
             )*
     {
       return l;
