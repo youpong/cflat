@@ -5,7 +5,8 @@ public interface ASTVisitor<S,E> {
 
     // Expressions
     public E visit(AddressNode node);
-    public E visit(ArefNode node);        
+    public E visit(ArefNode node);
+    public E visit(AssignNode node);            
     public E visit(BinaryOpNode node);
     public E visit(CastNode node);
     public E visit(CondExprNode node);
@@ -15,6 +16,7 @@ public interface ASTVisitor<S,E> {
     public E visit(LogicalAndNode node);
     public E visit(LogicalOrNode node);    
     public E visit(MemberNode node);
+    public E visit(OpAssignNode node);            
     public E visit(PrefixOpNode node);
     public E visit(PtrMemberNode node);    
     public E visit(SizeofTypeNode node);

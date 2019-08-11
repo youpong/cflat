@@ -10,6 +10,7 @@ package cflat.parser;
 import cflat.ast.AddressNode;
 import cflat.ast.AST;
 import cflat.ast.ArefNode;
+import cflat.ast.AssignNode;
 import cflat.ast.BinaryOpNode;
 import cflat.ast.CastNode;
 import cflat.ast.CondExprNode;
@@ -21,6 +22,7 @@ import cflat.ast.Location;
 import cflat.ast.LogicalAndNode;
 import cflat.ast.LogicalOrNode;
 import cflat.ast.MemberNode;
+import cflat.ast.OpAssignNode;
 import cflat.ast.PrefixOpNode;
 import cflat.ast.PtrMemberNode;
 import cflat.ast.SizeofExprNode;
@@ -562,30 +564,40 @@ void slot() : {}
 }
 
 // TODO: implement
-ExprNode expr() : {}
+ExprNode expr() :
 {
-  (LOOKAHEAD(term() "=")
-  term() "=" expr()
+  ExprNode lhs, rhs, expr;
+  String op;
+}
+{
+  LOOKAHEAD(term() "=")
+  lhs=term() "=" rhs=expr()
+    {
+      return new AssignNode(lhs, rhs);
+    }
   | LOOKAHEAD(term() opassign_op())
-  term() opassign_op() expr()
-  | expr10()
-  ) {
-      return null;
+  lhs=term() op=opassign_op() rhs=expr()
+    {
+      return new OpAssignNode(lhs, op, rhs);
+    }
+  | expr=expr10()
+    {
+      return expr;
     }  
 }
 
-void opassign_op() : {}
+String opassign_op() : {}
 {
-  ( "+="
-  | "-="
-  | "*="
-  | "/="
-  | "%="
-  | "&="
-  | "|="
-  | "^="
-  | "<<="
-  | ">>="
+  ( "+="  { return "+"; }
+  | "-="  { return "-"; }
+  | "*="  { return "*"; }
+  | "/="  { return "/"; }
+  | "%="  { return "%"; }
+  | "&="  { return "&"; }
+  | "|="  { return "|"; }
+  | "^="  { return "^"; }
+  | "<<=" { return "<<"; }
+  | ">>=" { return ">>"; }
   )
 }
 
