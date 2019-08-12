@@ -15,6 +15,7 @@ import cflat.ast.BinaryOpNode;
 import cflat.ast.BlockNode;
 import cflat.ast.CastNode;
 import cflat.ast.CondExprNode;
+import cflat.ast.Declarations;
 import cflat.ast.DereferenceNode;
 import cflat.ast.ExprNode;
 import cflat.ast.FuncallNode;
@@ -29,13 +30,18 @@ import cflat.ast.PrefixOpNode;
 import cflat.ast.PtrMemberNode;
 import cflat.ast.SizeofExprNode;
 import cflat.ast.SizeofTypeNode;
+import cflat.ast.Slot;
 import cflat.ast.StmtNode;
 import cflat.ast.StringLiteralNode;
+import cflat.ast.StructNode;
 import cflat.ast.SuffixOpNode;
+import cflat.ast.TypedefNode;
 import cflat.ast.TypeNode;
 import cflat.ast.UnaryOpNode;
+import cflat.ast.UnionNode;
 import cflat.ast.VariableNode;
 import cflat.ast.WhileNode;
+import cflat.entity.Constant;
 import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
 import cflat.entity.Parameter;
@@ -338,17 +344,29 @@ void import_stmt() : {}
   <IMPORT> name() ("." name())* ";"
 }
 
-void top_defs() : {}
+Declarations top_defs() :
+{
+  Declarations decls = new Declarations();
+  DefinedFunction defun;
+  List<DefinedVariable> defvars;
+  Constant defconst;
+  StructNode defstruct;
+  UnionNode defunion;
+  TypedefNode typedef;
+}
 {
   ( LOOKAHEAD(storage() typeref() <IDENTIFIER> "(")
-    defun()
+    defun=defun()         { decls.addDefun(defun); }
   | LOOKAHEAD(3)
-    defvars()
-  | defconst()
-  | defstruct()
-  | defunion()
-  | typedef()
+    defvars=defvars()     { decls.addDefvars(defvars); }
+  | defconst=defconst()   { decls.addConstant(defconst); }
+  | defstruct=defstruct() { decls.addDefstruct(defstruct); }
+  | defunion=defunion()   { decls.addDefunion(defunion); }
+  | typedef=typedef()     { decls.addTypedef(typedef); }
   )*
+    {
+      return decls;
+    }  
 }
 
 DefinedFunction defun() :
@@ -450,30 +468,62 @@ boolean storage() :
   [t=<STATIC>] { return (t == null ? false : true); }
 }
 
-void defconst(): {}
+Constant defconst():
 {
-  <CONST> type() name() "=" expr() ";"
+  TypeNode type;
+  String name;
+  ExprNode value;
+}
+{
+  <CONST> type=type() name=name() "=" value=expr() ";"
+    {
+      return new Constant(type, name, value);
+    }  
 }
 
-void defstruct(): {}
+StructNode defstruct():
 {
-  <STRUCT> name() member_list() ";"
+  Token t;
+  String n;
+  List<Slot> membs;
+}
+{
+  t=<STRUCT> n=name() membs=member_list() ";"
+    {
+      return new StructNode(location(t), new StructTypeRef(n), n, membs);
+    }  
 }
 
-void defunion(): {}
+UnionNode defunion():
 {
-  <UNION> name() member_list() ";"
+  Token t;
+  String n;
+  List<Slot> membs;
+}
+{
+  t=<UNION> n=name() membs=member_list() ";"
+    {
+      return new UnionNode(location(t), new UnionTypeRef(n), n, membs);
+    }  
 }
 
-void typedef(): {}
+// TODO: implement
+TypedefNode typedef():
 {
-  <TYPEDEF> typeref() <IDENTIFIER> ";"
+  Token t;
+  TypeRef ref;
+  Token newname;
+}
+{
+  t=<TYPEDEF> ref=typeref() newname=<IDENTIFIER> ";"
+    {
+      addType(newname.image);
+      return new TypedefNode(location(t), ref, newname.image);
+    }  
 }
 
 String name() :
-{
-  Token t;
-}
+{ Token t; }
 {
   t=<IDENTIFIER> { return t.image; }  
 }
@@ -708,14 +758,25 @@ void goto_stmt() : {}
   <GOTO> <IDENTIFIER> ";"
 }
 
-void member_list() : {}
+List<Slot> member_list() :
 {
-  "{" (slot() ";")* "}"
+  List<Slot> membs = new ArrayList<Slot>();
+  Slot s;
+}
+{
+  "{" (s=slot() ";" { membs.add(s); })* "}"
+    {
+      return membs;
+    }  
 }
 
-void slot() : {}
+Slot slot() :
 {
-  type() name()
+  TypeNode t;
+  String n;
+}
+{
+  t=type() n=name() { return new Slot(t, n); }
 }
 
 // TODO: test
