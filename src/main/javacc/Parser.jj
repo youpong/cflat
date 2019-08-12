@@ -36,7 +36,10 @@ import cflat.ast.TypeNode;
 import cflat.ast.UnaryOpNode;
 import cflat.ast.VariableNode;
 import cflat.ast.WhileNode;
+import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
+import cflat.entity.Parameter;
+import cflat.entity.Params;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
 import cflat.type.ArrayTypeRef;
@@ -348,26 +351,59 @@ void top_defs() : {}
   )*
 }
 
-void defun() : {}
+DefinedFunction defun() :
 {
-  storage() typeref() name() "(" params() ")" block()
+  boolean priv;
+  TypeRef ret;
+  String n;
+  Params ps;
+  BlockNode body;
+}
+{
+  priv=storage() ret=typeref() n=name() "(" ps=params() ")" body=block()
+    {
+      TypeRef t = new FunctionTypeRef(ret, ps.parametersTypeRef());
+      return new DefinedFunction(priv, new TypeNode(t), n, ps, body);
+    }  
 }
 
-void params() : {}
+Params params() :
+{
+  Token t;
+  Params params;
+}
 {
   LOOKAHEAD(<VOID> ")")
-  <VOID>
-  | fixedparams() ["," "..."]
+  t=<VOID>
+    {
+      return new Params(location(t), new ArrayList<Parameter>());
+    }  
+  | params=fixedparams() ["," "..." { params.acceptVarargs(); }]
+    {
+      return params;
+    }  
 }
 
-void fixedparams() : {}
+Params fixedparams() :
 {
-  param() (LOOKAHEAD(2) "," param())*
+  List<Parameter> params = new ArrayList<Parameter>();
+  Parameter param, param1;
+}
+{
+  param1=param() { params.add(param1); }
+  (LOOKAHEAD(2) "," param=param() { params.add(param); })*
+    {
+      return new Params(param1.location(), params);
+    }  
 }
 
-void param() : {}
+Parameter param() :
 {
-  type() name()
+  TypeNode t;
+  String n;
+}
+{
+  t=type() n=name() { return new Parameter(t, n); }
 }
 
 BlockNode block() :
@@ -395,10 +431,12 @@ List<DefinedVariable> defvars() :
   priv=storage() type=type() name=name() ["=" init=expr()]
     {
       defs.add(new DefinedVariable(priv, type, name, init));
+      init = null;
     }  
   ("," name=name() ["=" init=expr()]
     {
       defs.add(new DefinedVariable(priv, type, name, init));
+      init = null;
     }  
   )* ";"
     {

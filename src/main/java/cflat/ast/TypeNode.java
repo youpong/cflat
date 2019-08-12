@@ -18,10 +18,10 @@ public class TypeNode extends Node {
 	super();
 	this.type = type;
     }
-    /*
     public TypeRef typeRef() {
 	return typeRef;
     }
+    /*    
     public boolean isResolved() {
 	return (type != null);
     }

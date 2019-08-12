@@ -18,6 +18,9 @@ abstract public class Entity implements Dumpable {
 	this.nRefered = 0;
     }
 
+    public TypeNode typeNode() {
+	return typeNode;
+    }
     public Location location() {
 	return typeNode.location();
     }
