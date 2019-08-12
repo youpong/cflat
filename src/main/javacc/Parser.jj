@@ -46,6 +46,9 @@ import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
 import cflat.entity.Parameter;
 import cflat.entity.Params;
+import cflat.entity.UndefinedFunction;
+import cflat.entity.UndefinedVariable;
+import cflat.exception.CompileException;
 import cflat.exception.FileException;
 import cflat.exception.SyntaxException;
 import cflat.type.ArrayTypeRef;
@@ -79,6 +82,16 @@ public class Parser {
     return newFileParser(file, loader, errorHandler, debug).parse();
   }
 
+  static public Declarations parseDeclFile(File file, LibraryLoader loader,
+                              ErrorHandler errorHandler)
+			      throws SyntaxException, FileException {
+    return parseDeclFile(file, loader, errorHandler, false);
+  }
+  static public Declarations parseDeclFile(File file, LibraryLoader loader,
+                              ErrorHandler errorHandler, boolean debug)
+			      throws SyntaxException, FileException {
+    return newFileParser(file, loader, errorHandler, debug).parseDecls();
+  }
   static final public String SOURCE_ENCODING = "UTF-8";
   
   static public Parser newFileParser(File file, LibraryLoader loader,
@@ -138,6 +151,24 @@ public class Parser {
     }
   }  
 
+  public Declarations parseDecls() throws SyntaxException {
+    try {
+      return declaration_file();
+    }
+    catch (TokenMgrException ex) {
+      throw new SyntaxException(ex.getMessage());
+    }
+    catch (ParseException ex) {
+      throw new SyntaxException(ex.getMessage());
+    }
+  }
+
+  private void addKnownTypedefs(List<TypedefNode> typedefs) {
+    for (TypedefNode n : typedefs) {
+      addType(n.name());
+    }
+  }
+  
   // TODO: test
   private void addType(String name) {
     knownTypedefs.add(name);
@@ -295,6 +326,7 @@ TOKEN: {
   | <DEFAULT_ : "default" >
   | <DO       : "do"      >
   | <ELSE     : "else"    >
+  | <EXTERN   : "extern"  >
   | <FOR      : "for"     >
   | <GOTO     : "goto"    >
   | <IF       : "if"      >
@@ -325,23 +357,86 @@ TOKEN: {
     <IDENTIFIER: ["a"-"z", "A"-"Z", "_"](["a"-"z", "A"-"Z", "_", "0"-"9"])*>
 }
 
-AST compilation_unit(): {}
+AST compilation_unit():
 {
-  import_stmts() top_defs() <EOF>
+  Token t;
+  Declarations impdecls, decls;
+}
+{
     {
-      // TODO
-      return null;
+      t = getToken(1);
+    }  
+  impdecls=import_stmts() decls=top_defs() <EOF>
+    {
+      decls.add(impdecls);
+      return new AST(location(t), decls);
     }  
 }
 
-void import_stmts() : {}
+Declarations declaration_file():
 {
-  (import_stmt())*		
+  Declarations impdecls, decls = new Declarations();
+  UndefinedFunction funcdecl;
+  UndefinedVariable vardecl;
+  Constant defconst;
+  StructNode defstruct;
+  UnionNode defunion;
+  TypedefNode typedef;
+}
+{
+  impdecls=import_stmts()
+    {
+      decls.add(impdecls);
+    }
+  ( LOOKAHEAD(<EXTERN> typedef() <IDENTIFIER> "(")
+    funcdecl=funcdecl()   { decls.addFuncdecl(funcdecl); }
+  | vardecl=vardecl()     { decls.addVardecl(vardecl); }
+  | defconst=defconst()   { decls.addConstant(defconst); }
+  | defstruct=defstruct() { decls.addDefstruct(defstruct); }
+  | defunion=defunion()   { decls.addDefunion(defunion); }
+  | typedef=typedef()     { decls.addTypedef(typedef); }
+  )* <EOF>
+    {
+      return decls;
+    }  
 }
 
-void import_stmt() : {}
+Declarations import_stmts() :
 {
-  <IMPORT> name() ("." name())* ";"
+  String libid;
+  Declarations impdecls = new Declarations();
+}
+{
+  (libid=import_stmt()
+    {
+      try {
+        Declarations decls = loader.loadLibrary(libid, errorHandler);
+	if (decls != null) {
+	  impdecls.add(decls);
+	  addKnownTypedefs(decls.typedefs());
+	}
+      }
+      catch (CompileException ex) {
+        throw new ParseException(ex.getMessage());
+      }
+    }  
+  )*
+    {
+      return impdecls;
+    }  
+}
+
+String import_stmt() :
+{
+  StringBuffer buf = new StringBuffer();
+  String n;
+}
+{
+  <IMPORT> n=name() { buf.append(n); }
+  ("." n=name() {buf.append("."); buf.append(n); })* ";"
+    {
+      return buf.toString();
+    }  
 }
 
 Declarations top_defs() :
@@ -777,6 +872,32 @@ Slot slot() :
 }
 {
   t=type() n=name() { return new Slot(t, n); }
+}
+
+UndefinedFunction funcdecl():
+{
+  TypeRef ret;
+  String n;
+  Params ps;
+}
+{
+  <EXTERN> ret=typeref() n=name() "(" ps=params() ")" ";"
+    {
+      TypeRef t = new FunctionTypeRef(ret, ps.parametersTypeRef());
+      return new UndefinedFunction(new TypeNode(t), n, ps);
+    }
+}    
+
+UndefinedVariable vardecl():
+{
+  TypeNode t;
+  String n;
+}
+{
+  <EXTERN> t=type() n=name() ";"
+    {
+      return new UndefinedVariable(t, n);
+    }
 }
 
 // TODO: test

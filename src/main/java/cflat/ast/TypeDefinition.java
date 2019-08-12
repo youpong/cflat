@@ -13,6 +13,9 @@ abstract public class TypeDefinition extends Node {
 	this.typeNode = new TypeNode(ref);
     }
 
+    public String name() {
+	return name;
+    }
     public Location location() {
 	return location;
     }
