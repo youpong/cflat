@@ -13,5 +13,7 @@ public class Location {
 	this.sourceName = sourceName;
 	this.token = token;
     }
-    
+    public CflatToken token() {
+	return token;
+    }
 }

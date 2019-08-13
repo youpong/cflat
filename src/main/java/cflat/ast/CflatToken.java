@@ -1,6 +1,8 @@
 package cflat.ast;
 
 import cflat.parser.Token;
+import cflat.parser.ParserConstants;
+import cflat.utils.TextUtils;
 import java.util.*;
 
 public class CflatToken implements Iterable<CflatToken> {
@@ -13,6 +15,12 @@ public class CflatToken implements Iterable<CflatToken> {
     public CflatToken(Token token, boolean isSpecial) {
 	this.token = token;
 	this.isSpecial = isSpecial;
+    }
+    public String kindName() {
+	return ParserConstants.tokenImage[token.kind];
+    }
+    public String dumpedImage() {
+	return TextUtils.dumpString(token.image);
     }
     public Iterator<CflatToken> iterator() {
 	return buildTokenList(token, false).iterator();

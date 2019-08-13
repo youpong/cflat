@@ -81,9 +81,11 @@ public class Compiler {
 	link(opts);
     }
 
+    // TODO: implement
     public void compile(String srcPath, String destPath, Options opts)
 	throws CompileException {
 	AST ast = parseFile(srcPath, opts);
+	if(dumpAST(ast, opts.mode())) return;
 	TypeTable types = opts.typeTable();
 	AST sem = semanticAnalyze(ast, types, opts);
 	IR ir = new IRGenerator(errorHandler).generate(sem, types);
@@ -114,5 +116,25 @@ public class Compiler {
 
     public void link(Options opts) {
 	// TODO
+    }
+    private boolean dumpAST(AST ast, CompilerMode mode) {
+	switch(mode) {
+	case DumpTokens:
+	    ast.dumpTokens(System.out);
+	    return true;
+	case DumpAST:
+	    ast.dump();
+	    return true;
+	case DumpStmt:
+	    // TODO: implement
+	    //findStmt(ast).dump();
+	    return true;
+	case DumpExpr:
+	    // TODO: implement	    
+	    //findExpr(ast).dump();
+	    return true;
+	default:
+	    return false;
+	}
     }
 }

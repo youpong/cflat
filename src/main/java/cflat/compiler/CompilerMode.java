@@ -9,6 +9,8 @@ enum CompilerMode {
     CheckSyntax ("--check-syntax"),
     DumpTokens ("--dump-tokens"),
     DumpAST ("--dump-ast"),
+    DumpStmt ("--dump-stmt"),
+    DumpExpr ("--dump-expr"),
     DumpSemantic ("--dump-semantic"),
     DumpIR ("--dump-ir"),
     DumpAsm ("--dump-asm");
