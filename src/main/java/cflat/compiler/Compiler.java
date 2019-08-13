@@ -93,7 +93,6 @@ public class Compiler {
 
     public AST parseFile(String path, Options opts)
 	throws SyntaxException, FileException {
-	// TODO
 	return Parser.parseFile(new File(path), opts.loader(), errorHandler,
 			 opts.doesDebugParser());
     }

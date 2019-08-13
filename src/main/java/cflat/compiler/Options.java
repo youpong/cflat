@@ -3,16 +3,22 @@ package cflat.compiler;
 import cflat.type.TypeTable;
 import cflat.exception.OptionParseError;
 import cflat.parser.LibraryLoader;
+import cflat.sysdep.Platform;
+import cflat.sysdep.X86Linux;
 import java.util.*;
 import java.io.*;
 
 public class Options {
 
-    private List<LdArg> ldArgs;
-    private List<SourceFile> sourceFiles;
     private CompilerMode mode;
+    private Platform platform = new X86Linux();
+    
     private LibraryLoader loader = new LibraryLoader();
     private boolean debugParser = false;
+
+    private List<LdArg> ldArgs;
+    private List<SourceFile> sourceFiles;
+
     
     public static Options parse(String[] args) {
 	Options opts = new Options();
@@ -36,9 +42,9 @@ public class Options {
 	// TODO: CompileMode.Assemble
 	return src.objFileName();
     }
+    // TODO: test
     TypeTable typeTable() {
-	// TODO:
-	return null;
+	return platform.typeTable();
     }
     
     void parseArgs(String[] origArgs) {
@@ -108,13 +114,14 @@ public class Options {
     }
     
     void printUsage(PrintStream out) {
-	out.println("Usage: cbc [options] file...");
-	out.println("Global Options:");
-	out.println("  --check-syntax  Check syntax and quit.");
-	out.println("  --dump-tokens   Dumps tokens and quit.");
-	out.println("  --dump-ast      Dumps AST and quit.");
-	out.println("  --dump-semantic Dump AST after semantic checks and quit.");
-	out.println("  --dump-ir       Dumps IR and quit.");
-	out.println("  --version       Shows compiler version.");
+	String msg = "Usage: cbc [options] file...\n" +
+	    "Global Options:\n" +
+	    "  --check-syntax  Check syntax and quit.\n" +
+	    "  --dump-tokens   Dumps tokens and quit.\n" +
+	    "  --dump-ast      Dumps AST and quit.\n" +
+	    "  --dump-semantic Dumps AST after semantic checks and quit.\n" +
+	    "  --dump-ir       Dumps IR and quit.\n" +
+	    "  --version       Shows compiler version.";
+	out.println(msg);
     }
 }
