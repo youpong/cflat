@@ -3,7 +3,7 @@ package cflat.ast;
 import cflat.type.Type;
 
 /**
- * ポインタ間接メンバ参照 ptr->memb
+ * ポインタ間接メンバ参照 ptr-&gt;memb
  */
 public class PtrMemberNode extends LHSNode {
     // TODO: private?

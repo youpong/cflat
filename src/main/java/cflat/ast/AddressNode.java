@@ -3,7 +3,7 @@ package cflat.ast;
 import cflat.type.Type;
 
 /**
- * Address operator "&"
+ * Address operator "&amp;"
  */
 public class AddressNode extends ExprNode {
     final ExprNode expr;

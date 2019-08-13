@@ -116,11 +116,14 @@ public class Parser {
                 ErrorHandler errorHandler) {
     this(s, name, loader, errorHandler, false);		
   }
-  
+  /** プログラムを入力しているファイル名 */
   private String sourceName;
+  /** import で読み込むインポートファイルのローダー */
   private LibraryLoader loader;
+  /** エラーや警告を処理するオブジェクト */
   private ErrorHandler errorHandler;
-  private Set<String>knownTypedefs;
+  /** typedef で定義された型の名前を記憶するテーブル */
+  private Set<String> knownTypedefs;
   
   public Parser(Reader s, String name, LibraryLoader loader,
                 ErrorHandler errorHandler, boolean debug) {
@@ -146,7 +149,7 @@ public class Parser {
     catch (ParseException ex) {
       throw new SyntaxException(ex.getMessage());
     }
-    catch (LookaheadSuccess err) {
+    catch (LookaheadSuccess err) { // TODO: これは実際に来るのかな
       throw new SyntaxException("syntax error");
     }
   }  
