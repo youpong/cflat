@@ -5,7 +5,6 @@ import cflat.type.Type;
 
 // TODO: implement
 public class TypeNode extends Node {
-
     TypeRef typeRef;
     Type type;
 
@@ -21,10 +20,11 @@ public class TypeNode extends Node {
     public TypeRef typeRef() {
 	return typeRef;
     }
-    /*    
+
     public boolean isResolved() {
 	return (type != null);
     }
+    /*
     public void setType(Type t) {
 	if (type != null)
 	    throw new Error("TypeNode#setType called twice");

@@ -16,4 +16,7 @@ public class Location {
     public CflatToken token() {
 	return token;
     }
+    public String toString() {
+	return sourceName + ":" + token.lineno();
+    }
 }

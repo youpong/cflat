@@ -19,6 +19,9 @@ public class CflatToken implements Iterable<CflatToken> {
     public String kindName() {
 	return ParserConstants.tokenImage[token.kind];
     }
+    public int lineno() {
+	return token.beginLine;
+    }
     public String dumpedImage() {
 	return TextUtils.dumpString(token.image);
     }

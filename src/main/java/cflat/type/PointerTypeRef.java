@@ -6,4 +6,7 @@ public class PointerTypeRef extends TypeRef {
 	super(baseType.location());
 	this.baseType = baseType;
     }
+    public String toString() {
+	return baseType.toString() + "*";
+    }
 }

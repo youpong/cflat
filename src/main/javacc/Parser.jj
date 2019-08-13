@@ -18,6 +18,7 @@ import cflat.ast.CondExprNode;
 import cflat.ast.Declarations;
 import cflat.ast.DereferenceNode;
 import cflat.ast.ExprNode;
+import cflat.ast.ExprStmtNode;
 import cflat.ast.FuncallNode;
 import cflat.ast.IfNode;
 import cflat.ast.IntegerLiteralNode;
@@ -28,6 +29,7 @@ import cflat.ast.MemberNode;
 import cflat.ast.OpAssignNode;
 import cflat.ast.PrefixOpNode;
 import cflat.ast.PtrMemberNode;
+import cflat.ast.ReturnNode;
 import cflat.ast.SizeofExprNode;
 import cflat.ast.SizeofTypeNode;
 import cflat.ast.Slot;
@@ -744,27 +746,35 @@ List<StmtNode> stmts() :
 }
 
 // TODO: implement
-StmtNode stmt() : {}
+StmtNode stmt() :
+{
+  StmtNode n = null;
+  ExprNode e = null;
+}
 {
   (";"
-  | LOOKAHEAD(2) labeled_stmt()
-  | expr() ";"
-  | block()
-  | if_stmt()
-  | while_stmt()
-  | dowhile_stmt()
-  | for_stmt()
-  | switch_stmt()
-  | break_stmt()
-  | continue_stmt()
-  | goto_stmt()
-  | return_stmt()
-  ) { return null; }
+  | LOOKAHEAD(2) n=labeled_stmt()
+  | e=expr() ";" { n = new ExprStmtNode(e.location(), e); }
+  | n=block()
+  | n=if_stmt()
+  | n=while_stmt()
+  | n=dowhile_stmt()
+  | n=for_stmt()
+  | n=switch_stmt()
+  | n=break_stmt()
+  | n=continue_stmt()
+  | n=goto_stmt()
+  | n=return_stmt()
+  )
+    {
+      return n;
+    }
 }
 
-void labeled_stmt() : {}
+// TODO: implement
+StmtNode labeled_stmt() : {}
 {
-  <IDENTIFIER> ":" stmt()
+  <IDENTIFIER> ":" stmt() { return null; }
 }
 
 IfNode if_stmt() :
@@ -794,19 +804,22 @@ WhileNode while_stmt() :
     }  
 }
 
-void dowhile_stmt() : {}
+// TODO: implement
+StmtNode dowhile_stmt() : {}
 {
-  <DO> stmt() <WHILE> "(" expr() ")" ";"
+  <DO> stmt() <WHILE> "(" expr() ")" ";" { return null; }
 }
 
-void for_stmt() : {}
+// TODO: implement
+StmtNode for_stmt() : {}
 {
-  <FOR> "(" [expr()] ";" [expr()] ";" [expr()] ")" stmt()
+  <FOR> "(" [expr()] ";" [expr()] ";" [expr()] ")" stmt() { return null; }
 }
 
-void switch_stmt() : {}
+// TODO: implement
+StmtNode switch_stmt() : {}
 {
-  <SWITCH> "(" expr() ")" "{" case_clauses() "}"
+  <SWITCH> "(" expr() ")" "{" case_clauses() "}" { return null; }
 }
 
 void case_clauses() : {}
@@ -835,25 +848,32 @@ void case_body() : {}
   (stmt())+
 }
 
-void break_stmt() : {}
+// TODO: implement
+StmtNode break_stmt() : {}
 {
-  <BREAK> ";"
+  <BREAK> ";" { return null; }
 }
 
-void continue_stmt() : {}
+// TODO: implement
+StmtNode continue_stmt() : {}
 {
-  <CONTINUE> ";"
+  <CONTINUE> ";" { return null; }
 }
 
-void return_stmt() : {}
+ReturnNode return_stmt() :
 {
-  LOOKAHEAD(2) <RETURN> ";"
-  | <RETURN> expr() ";"
+  Token t;
+  ExprNode expr;
+}
+{
+    LOOKAHEAD(2) t=<RETURN> ";" { return new ReturnNode(location(t), null); }
+  | t=<RETURN> expr=expr() ";"  { return new ReturnNode(location(t), expr); }
 }  
 
-void goto_stmt() : {}
+// TODO: implement
+StmtNode goto_stmt() : {}
 {
-  <GOTO> <IDENTIFIER> ";"
+  <GOTO> <IDENTIFIER> ";" { return null; }
 }
 
 List<Slot> member_list() :

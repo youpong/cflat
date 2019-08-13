@@ -61,4 +61,7 @@ public class IntegerTypeRef extends TypeRef {
     static public IntegerTypeRef ulongRef(){
     	return new IntegerTypeRef("unsigned long");
     }
+    public String toString() {
+	return name;
+    }
 }

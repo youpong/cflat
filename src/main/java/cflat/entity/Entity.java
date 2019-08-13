@@ -26,6 +26,7 @@ abstract public class Entity implements Dumpable {
     }
     public void dump(Dumper d) {
 	d.printClass(this, location());
+	_dump(d);
     }
     
     abstract protected void _dump(Dumper d);

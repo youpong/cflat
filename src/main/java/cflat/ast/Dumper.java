@@ -61,7 +61,11 @@ public class Dumper {
 	printIndent();
 	stream.println(name + ": " + value);
     }
-
+    public void printMember(String name, TypeNode n) {
+	printIndent();
+	stream.println(name + ": " + n.typeRef() 
+		       + (n.isResolved() ? " (resolved)" : ""));
+    }
     public void printMember(String name, Dumpable n) {
 	printIndent();
 	if(n == null)
