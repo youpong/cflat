@@ -13,8 +13,11 @@ import cflat.ast.ArefNode;
 import cflat.ast.AssignNode;
 import cflat.ast.BinaryOpNode;
 import cflat.ast.BlockNode;
+import cflat.ast.BreakNode;
+import cflat.ast.CaseNode;
 import cflat.ast.CastNode;
 import cflat.ast.CondExprNode;
+import cflat.ast.ContinueNode;
 import cflat.ast.Declarations;
 import cflat.ast.DereferenceNode;
 import cflat.ast.DoWhileNode;
@@ -40,6 +43,7 @@ import cflat.ast.StmtNode;
 import cflat.ast.StringLiteralNode;
 import cflat.ast.StructNode;
 import cflat.ast.SuffixOpNode;
+import cflat.ast.SwitchNode;
 import cflat.ast.TypedefNode;
 import cflat.ast.TypeNode;
 import cflat.ast.UnaryOpNode;
@@ -842,53 +846,97 @@ ForNode for_stmt() :
     }
 }
 
-// TODO: implement
-StmtNode switch_stmt() : {}
+// TODO: test
+SwitchNode switch_stmt() :
 {
-  <SWITCH> "(" expr() ")" "{" case_clauses() "}" { return null; }
+  Token t;
+  ExprNode cond;
+  List<CaseNode> bodies;
+}
+{
+  t=<SWITCH> "(" cond=expr() ")" "{" bodies=case_clauses() "}"
+    {
+      return new SwitchNode(location(t), cond, bodies);
+    }
 }
 
-// TODO: implement
-void case_clauses() : {}
+// TODO: test
+List<CaseNode> case_clauses() :
 {
-  (case_clause())*
-  [default_clause()]
+  List<CaseNode> clauses = new ArrayList<CaseNode>();
+  CaseNode n;
+}
+{
+  (n=case_clause() { clauses.add(n); })*
+  [n=default_clause() { clauses.add(n); }]
+    {
+      return clauses;
+    }  
 }
 
-// TODO: implement
-void case_clause() : {}
+// TODO: test
+CaseNode case_clause() :
 {
-  cases() case_body()
+  List<ExprNode> values;
+  BlockNode body;
+}
+{
+  values=cases() body=case_body()
+    {
+      return new CaseNode(body.location(), values, body);
+    }  
 }
 
-// TODO: implement
-void cases() : {}
+// TODO: test
+List<ExprNode> cases() :
 {
-  (<CASE> primary() ":")+
+  List<ExprNode> values = new ArrayList<ExprNode>();
+  ExprNode n;
+}
+{
+  (<CASE> n=primary() ":" { values.add(n); })+ { return values; }
 }
 
-// TODO: implement
-void default_clause() : {}
+// TODO: test
+CaseNode default_clause() :
+{ BlockNode body; }
 {
-  <DEFAULT_> ":" case_body()
+  <DEFAULT_> ":" body=case_body()
+    {
+      return new CaseNode(body.location(), new ArrayList<ExprNode>(), body);
+    }
 }
 
-// TODO: implement
-void case_body() : {}
+// TODO: test
+BlockNode case_body() :
 {
-  (stmt())+
+  LinkedList<StmtNode> stmts = new LinkedList<StmtNode>();
+  StmtNode s;
+}
+{
+  (s=stmt() { if (s != null) stmts.add(s); })+
+    {
+      if (! (stmts.getLast() instanceof BreakNode)) {
+        throw new ParseException("missing break statement at the last " +
+	                         "of case clause");
+      }
+      return new BlockNode(stmts.get(0).location(),
+                           new ArrayList<DefinedVariable>(), stmts);
+    }  			   
 }
 
-// TODO: implement
-StmtNode break_stmt() : {}
+// TODO: test
+BreakNode break_stmt() :
+{ Token t; }
 {
-  <BREAK> ";" { return null; }
+  t=<BREAK> ";" { return new BreakNode(location(t)); }
 }
 
-// TODO: implement
-StmtNode continue_stmt() : {}
+// TODO: test
+ContinueNode continue_stmt() :
+{ Token t; }
 {
-  <CONTINUE> ";" { return null; }
+  t=<CONTINUE> ";" { return new ContinueNode(location(t)); }
 }
 
 ReturnNode return_stmt() :
