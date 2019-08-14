@@ -20,6 +20,7 @@ import cflat.ast.DereferenceNode;
 import cflat.ast.DoWhileNode;
 import cflat.ast.ExprNode;
 import cflat.ast.ExprStmtNode;
+import cflat.ast.ForNode;
 import cflat.ast.FuncallNode;
 import cflat.ast.IfNode;
 import cflat.ast.IntegerLiteralNode;
@@ -827,10 +828,18 @@ DoWhileNode dowhile_stmt() :
     }
 }
 
-// TODO: implement
-StmtNode for_stmt() : {}
+// TODO: test
+ForNode for_stmt() :
 {
-  <FOR> "(" [expr()] ";" [expr()] ";" [expr()] ")" stmt() { return null; }
+  Token t;
+  ExprNode init = null, cond = null, incr = null;
+  StmtNode body;
+}
+{
+  t=<FOR> "(" [init=expr()] ";" [cond=expr()] ";" [incr=expr()] ")" body=stmt()
+    {
+      return new ForNode(location(t), init, cond, incr, body);
+    }
 }
 
 // TODO: implement
