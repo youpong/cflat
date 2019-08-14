@@ -17,6 +17,7 @@ import cflat.ast.CastNode;
 import cflat.ast.CondExprNode;
 import cflat.ast.Declarations;
 import cflat.ast.DereferenceNode;
+import cflat.ast.DoWhileNode;
 import cflat.ast.ExprNode;
 import cflat.ast.ExprStmtNode;
 import cflat.ast.FuncallNode;
@@ -812,10 +813,18 @@ WhileNode while_stmt() :
     }  
 }
 
-// TODO: implement
-StmtNode dowhile_stmt() : {}
+// TODO: test
+DoWhileNode dowhile_stmt() :
 {
-  <DO> stmt() <WHILE> "(" expr() ")" ";" { return null; }
+  Token t;
+  StmtNode body;
+  ExprNode cond;
+}
+{
+  t=<DO> body=stmt() <WHILE> "(" cond=expr() ")" ";"
+    {
+      return new DoWhileNode(location(t), body, cond);
+    }
 }
 
 // TODO: implement
