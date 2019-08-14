@@ -22,6 +22,7 @@ import cflat.ast.ExprStmtNode;
 import cflat.ast.FuncallNode;
 import cflat.ast.IfNode;
 import cflat.ast.IntegerLiteralNode;
+import cflat.ast.LabelNode;
 import cflat.ast.Location;
 import cflat.ast.LogicalAndNode;
 import cflat.ast.LogicalOrNode;
@@ -607,7 +608,7 @@ UnionNode defunion():
     }  
 }
 
-// TODO: implement
+// TODO: test
 TypedefNode typedef():
 {
   Token t;
@@ -720,7 +721,7 @@ ParamTypeRefs fixedparam_typerefs() :
     }  
 }
 
-// TODO: implement
+// TODO: test
 List<DefinedVariable> defvar_list() :
 {
   List<DefinedVariable> result = new ArrayList<DefinedVariable>();
@@ -745,7 +746,7 @@ List<StmtNode> stmts() :
     }  
 }
 
-// TODO: implement
+// TODO: test
 StmtNode stmt() :
 {
   StmtNode n = null;
@@ -771,10 +772,17 @@ StmtNode stmt() :
     }
 }
 
-// TODO: implement
-StmtNode labeled_stmt() : {}
+// TODO: test
+LabelNode labeled_stmt() :
 {
-  <IDENTIFIER> ":" stmt() { return null; }
+  Token t;
+  StmtNode n;
+}
+{
+  t=<IDENTIFIER> ":" n=stmt()
+    {
+      return new LabelNode(location(t), t.image, n);
+    }
 }
 
 IfNode if_stmt() :
@@ -822,27 +830,32 @@ StmtNode switch_stmt() : {}
   <SWITCH> "(" expr() ")" "{" case_clauses() "}" { return null; }
 }
 
+// TODO: implement
 void case_clauses() : {}
 {
   (case_clause())*
   [default_clause()]
 }
 
+// TODO: implement
 void case_clause() : {}
 {
   cases() case_body()
 }
 
+// TODO: implement
 void cases() : {}
 {
   (<CASE> primary() ":")+
 }
 
+// TODO: implement
 void default_clause() : {}
 {
   <DEFAULT_> ":" case_body()
 }
 
+// TODO: implement
 void case_body() : {}
 {
   (stmt())+

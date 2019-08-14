@@ -5,6 +5,7 @@ public interface ASTVisitor<S,E> {
     public S visit(BlockNode node);
     public S visit(ExprStmtNode node);
     public S visit(IfNode node);
+    public S visit(LabelNode node);    
     public S visit(WhileNode node);
     public S visit(ReturnNode node);
     
