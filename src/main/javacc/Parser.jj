@@ -25,6 +25,7 @@ import cflat.ast.ExprNode;
 import cflat.ast.ExprStmtNode;
 import cflat.ast.ForNode;
 import cflat.ast.FuncallNode;
+import cflat.ast.GotoNode;
 import cflat.ast.IfNode;
 import cflat.ast.IntegerLiteralNode;
 import cflat.ast.LabelNode;
@@ -949,10 +950,14 @@ ReturnNode return_stmt() :
   | t=<RETURN> expr=expr() ";"  { return new ReturnNode(location(t), expr); }
 }  
 
-// TODO: implement
-StmtNode goto_stmt() : {}
+// TODO: test
+GotoNode goto_stmt() :
+{ Token t, name; }
 {
-  <GOTO> <IDENTIFIER> ";" { return null; }
+  t=<GOTO> name=<IDENTIFIER> ";"
+    {
+      return new GotoNode(location(t), name.image);
+    }
 }
 
 List<Slot> member_list() :

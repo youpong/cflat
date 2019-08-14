@@ -8,7 +8,8 @@ public interface ASTVisitor<S,E> {
     public S visit(ContinueNode node);            
     public S visit(DoWhileNode node);    
     public S visit(ExprStmtNode node);
-    public S visit(ForNode node);    
+    public S visit(ForNode node);
+    public S visit(GotoNode node);        
     public S visit(IfNode node);
     public S visit(LabelNode node);    
     public S visit(ReturnNode node);
