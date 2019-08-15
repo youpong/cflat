@@ -33,6 +33,12 @@ public class FuncallNode extends ExprNode {
 	return expr.type().getPointerType().baseType().getFunctionType();
     }
     */
+    public ExprNode expr() {
+	return expr;
+    }
+    public List<ExprNode> args() {
+	return args;
+    }
     public Location location() {
 	return expr.location();
     }

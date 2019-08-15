@@ -1,12 +1,13 @@
 package cflat.ast;
 
 import cflat.type.Type;
+import cflat.entity.Entity;
 
 // TODO: implement
 public class VariableNode extends LHSNode {
     private Location location;
     private String name;
-    //    private Entity entity;
+    private Entity entity;
     
     public VariableNode(Location loc, String name) {
 	this.location = loc;
@@ -25,12 +26,17 @@ public class VariableNode extends LHSNode {
     }
     */
 
+    public void setEntity(Entity entity) {
+	this.entity = entity;
+    }
     // TODO: implement
     protected Type origType() {
 	//return entity().type();
 	return null;
     }
-
+    public String name() {
+	return name;
+    }
     public Location location() {
 	return location;
     }

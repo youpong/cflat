@@ -17,7 +17,12 @@ abstract public class Entity implements Dumpable {
 	this.name = name;
 	this.nRefered = 0;
     }
-
+    public void refered() {
+	nRefered++;
+    }
+    public String name() {
+	return name;
+    }
     public TypeNode typeNode() {
 	return typeNode;
     }

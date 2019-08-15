@@ -10,6 +10,10 @@ import cflat.ast.StructNode;
 import cflat.ast.UnionNode;
 import cflat.ast.TypedefNode;
 
+/** 
+ * Set<Constant> constants 
+ * List<Constant> constants()
+ */
 public class Declarations {
     Set<DefinedVariable> defvars = new LinkedHashSet<DefinedVariable>();
     Set<UndefinedVariable> vardecls = new LinkedHashSet<UndefinedVariable>();
@@ -37,6 +41,9 @@ public class Declarations {
     }
     public List<DefinedVariable> defvars() {
 	return new ArrayList<DefinedVariable>(defvars);
+    }
+    public List<Constant> constants() {
+	return new ArrayList<Constant>(constants);
     }
     public void addVardecl(UndefinedVariable var) {
 	vardecls.add(var);

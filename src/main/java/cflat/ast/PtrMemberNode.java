@@ -30,7 +30,9 @@ public class PtrMemberNode extends LHSNode {
 	//return dereferencedCompositeType().memberType(member);
 	return null;
     }
-
+    public ExprNode expr() {
+	return expr;
+    }
     public Location location() {
 	return expr.location();
     }

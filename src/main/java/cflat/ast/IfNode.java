@@ -12,6 +12,15 @@ public class IfNode extends StmtNode {
 	this.elseBody = e;
     }
 
+    public ExprNode cond() {
+	return cond;
+    }
+    public StmtNode thenBody() {
+	return thenBody;
+    }
+    public StmtNode elseBody() {
+	return elseBody;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("cond", cond);
 	d.printMember("thenBody", thenBody);

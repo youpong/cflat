@@ -9,7 +9,9 @@ public class LabelNode extends StmtNode {
 	this.name = name;
 	this.stmt = stmt;
     }
-
+    public StmtNode stmt() {
+	return stmt;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("stmt", stmt);

@@ -17,6 +17,9 @@ public class AddressNode extends ExprNode {
 	    throw new Error("type is null");
 	return type;
     }
+    public ExprNode expr() {
+	return expr;
+    }
     public Location location() {
 	return expr.location();
     }

@@ -14,7 +14,9 @@ public class SizeofExprNode extends ExprNode {
 	this.expr = expr;
 	this.type = new TypeNode(type);
     }
-
+    public ExprNode expr() {
+	return expr;
+    }
     public Type type() {
 	return type.type();
     }

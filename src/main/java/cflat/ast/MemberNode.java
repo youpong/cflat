@@ -30,7 +30,9 @@ public class MemberNode extends LHSNode {
 	//return baseType().memberType(member);
 	return null;
     }
-
+    public ExprNode expr() {
+	return expr;
+    }
     public Location location() {
 	return expr.location();
     }

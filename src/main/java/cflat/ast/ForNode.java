@@ -12,6 +12,18 @@ public class ForNode extends StmtNode {
 	this.incr = incr;
 	this.body = body;
     }
+    public ExprNode init() {
+	return init;
+    }
+    public ExprNode cond() {
+	return cond;
+    }
+    public ExprNode incr() {
+	return incr;
+    }
+    public StmtNode body() {
+	return body;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("init", init);
 	d.printMember("cond", cond);	

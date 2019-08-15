@@ -15,6 +15,9 @@ public class DereferenceNode extends LHSNode {
     protected Type origType() {
 	return expr.type().baseType();
     }
+    public ExprNode expr() {
+	return expr;
+    }
     public Location location() {
 	return expr.location();
     }

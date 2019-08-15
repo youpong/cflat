@@ -8,6 +8,12 @@ public class WhileNode extends StmtNode {
 	this.cond = c;
 	this.body = b;
     }
+    public ExprNode cond() {
+	return cond;
+    }
+    public StmtNode body() {
+	return body;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("cond", cond);
 	d.printMember("body", body);

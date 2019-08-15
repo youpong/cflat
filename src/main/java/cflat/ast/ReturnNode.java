@@ -7,6 +7,9 @@ public class ReturnNode extends StmtNode {
 	super(loc);
 	this.expr = expr;
     }
+    public ExprNode expr() {
+	return expr;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("expr", expr);
     }

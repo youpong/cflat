@@ -12,6 +12,12 @@ abstract public class AbstractAssignNode extends ExprNode {
     public Type type() {
 	return lhs.type();
     }
+    public ExprNode lhs() {
+	return lhs;
+    }
+    public ExprNode rhs() {
+	return rhs;
+    }
     public Location location() {
 	return lhs.location();
     }

@@ -18,6 +18,9 @@ public class UnaryOpNode extends ExprNode {
     public Type type() {
 	return expr.type();
     }
+    public ExprNode expr() {
+	return expr;
+    }
     public Location location() {
 	return expr.location();
     }

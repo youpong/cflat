@@ -12,6 +12,12 @@ public class CaseNode extends StmtNode {
 	this.values = values;
 	this.body = body;
     }
+    public List<ExprNode> values() {
+	return values;
+    }
+    public BlockNode body() {
+	return body;
+    }
     protected void _dump(Dumper d) {
 	d.printNodeList("values", values);
 	d.printMember("body", body);

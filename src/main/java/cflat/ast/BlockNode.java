@@ -14,6 +14,12 @@ public class BlockNode extends StmtNode {
 	this.variables = vars;
 	this.stmts = stmts;
     }
+    public List<DefinedVariable> variables() {
+	return variables;
+    }
+    public List<StmtNode> stmts() {
+	return stmts;
+    }
     protected void _dump(Dumper d) {
 	d.printNodeList("variables", variables);
 	d.printNodeList("stmts", stmts);

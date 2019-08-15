@@ -13,6 +13,15 @@ public class CondExprNode extends ExprNode {
     public Type type() {
 	return thenExpr.type();
     }
+    public ExprNode cond() {
+	return cond;
+    }
+    public ExprNode thenExpr() {
+	return thenExpr;
+    }
+    public ExprNode elseExpr() {
+	return elseExpr;
+    }
     public Location location() {
 	return cond.location();
     }
