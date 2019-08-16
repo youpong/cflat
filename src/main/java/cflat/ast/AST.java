@@ -76,4 +76,26 @@ public class AST extends Node {
 	    s.print(" ");
 	s.println(value);
     }
+
+    public StmtNode getSingleMainStmt() {
+	for (DefinedFunction f : definedFunctions()) {
+	    if (f.name().equals("main")) {
+		if (f.body().stmts().isEmpty()) {
+		    return null;
+		}
+		return f.body().stmts().get(0);
+	    }
+	}
+	return null;
+    }
+    public ExprNode getSingleMainExpr() {
+	StmtNode stmt = getSingleMainStmt();
+	if (stmt == null) 
+	    return null;
+	if (stmt instanceof ExprStmtNode) 
+	    return ((ExprStmtNode)stmt).expr();
+	if (stmt instanceof ReturnNode) 
+	    return ((ReturnNode)stmt).expr();
+	return null;
+    }
 }

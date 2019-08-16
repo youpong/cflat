@@ -2,9 +2,12 @@ package cflat.compiler;
 
 import cflat.type.TypeTable;
 import cflat.ast.AST;
+import cflat.ast.StmtNode;
+import cflat.ast.ExprNode;
 import cflat.exception.CompileException;
 import cflat.exception.SyntaxException;
 import cflat.exception.FileException;
+import cflat.exception.SemanticException;
 import cflat.utils.ErrorHandler;
 import cflat.ir.IR;
 import cflat.sysdep.x86.AssemblyCode;
@@ -85,9 +88,10 @@ public class Compiler {
     public void compile(String srcPath, String destPath, Options opts)
 	throws CompileException {
 	AST ast = parseFile(srcPath, opts);
-	if(dumpAST(ast, opts.mode())) return;
+	if (dumpAST(ast, opts.mode())) return;
 	TypeTable types = opts.typeTable();
 	AST sem = semanticAnalyze(ast, types, opts);
+	if (dumpSemant(sem, opts.mode())) return;
 	IR ir = new IRGenerator(errorHandler).generate(sem, types);
 	AssemblyCode asm = generateAssembly(ir, opts);
 	writeFile(destPath, asm);
@@ -98,9 +102,20 @@ public class Compiler {
 	return Parser.parseFile(new File(path), opts.loader(), errorHandler,
 			 opts.doesDebugParser());
     }
-    public AST semanticAnalyze(AST ast, TypeTable types, Options opts) {
-	// TODO
-	return null;
+    
+    // TODO: test
+    public AST semanticAnalyze(AST ast, TypeTable types, Options opts)
+	throws SemanticException {
+	new LocalResolver(errorHandler).resolve(ast);
+	new TypeResolver(types, errorHandler).resolve(ast);
+	types.semanticCheck(errorHandler);
+	if (opts.mode() == CompilerMode.DumpReference) {
+	    ast.dump();
+	    return ast;
+	}
+	new DereferenceChecker(types, errorHandler).check(ast);
+	new TypeChecker(types, errorHandler).check(ast);
+	return ast;
     }
     public AssemblyCode generateAssembly(IR ir, Options opts) {
 	// TODO
@@ -127,14 +142,43 @@ public class Compiler {
 	    return true;
 	case DumpStmt:
 	    // TODO: implement
-	    //findStmt(ast).dump();
+	    findStmt(ast).dump();
 	    return true;
 	case DumpExpr:
 	    // TODO: implement	    
-	    //findExpr(ast).dump();
+	    findExpr(ast).dump();
 	    return true;
 	default:
 	    return false;
 	}
+    }
+    private StmtNode findStmt(AST ast) {
+	StmtNode stmt = ast.getSingleMainStmt();
+	if (stmt == null) {
+	    errorExit("source file does not contains main()");
+	}
+	return stmt;
+    }
+    private ExprNode findExpr(AST ast) {
+	ExprNode expr = ast.getSingleMainExpr();
+	if (expr == null) {
+	    errorExit("source file does not contains single expression");
+	}
+	return expr;
+    }
+    private boolean dumpSemant(AST ast, CompilerMode mode) {
+	switch(mode) {
+	case DumpReference:
+	    return true;
+	case DumpSemantic:
+	    ast.dump();
+	    return true;
+	default:
+	    return false;
+	}
+    }
+    private void errorExit(String msg) {
+	errorHandler.error(msg);
+	System.exit(1);
     }
 }

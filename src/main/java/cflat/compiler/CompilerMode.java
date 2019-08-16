@@ -12,6 +12,7 @@ enum CompilerMode {
     DumpStmt ("--dump-stmt"),
     DumpExpr ("--dump-expr"),
     DumpSemantic ("--dump-semantic"),
+    DumpReference ("--dump-reference"),
     DumpIR ("--dump-ir"),
     DumpAsm ("--dump-asm");
 
