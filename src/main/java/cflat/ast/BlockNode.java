@@ -1,12 +1,13 @@
 package cflat.ast;
 
 import java.util.*;
+import cflat.entity.LocalScope;
 import cflat.entity.DefinedVariable;
 
 public class BlockNode extends StmtNode {
     protected List<DefinedVariable> variables;
     protected List<StmtNode> stmts;
-    //protected LocalScope scope;
+    protected LocalScope scope;
 
     public BlockNode(Location loc,
 		     List<DefinedVariable> vars, List<StmtNode> stmts) {
@@ -19,6 +20,9 @@ public class BlockNode extends StmtNode {
     }
     public List<StmtNode> stmts() {
 	return stmts;
+    }
+    public void setScope(LocalScope scope) {
+	this.scope = scope;
     }
     protected void _dump(Dumper d) {
 	d.printNodeList("variables", variables);

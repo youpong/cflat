@@ -1,6 +1,7 @@
 package cflat.compiler;
 
 import cflat.ast.AST;
+import cflat.ast.BlockNode;
 import cflat.ast.ExprNode;
 import cflat.ast.StmtNode;
 import cflat.ast.VariableNode;
@@ -19,7 +20,10 @@ import cflat.utils.ErrorHandler;
 
 import java.util.*;
 
-// TODO: implement
+// TODO: test
+/**
+ * 変数参照の解決
+ */
 public class LocalResolver extends Visitor {
     private final LinkedList<Scope> scopeStack;
     private final ConstantTable constantTable;
@@ -55,19 +59,28 @@ public class LocalResolver extends Visitor {
 	ast.setScope(toplevel);
 	ast.setConstantTable(constantTable);
     }
-    // TODO: implement
-    private void resolveGvarInitializers(List<DefinedVariable> d){}
-    // TODO: implement
-    private void resolveConstantValues(List<Constant> c){}
-    // TODO: implement    
+    // TODO: test
+    private void resolveGvarInitializers(List<DefinedVariable> gvars) {
+	for (DefinedVariable gvar : gvars) {
+	    if (gvar.hasInitializer()) {
+		resolve(gvar.initializer());
+	    }
+	}
+    }
+    // TODO: test
+    private void resolveConstantValues(List<Constant> consts) {
+	for (Constant c : consts) {
+	    resolve(c.value());
+	}
+    }
+    // TODO: test
     private void resolveFunctions(List<DefinedFunction> funcs){
 	for (DefinedFunction func : funcs) {
 	    pushScope(func.parameters());
-	    resolve(func.body());
+	    resolve(func.body()); 
 	    func.setScope(popScope());
 	}
     }
-
     
     // TODO: test
     private void pushScope(List<? extends DefinedVariable> vars) {
@@ -96,6 +109,12 @@ public class LocalResolver extends Visitor {
 	}
     */
 
+    public Void visit(BlockNode node) {
+	pushScope(node.variables());
+	super.visit(node); // TODO: 振る舞いを理解する
+	node.setScope(popScope());
+	return null;
+    }
     // TODO: test
     public Void visit(VariableNode node) {
 	try {

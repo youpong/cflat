@@ -4,6 +4,9 @@ import cflat.exception.SemanticException;
 import java.util.*;
 
 // TODO: implement
+/**
+ * ローカル変数のスコープ1つを表現する。仮引数またはローカル変数を持つ。
+ */
 public class LocalScope extends Scope {
     protected Scope parent;
     protected Map<String, DefinedVariable> variables;

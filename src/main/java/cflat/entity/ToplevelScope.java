@@ -5,6 +5,9 @@ import cflat.utils.ErrorHandler;
 import cflat.exception.SemanticException;
 
 // TODO: implement
+/**
+ * プログラムのトップレベルスコープを表現する。関数とグローバル変数を持つ。
+ */
 public class ToplevelScope extends Scope {
     protected Map<String, Entity> entities;
     protected List<DefinedVariable> staticLocalVariables;

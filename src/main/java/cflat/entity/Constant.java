@@ -11,6 +11,9 @@ public class Constant extends Entity {
 	super(true, type, name);
 	this.value = value;
     }
+    public ExprNode value() {
+	return value();
+    }
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("typeNode", typeNode);

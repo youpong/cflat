@@ -4,6 +4,9 @@ import java.util.*;
 import cflat.exception.SemanticException;
 
 // TODO: implement
+/**
+ * スコープを表現する抽象クラス
+ */
 abstract public class Scope {
     protected List<LocalScope> children;
 
