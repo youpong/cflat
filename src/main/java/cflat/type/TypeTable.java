@@ -33,7 +33,13 @@ public class TypeTable {
     public boolean isDefined(TypeRef ref) {
 	return table.containsKey(ref);
     }
-    
+
+    public void put(TypeRef ref, Type t) {
+	if (table.containsKey(ref)) {
+	    throw new Error("duplicated type definition: " + ref);
+	}
+	table.put(ref, t);
+    }
     // TODO: implement    
     public void semanticCheck(ErrorHandler errorHandler) {
     }

@@ -55,7 +55,7 @@ public class TypeResolver extends Visitor
 	    if (typeTable.isDefined(def.typeRef())) {
 		error(def, "duplicated type definitions: " + def.typeRef());
 	    }
-	    //	    typeTable.put(def.typeRef(), def.definitingType());
+	    typeTable.put(def.typeRef(), def.definitingType());
 	}
     }
 
