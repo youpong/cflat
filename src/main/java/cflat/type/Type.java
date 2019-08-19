@@ -6,4 +6,5 @@ public abstract class Type {
     public Type baseType() {
 	throw new SemanticError("#baseType called for undereferable type");
     }
+    public boolean isArray() { return false; }
 }

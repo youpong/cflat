@@ -24,13 +24,12 @@ public class TypeNode extends Node {
     public boolean isResolved() {
 	return (type != null);
     }
-    /*
+
     public void setType(Type t) {
 	if (type != null)
 	    throw new Error("TypeNode#setType called twice");
 	type = t;
     }
-    */
 
     public Type type() {
 	if(type ==null) {

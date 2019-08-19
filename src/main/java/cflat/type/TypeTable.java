@@ -40,6 +40,50 @@ public class TypeTable {
 	}
 	table.put(ref, t);
     }
+
+    // TODO: test20
+    public Type get(TypeRef ref) {
+	Type type = table.get(ref);
+	if (type == null) {
+	    if (ref instanceof UserTypeRef) {
+		UserTypeRef uref = (UserTypeRef)ref;
+		throw new Error("undefined type: " + uref.name());
+	    }
+	    else if(ref instanceof PointerTypeRef) {
+		PointerTypeRef pref = (PointerTypeRef)ref;
+		Type t = new PointerType(pointerSize, get(pref.baseType()));
+		table.put(pref, t);
+		return t;
+	    }
+	    else if(ref instanceof ArrayTypeRef) {
+		ArrayTypeRef aref = (ArrayTypeRef)ref;
+		Type t = new ArrayType(get(aref.baseType()),
+				       aref.length(), pointerSize);
+		table.put(aref, t);
+		return t;
+	    }
+	    else if(ref instanceof FunctionTypeRef) {
+		FunctionTypeRef fref = (FunctionTypeRef)ref;
+		Type t = new FunctionType(get(fref.returnType()),
+					  fref.params().internTypes(this));
+		table.put(fref, t);
+		return t;
+	    }
+	    throw new Error("unregistered type: " + ref.toString());
+	}
+	return type;
+    }
+
+    // TODO: test20
+    public Type getParamType(TypeRef ref) {
+	Type t = get(ref);
+	return t.isArray() ? pointerTo(t.baseType()) : t;
+    }
+
+    // TODO: test20
+    public PointerType pointerTo(Type baseType) {
+	return new PointerType(pointerSize, baseType);
+    }
     // TODO: implement    
     public void semanticCheck(ErrorHandler errorHandler) {
     }

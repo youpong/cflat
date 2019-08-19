@@ -17,4 +17,10 @@ public class ArrayTypeRef extends TypeRef {
 	this.baseType = baseType;
 	this.length = length;
     }
+    public TypeRef baseType() {
+	return baseType;
+    }
+    public long length() {
+	return length;
+    }
 }

@@ -59,8 +59,10 @@ public class TypeResolver extends Visitor
 	}
     }
 
-    // TODO: implement
+    // TODO: test
     private void bindType(TypeNode n) {
+	if (n.isResolved()) return;
+	n.setType(typeTable.get(n.typeRef()));
     }
 
     //
@@ -109,7 +111,7 @@ public class TypeResolver extends Visitor
 	return null;
     }
     public Void visit(DefinedVariable var) {
-	//	bindType(var.typeNode());
+	bindType(var.typeNode());
 	if (var.hasInitializer()) {
 	    visitExpr(var.initializer());
 	}

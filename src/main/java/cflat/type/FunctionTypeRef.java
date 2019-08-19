@@ -9,4 +9,10 @@ public class FunctionTypeRef extends TypeRef {
 	this.returnType = returnType;
 	this.params = params;
     }
+    public TypeRef returnType() {
+	return returnType;
+    }
+    public ParamTypeRefs params() {
+	return params;
+    }
 }

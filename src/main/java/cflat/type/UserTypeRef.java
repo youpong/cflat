@@ -12,4 +12,7 @@ public class UserTypeRef extends TypeRef {
 	super(loc);
 	this.name = name;
     }
+    public String name() {
+	return name;
+    }
 }
