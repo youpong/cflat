@@ -12,6 +12,12 @@ public class ToplevelScope extends Scope {
     protected Map<String, Entity> entities;
     protected List<DefinedVariable> staticLocalVariables;
 
+    public ToplevelScope() {
+	super();
+	entities = new LinkedHashMap<String, Entity>();
+	staticLocalVariables = null;
+    }
+    
     // TODO: test
     public void declareEntity(Entity entity) throws SemanticException {
 	Entity e = entities.get(entity.name());
