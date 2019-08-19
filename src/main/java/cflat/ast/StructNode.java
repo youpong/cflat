@@ -1,7 +1,7 @@
 package cflat.ast;
 
 import cflat.type.TypeRef;
-//import cflat.type.StructType;
+import cflat.type.StructType;
 import cflat.type.Type;
 import java.util.*;
 
@@ -12,8 +12,7 @@ public class StructNode extends CompositeTypeDefinition {
     }
     // TODO: implement
     public Type definitingType() {
-	//	return new StructType(name(), members(), location());
-	return null;
+	return new StructType(name(), members(), location());
     }
     public <T> T accept(DeclarationVisitor<T> visitor) {
 	return visitor.visit(this);

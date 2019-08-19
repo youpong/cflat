@@ -12,6 +12,9 @@ abstract public class CompositeTypeDefinition extends TypeDefinition {
 	this.members = membs;
     }
 
+    public List<Slot> members() {
+	return members;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printNodeList("members", members);
