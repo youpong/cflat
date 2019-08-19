@@ -23,6 +23,11 @@ import java.util.*;
 // TODO: test
 /**
  * 変数参照の解決
+ *
+ * Scope オブジェクトのツリーをつくりながら、変数参照ノード VariableNode を
+ * 解決していく。
+ * Scope オブジェクトを作る際に、重複する同名の関数、変数があれば
+ * エラーとしてカウントする。
  */
 public class LocalResolver extends Visitor {
     private final LinkedList<Scope> scopeStack;

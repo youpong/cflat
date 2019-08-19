@@ -1,0 +1,5 @@
+int global_variable = 42;
+
+int main(void) { 
+  return global_variable;
+}

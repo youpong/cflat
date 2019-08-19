@@ -29,6 +29,9 @@ abstract public class Entity implements Dumpable {
     public Location location() {
 	return typeNode.location();
     }
+
+    abstract public <T> T accept(EntityVisitor<T> visitor);
+    
     public void dump(Dumper d) {
 	d.printClass(this, location());
 	_dump(d);

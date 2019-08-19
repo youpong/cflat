@@ -1,6 +1,7 @@
 package cflat.ast;
 
 import cflat.type.TypeRef;
+import cflat.type.Type;
 
 abstract public class TypeDefinition extends Node {
     protected String name;
@@ -19,4 +20,11 @@ abstract public class TypeDefinition extends Node {
     public Location location() {
 	return location;
     }
+
+    public TypeRef typeRef() {
+	return typeNode.typeRef();
+    }
+
+    abstract public Type definitingType();
+    abstract public <T> T accept(DeclarationVisitor<T> visitor);
 }

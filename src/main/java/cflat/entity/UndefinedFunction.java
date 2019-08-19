@@ -17,4 +17,8 @@ public class UndefinedFunction extends Function {
 	d.printMember("typeNode", typeNode);
 	d.printMember("params", params);
     }
+
+    public <T> T accept(EntityVisitor<T> visitor) {
+	return visitor.visit(this);
+    }
 }

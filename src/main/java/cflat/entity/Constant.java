@@ -19,5 +19,8 @@ public class Constant extends Entity {
 	d.printMember("typeNode", typeNode);
 	d.printMember("value", value);
     }
-	
+
+    public <T> T accept(EntityVisitor<T> visitor) {
+	return visitor.visit(this);
+    }
 }

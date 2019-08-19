@@ -60,8 +60,14 @@ public class Declarations {
     public void addDefstruct(StructNode n) {
 	defstructs.add(n);
     }
+    public List<StructNode> defstructs() {
+	return new ArrayList<StructNode>(defstructs);
+    }
     public void addDefunion(UnionNode n) {
 	defunions.add(n);
+    }
+    public List<UnionNode> defunions() {
+	return new ArrayList<UnionNode>(defunions);
     }
     public void addFuncdecl(UndefinedFunction func) {
 	funcdecls.add(func);

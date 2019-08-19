@@ -26,4 +26,7 @@ public class DefinedVariable extends Variable {
 	d.printMember("typeNode", typeNode);
 	d.printMember("initializer", initializer);
     }
+    public <T> T accept(EntityVisitor<T> visitor) {
+	return visitor.visit(this);
+    }
 }

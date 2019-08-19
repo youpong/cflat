@@ -24,6 +24,23 @@ public class AST extends Node {
     public Location location() {
 	return source;
     }
+    
+    public List<TypeDefinition> types() {
+	List<TypeDefinition> result = new ArrayList<TypeDefinition>();
+	result.addAll(declarations.defstructs());
+	result.addAll(declarations.defunions());
+	result.addAll(declarations.typedefs());
+	return result;
+    }
+    public List<Entity> entities() {
+	List<Entity> result = new ArrayList<Entity>();
+	result.addAll(declarations.funcdecls);
+	result.addAll(declarations.vardecls);
+	result.addAll(declarations.defvars);
+	result.addAll(declarations.defuns);
+	result.addAll(declarations.constants);
+	return result;
+    }
     public List<Entity> declarations() {
 	List<Entity> result = new ArrayList<Entity>();
 	result.addAll(declarations.funcdecls);
