@@ -1,5 +1,7 @@
 package cflat.ast;
 
+import cflat.type.Type;
+
 public class Slot extends Node {
     protected TypeNode typeNode;
     protected String name;
@@ -10,6 +12,12 @@ public class Slot extends Node {
     }
     public TypeNode typeNode() {
 	return typeNode;
+    }
+    public Type type() {
+	return typeNode.type();
+    }
+    public String name() {
+	return name;
     }
     public Location location() {
 	return typeNode.location();

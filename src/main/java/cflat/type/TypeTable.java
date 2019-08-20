@@ -1,6 +1,8 @@
 package cflat.type;
 
+import cflat.ast.Slot;
 import cflat.utils.ErrorHandler;
+
 import java.util.*;
 
 /**
@@ -57,7 +59,7 @@ public class TypeTable {
 	}
 	table.put(ref, t);
     }
-
+    
     // TODO: test20
     public Type get(TypeRef ref) {
 	Type type = table.get(ref);
@@ -97,11 +99,82 @@ public class TypeTable {
 	return t.isArray() ? pointerTo(t.baseType()) : t;
     }
 
+    public Collection<Type> types() {
+	return table.values();
+    }
     // TODO: test20
     public PointerType pointerTo(Type baseType) {
 	return new PointerType(pointerSize, baseType);
     }
+    // TODO: test
+    public void semanticCheck(ErrorHandler h) {
+	for (Type t : types()) {
+	    if (t instanceof CompositeType) {
+		checkVoidMembers((CompositeType)t, h);
+		checkDuplicatedMembers((CompositeType)t, h);
+	    }
+	    else if(t instanceof ArrayType) {
+		checkVoidMembers((ArrayType)t, h);
+	    }
+	    checkRecursiveDefinition(t, h);
+	}
+    }
+
+    // TODO: test
+    protected void checkVoidMembers(ArrayType t, ErrorHandler h) {
+	if (t.baseType().isVoid()) {
+	    h.error("array cannot contain void");
+	}
+    }
+    // TODO: test
+    protected void checkVoidMembers(CompositeType t, ErrorHandler h) {
+	for (Slot s : t.members()) {
+	    if (s.type().isVoid()) {
+		h.error(t.location(), "struct/union cannot contain void");
+	    }
+	}
+    }
+    // TODO: implement
+    protected void checkDuplicatedMembers(CompositeType t, ErrorHandler h) {
+	Map<String, Slot> seen = new HashMap<String, Slot>();
+	for (Slot s : t.members()) {
+	    if (seen.containsKey(s.name())) {
+		h.error(t.location(),
+			t.toString() + " has duplicated member: " + s.name());
+	    }
+	    seen.put(s.name(), s);
+	}
+    }
     // TODO: implement    
-    public void semanticCheck(ErrorHandler errorHandler) {
+    protected void checkRecursiveDefinition(Type t, ErrorHandler h) {
+	_checkRecursiveDefinition(t, new HashMap<Type, Object>(), h);
+    }
+    static final protected Object checking = new Object();
+    static final protected Object checked = new Object();
+
+    protected void _checkRecursiveDefinition(Type t, Map<Type, Object> marks,
+					     ErrorHandler h) {
+	if (marks.get(t) == checking) {
+	    h.error(((NamedType)t).location(),
+		    "recursive type definition: " + t);
+	    return;
+	} else if (marks.get(t) == checked) {
+	    return;
+	} else {
+	    marks.put(t, checking);
+	    if (t instanceof CompositeType) {
+		CompositeType ct = (CompositeType)t;
+		for (Slot s : ct.members()) {
+		    _checkRecursiveDefinition(s.type(), marks, h);
+		}
+	    } else if (t instanceof ArrayType) {
+		ArrayType at = (ArrayType)t;
+		_checkRecursiveDefinition(at.baseType(), marks, h);
+	    } else if (t instanceof UserType) {
+		UserType ut = (UserType)t;
+		_checkRecursiveDefinition(ut.baseType(), marks, h);
+	    }
+	    marks.put(t, checked);
+	}
     }
 }
