@@ -12,6 +12,10 @@ public class StructTypeRef extends TypeRef {
 	super(loc);
 	this.name = name;
     }
+    public boolean equals(Object other) {
+	if (! (other instanceof StructTypeRef)) return false;
+	return name.equals(((StructTypeRef)other).name);
+    }
     public String toString() {
 	return "struct " + name;
     }

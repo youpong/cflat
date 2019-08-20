@@ -61,6 +61,13 @@ public class IntegerTypeRef extends TypeRef {
     static public IntegerTypeRef ulongRef(){
     	return new IntegerTypeRef("unsigned long");
     }
+
+    public boolean equals(Object other) {
+	if (! (other instanceof IntegerTypeRef)) return false;
+	IntegerTypeRef ref = (IntegerTypeRef)other;
+	return name.equals(ref.name);
+    }
+    
     public String toString() {
 	return name;
     }

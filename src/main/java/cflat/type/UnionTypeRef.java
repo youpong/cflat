@@ -12,6 +12,10 @@ public class UnionTypeRef extends TypeRef {
 	super(loc);
 	this.name = name;
     }
+    public boolean equals(Object other) {
+	if (! (other instanceof UnionTypeRef)) return false;
+	return name.equals(((UnionTypeRef)other).name);
+    }
     public String toString() {
 	return "union " + name;
     }
