@@ -14,7 +14,24 @@ public class TypeTable {
     static private TypeTable newTable(int charsize, int shortsize,
 				      int intsize, int longsize, int ptrsize) {
 	TypeTable table = new TypeTable(intsize, longsize, ptrsize);
-	// table.put(new VoidTypeRef(), new VoidType());
+	table.put(new VoidTypeRef(), new VoidType());
+	table.put(IntegerTypeRef.charRef(),
+		  new IntegerType(charsize, true, "char"));
+	table.put(IntegerTypeRef.shortRef(),
+		  new IntegerType(shortsize, true, "short"));
+	table.put(IntegerTypeRef.intRef(),
+		  new IntegerType(intsize, true, "int"));
+	table.put(IntegerTypeRef.longRef(),
+		  new IntegerType(longsize, true, "long"));
+	
+	table.put(IntegerTypeRef.ucharRef(),
+		  new IntegerType(charsize, false, "unsigned char"));
+	table.put(IntegerTypeRef.ushortRef(),
+		  new IntegerType(shortsize, false, "unsigned short"));
+	table.put(IntegerTypeRef.uintRef(),
+		  new IntegerType(intsize, false, "unsigned int"));
+	table.put(IntegerTypeRef.ulongRef(),
+		  new IntegerType(longsize, false, "unsigned long"));
 	return table;
     }
     

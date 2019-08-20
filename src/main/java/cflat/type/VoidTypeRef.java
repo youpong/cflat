@@ -9,4 +9,7 @@ public class VoidTypeRef extends TypeRef {
     public VoidTypeRef(Location loc) {
 	super(loc);
     }
+    public String toString() {
+	return "void";
+    }
 }

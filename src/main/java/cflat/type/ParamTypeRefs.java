@@ -13,6 +13,9 @@ public class ParamTypeRefs extends ParamSlots<TypeRef> {
 	super(loc, paramDescs, vararg);
     }
 
+    public List<TypeRef> typerefs() {
+	return paramDescriptors;
+    }
     // TODO: test20
     public ParamTypes internTypes(TypeTable table) {
 	List<Type> types = new ArrayList<Type>();
@@ -21,4 +24,5 @@ public class ParamTypeRefs extends ParamSlots<TypeRef> {
 	}
 	return new ParamTypes(location, types, vararg);
     }
+    
 }

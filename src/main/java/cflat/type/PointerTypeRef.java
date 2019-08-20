@@ -7,11 +7,10 @@ public class PointerTypeRef extends TypeRef {
 	super(baseType.location());
 	this.baseType = baseType;
     }
-    public String toString() {
-	return baseType.toString() + "*";
-    }
-    
     public TypeRef baseType() {
 	return baseType;
+    }
+    public String toString() {
+	return baseType.toString() + "*";
     }
 }

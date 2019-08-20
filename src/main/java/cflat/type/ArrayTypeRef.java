@@ -23,4 +23,11 @@ public class ArrayTypeRef extends TypeRef {
     public long length() {
 	return length;
     }
+
+    public String toString() {
+	return baseType.toString()
+	    + "["
+	    + (length == undefined ? "" : "" + length)
+	    + "]";
+    }
 }

@@ -12,4 +12,7 @@ public class UnionTypeRef extends TypeRef {
 	super(loc);
 	this.name = name;
     }
+    public String toString() {
+	return "union " + name;
+    }
 }

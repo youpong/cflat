@@ -12,4 +12,7 @@ public class StructTypeRef extends TypeRef {
 	super(loc);
 	this.name = name;
     }
+    public String toString() {
+	return "struct " + name;
+    }
 }
