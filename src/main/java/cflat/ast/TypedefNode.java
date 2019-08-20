@@ -4,6 +4,9 @@ import cflat.type.Type;
 import cflat.type.TypeRef;
 import cflat.type.UserTypeRef;
 
+/**
+ * typedef
+ */
 public class TypedefNode extends TypeDefinition {
     protected TypeNode real;
     

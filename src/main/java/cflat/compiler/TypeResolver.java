@@ -1,8 +1,14 @@
 package cflat.compiler;
 
 import cflat.ast.AST;
+import cflat.ast.BlockNode;
+import cflat.ast.CastNode;
 import cflat.ast.Node;
 import cflat.ast.CompositeTypeDefinition;
+import cflat.ast.IntegerLiteralNode;
+import cflat.ast.StringLiteralNode;
+import cflat.ast.SizeofExprNode;
+import cflat.ast.SizeofTypeNode;
 import cflat.ast.TypeDefinition;
 import cflat.ast.TypedefNode;
 import cflat.ast.TypeNode;
@@ -94,12 +100,29 @@ public class TypeResolver extends Visitor
 	    bindType(s.typeNode());
 	}
     }
+    
     public Void visit(TypedefNode typedef) {
 	bindType(typedef.typeNode());
 	bindType(typedef.realTypeNode());
 	return null;
     }
+
+    //
+    // Entities
+    //
     
+    public Void visit(DefinedVariable var) {
+	bindType(var.typeNode());
+	if (var.hasInitializer()) {
+	    visitExpr(var.initializer());
+	}
+	return null;
+    }
+    public Void visit(UndefinedVariable var) {
+	bindType(var.typeNode());
+	return null;
+    }
+
     // TODO: test
     public Void visit(Constant c) {
 	bindType(c.typeNode());
@@ -123,18 +146,48 @@ public class TypeResolver extends Visitor
 	    param.typeNode().setType(t);
 	}
     }
-    public Void visit(UndefinedVariable var) {
-	bindType(var.typeNode());
+
+    //
+    // Expressions
+    //
+
+    public Void visit(BlockNode node) {
+	for (DefinedVariable var : node.variables()) {
+	    var.accept(this);
+	}
+	visitStmts(node.stmts());
 	return null;
     }
-    public Void visit(DefinedVariable var) {
-	bindType(var.typeNode());
-	if (var.hasInitializer()) {
-	    visitExpr(var.initializer());
-	}
+    
+    public Void visit(CastNode node) {
+	bindType(node.typeNode());
+	super.visit(node);
 	return null;
     }
 
+    public Void visit(SizeofExprNode node) {
+	bindType(node.typeNode());
+	super.visit(node);
+	return null;
+    }
+
+    public Void visit(SizeofTypeNode node) {
+	bindType(node.operandTypeNode());
+	bindType(node.typeNode());
+	super.visit(node);
+	return null;
+    }
+
+    public Void visit(IntegerLiteralNode node) {
+	bindType(node.typeNode());
+	return null;
+    }
+
+    public Void visit(StringLiteralNode node) {
+	bindType(node.typeNode());
+	return null;
+    }
+    
     private void error(Node node, String msg) {
 	errorHandler.error(node.location(), msg);
     }

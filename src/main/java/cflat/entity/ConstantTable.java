@@ -12,4 +12,12 @@ public class ConstantTable implements Iterable<ConstantEntry> {
     public Iterator<ConstantEntry> iterator() {
 	return table.values().iterator();
     }
+    public ConstantEntry intern(String s) {
+	ConstantEntry ent = table.get(s);
+	if (ent == null) {
+	    ent = new ConstantEntry(s);
+	    table.put(s, ent);
+	}
+	return ent;
+    }
 }

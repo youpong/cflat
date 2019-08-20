@@ -4,6 +4,9 @@ import cflat.ast.Dumper;
 import cflat.ast.ExprNode;
 import cflat.ast.TypeNode;
 
+/**
+ * 変数定義
+ */
 public class DefinedVariable extends Variable {
     protected ExprNode initializer;
     protected long sequence;

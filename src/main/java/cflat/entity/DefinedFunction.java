@@ -4,7 +4,11 @@ import cflat.ast.BlockNode;
 import cflat.ast.Dumper;
 import cflat.ast.TypeNode;
 import java.util.*;
+
 // TODO: implement
+/**
+ * 関数定義
+ */
 public class DefinedFunction extends Function {
     protected Params params;
     protected BlockNode body;

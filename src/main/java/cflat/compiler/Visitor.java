@@ -5,8 +5,7 @@ import cflat.entity.DefinedVariable;
 import java.util.*;
 
 abstract public class Visitor implements ASTVisitor<Void, Void> {
-    public Visitor() {
-    }
+    public Visitor() { }
 
     protected void visitStmt(StmtNode stmt) {
 	stmt.accept(this);
@@ -42,16 +41,22 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
 	visitExpr(node.expr());
 	return null;
     }
-    public Void visit(LabelNode node) {
-	visitStmt(node.stmt());
-	return null;
-    }
     public Void visit(IfNode node) {
 	visitExpr(node.cond());
 	visitStmt(node.thenBody());
 	if (node.elseBody() != null) {
 	    visitStmt(node.elseBody());
 	}
+	return null;
+    }
+    public Void visit(SwitchNode node) {
+	visitExpr(node.cond());
+	visitStmts(node.cases());
+	return null;
+    }
+    public Void visit(CaseNode node) {
+	visitExprs(node.values());
+	visitStmt(node.body());
 	return null;
     }
     public Void visit(WhileNode node) {
@@ -71,20 +76,11 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
 	visitStmt(node.body());
 	return null;
     }
-    public Void visit(SwitchNode node) {
-	visitExpr(node.cond());
-	visitStmts(node.cases());
-	return null;
-    }
-    public Void visit(CaseNode node) {
-	visitExprs(node.values());
-	visitStmt(node.body());
-	return null;
-    }
-    public Void visit(BreakNode node) {
-	return null;
-    }
-    public Void visit(ContinueNode node) {
+    public Void visit(BreakNode node) {	return null; }
+    public Void visit(ContinueNode node) { return null; }
+    public Void visit(GotoNode node) { return null; }
+    public Void visit(LabelNode node) {
+	visitStmt(node.stmt());
 	return null;
     }
     public Void visit(ReturnNode node) {
@@ -93,68 +89,17 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
 	}
 	return null;
     }
-    public Void visit(GotoNode node) {
-	return null;
-    }
     
     //
     // Expressions
     //
 
-    public Void visit(ArefNode node) {
-	visitExpr(node.expr());
-	visitExpr(node.index());
-	return null;
-    }
-	
-    public Void visit(AssignNode node) {
-	visitExpr(node.lhs());
-	visitExpr(node.rhs());
-	return null;
-    }
-    public Void visit(BinaryOpNode node) {
-	visitExpr(node.left());
-	visitExpr(node.right());
-	return null;
-    }
-    public Void visit(CastNode node) {
-	visitExpr(node.expr());
-	return null;
-    }
     public Void visit(CondExprNode node) {
 	visitExpr(node.cond());
 	visitExpr(node.thenExpr());
 	if (node.elseExpr() != null) {
 	    visitExpr(node.elseExpr());
 	}
-	return null;
-    }
-    public Void visit(UnaryOpNode node) {
-	visitExpr(node.expr());
-	return null;
-    }
-    public Void visit(SizeofExprNode node) {
-	visitExpr(node.expr());
-	return null;
-    }
-    public Void visit(SizeofTypeNode node) {
-	return null;
-    }
-    public Void visit(PtrMemberNode node) {
-	visitExpr(node.expr());
-	return null;
-    }
-    public Void visit(PrefixOpNode node) {
-	visitExpr(node.expr());
-	return null;
-    }
-    public Void visit(OpAssignNode node) {
-	visitExpr(node.lhs());
-	visitExpr(node.rhs());	
-	return null;
-    }
-    public Void visit(MemberNode node) {
-	visitExpr(node.expr());
 	return null;
     }
     public Void visit(LogicalOrNode node) {
@@ -167,9 +112,49 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
 	visitExpr(node.right());
 	return null;
     }
+    public Void visit(AssignNode node) {
+	visitExpr(node.lhs());
+	visitExpr(node.rhs());
+	return null;
+    }
+    public Void visit(OpAssignNode node) {
+	visitExpr(node.lhs());
+	visitExpr(node.rhs());	
+	return null;
+    }
+    public Void visit(BinaryOpNode node) {
+	visitExpr(node.left());
+	visitExpr(node.right());
+	return null;
+    }
+    public Void visit(UnaryOpNode node) {
+	visitExpr(node.expr());
+	return null;
+    }
+    public Void visit(PrefixOpNode node) {
+	visitExpr(node.expr());
+	return null;
+    }
+    public Void visit(SuffixOpNode node) {
+	visitExpr(node.expr());
+	return null;
+    }
     public Void visit(FuncallNode node) {
 	visitExpr(node.expr());
 	visitExprs(node.args());		
+	return null;
+    }
+    public Void visit(ArefNode node) {
+	visitExpr(node.expr());
+	visitExpr(node.index());
+	return null;
+    }
+    public Void visit(MemberNode node) {
+	visitExpr(node.expr());
+	return null;
+    }
+    public Void visit(PtrMemberNode node) {
+	visitExpr(node.expr());
 	return null;
     }
     public Void visit(DereferenceNode node) {
@@ -178,6 +163,17 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
     }
     public Void visit(AddressNode node) {
 	visitExpr(node.expr());
+	return null;
+    }
+    public Void visit(CastNode node) {
+	visitExpr(node.expr());
+	return null;
+    }
+    public Void visit(SizeofExprNode node) {
+	visitExpr(node.expr());
+	return null;
+    }
+    public Void visit(SizeofTypeNode node) {
 	return null;
     }
     public Void visit(VariableNode node) { return null; }

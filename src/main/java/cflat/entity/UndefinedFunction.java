@@ -4,6 +4,9 @@ import cflat.ast.Dumper;
 import cflat.ast.TypeNode;
 import java.util.*;
 
+/**
+ * 関数宣言
+ */
 public class UndefinedFunction extends Function {
     protected Params params;
     

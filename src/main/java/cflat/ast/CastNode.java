@@ -20,6 +20,9 @@ public class CastNode extends ExprNode {
     public Type type() {
 	return typeNode.type();
     }
+    public TypeNode typeNode() {
+	return typeNode;
+    }
     public ExprNode expr() {
 	return expr;
     }

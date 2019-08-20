@@ -8,17 +8,20 @@ import cflat.type.TypeRef;
  */
 public class SizeofExprNode extends ExprNode {
     protected ExprNode expr;
-    protected TypeNode type;
+    protected TypeNode typeNode;
     
     public SizeofExprNode(ExprNode expr, TypeRef type) {
 	this.expr = expr;
-	this.type = new TypeNode(type);
+	this.typeNode = new TypeNode(type);
     }
     public ExprNode expr() {
 	return expr;
     }
     public Type type() {
-	return type.type();
+	return typeNode.type();
+    }
+    public TypeNode typeNode() {
+	return typeNode;
     }
     public Location location() {
 	return expr.location();

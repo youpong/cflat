@@ -4,6 +4,7 @@ import cflat.ast.AST;
 import cflat.ast.BlockNode;
 import cflat.ast.ExprNode;
 import cflat.ast.StmtNode;
+import cflat.ast.StringLiteralNode;
 import cflat.ast.VariableNode;
 import cflat.ast.Node;
 import cflat.ast.Location;
@@ -107,19 +108,19 @@ public class LocalResolver extends Visitor {
     private Scope currentScope() {
 	return scopeStack.getLast();
     }
-    /*
-    public Void visit(StringLiteralNode node) {
-	node.setEntry(constantTable.intern(node.value()));
-	return null;
-	}
-    */
 
     public Void visit(BlockNode node) {
 	pushScope(node.variables());
-	super.visit(node); // TODO: 振る舞いを理解する
+	super.visit(node);
 	node.setScope(popScope());
 	return null;
     }
+
+    public Void visit(StringLiteralNode node) {
+	node.setEntry(constantTable.intern(node.value()));
+	return null;
+    }
+    
     // TODO: test
     public Void visit(VariableNode node) {
 	try {

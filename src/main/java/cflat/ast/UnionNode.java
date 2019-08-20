@@ -5,6 +5,9 @@ import cflat.type.Type;
 
 import java.util.*;
 
+/**
+ * 共用体定義
+ */
 public class UnionNode extends CompositeTypeDefinition {
     public UnionNode(Location loc, TypeRef ref,
 		     String name, List<Slot> membs) {

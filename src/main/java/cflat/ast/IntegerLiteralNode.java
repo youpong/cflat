@@ -2,6 +2,9 @@ package cflat.ast;
 
 import cflat.type.TypeRef;
 
+/**
+ * 整数リテラル
+ */
 public class IntegerLiteralNode extends LiteralNode {
     protected long value;
 
