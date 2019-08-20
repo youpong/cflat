@@ -8,6 +8,9 @@ public class Slot extends Node {
 	this.typeNode = t;
 	this.name = n;
     }
+    public TypeNode typeNode() {
+	return typeNode;
+    }
     public Location location() {
 	return typeNode.location();
     }

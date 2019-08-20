@@ -12,16 +12,23 @@ public class TypedefNode extends TypeDefinition {
 	this.real = new TypeNode(real);
     }
 
-    protected void _dump(Dumper d) {
-	d.printMember("name", name);
-	d.printMember("typeNode", typeNode);
+    public TypeNode realTypeNode() {
+	return real;
     }
-
+    /*
+    public TypeRef realTypeRef() {
+	return real.typeRef();
+    }
+    */
     // TODO: implement
     public Type definitingType() {
 	return null;
     }
     
+    protected void _dump(Dumper d) {
+	d.printMember("name", name);
+	d.printMember("typeNode", typeNode);
+    }
     public <T> T accept(DeclarationVisitor<T> visitor) {
 	return visitor.visit(this);
     }

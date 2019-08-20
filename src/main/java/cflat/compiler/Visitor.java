@@ -140,9 +140,6 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
     public Void visit(SizeofTypeNode node) {
 	return null;
     }
-    public Void visit(StringLiteralNode node) {
-	return null;
-    }
     public Void visit(PtrMemberNode node) {
 	visitExpr(node.expr());
 	return null;
@@ -170,9 +167,6 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
 	visitExpr(node.right());
 	return null;
     }
-    public Void visit(IntegerLiteralNode node) {
-	return null;
-    }
     public Void visit(FuncallNode node) {
 	visitExpr(node.expr());
 	visitExprs(node.args());		
@@ -186,5 +180,7 @@ abstract public class Visitor implements ASTVisitor<Void, Void> {
 	visitExpr(node.expr());
 	return null;
     }
-    
+    public Void visit(VariableNode node) { return null; }
+    public Void visit(IntegerLiteralNode node) { return null; }
+    public Void visit(StringLiteralNode node) {	return null; }
 }

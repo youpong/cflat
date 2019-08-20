@@ -2,6 +2,7 @@ package cflat.entity;
 
 import cflat.ast.Dumper;
 import cflat.ast.TypeNode;
+import java.util.*;
 
 public class UndefinedFunction extends Function {
     protected Params params;
@@ -10,7 +11,9 @@ public class UndefinedFunction extends Function {
 	super(false, t, name);
 	this.params = params;
     }
-
+    public List<Parameter> parameters() {
+	return params.parameters();
+    }
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("isPrivate", isPrivate);

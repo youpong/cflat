@@ -20,7 +20,9 @@ abstract public class TypeDefinition extends Node {
     public Location location() {
 	return location;
     }
-
+    public TypeNode typeNode() {
+	return typeNode;
+    }
     public TypeRef typeRef() {
 	return typeNode.typeRef();
     }

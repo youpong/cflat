@@ -10,16 +10,22 @@ import cflat.ast.VariableNode;
 import cflat.ast.DeclarationVisitor;
 import cflat.ast.UnionNode;
 import cflat.ast.StructNode;
+import cflat.ast.Slot;
 
 import cflat.entity.Constant;
 import cflat.entity.Entity;
 import cflat.entity.EntityVisitor;
+import cflat.entity.Function;
 import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
-
 import cflat.entity.UndefinedFunction;
 import cflat.entity.UndefinedVariable;
+import cflat.entity.Parameter;
+
+import cflat.type.CompositeType;
+import cflat.type.Type;
 import cflat.type.TypeTable;
+
 import cflat.utils.ErrorHandler;
 import java.util.*;
 
@@ -77,37 +83,48 @@ public class TypeResolver extends Visitor
 	resolveCompositeType(union);
 	return null;
     }
+    // TODO: test    
     public void resolveCompositeType(CompositeTypeDefinition def) {
-	// TODO: implement
+	CompositeType ct =
+	    (CompositeType)typeTable.get(def.typeNode().typeRef());
+	if (ct == null) {
+	    throw new Error("cannot intern struct/union: " + def.name());
+	}
+	for (Slot s : ct.members()) {
+	    bindType(s.typeNode());
+	}
     }
     public Void visit(TypedefNode typedef) {
-	//	bindType(typedef.typeNode());
-	//	bindType(typedef.realTypeNode());
+	bindType(typedef.typeNode());
+	bindType(typedef.realTypeNode());
 	return null;
     }
     
-    // TODO: implement
-    public Void visit(VariableNode node) {
-	return null;
-    }
-    
-    // TODO: implemnt
+    // TODO: test
     public Void visit(Constant c) {
-	//	bindType(c.typeNode());
+	bindType(c.typeNode());
 	visitExpr(c.value());
 	return null;
     }
-    public Void visit(UndefinedFunction func) {
-	//resolveFunctionHeader(func);
-	return null;
-    }
+    
     public Void visit(DefinedFunction func) {
-	//	resolveFunctionHeader(func);
+	resolveFunctionHeader(func);
 	visitStmt(func.body());
 	return null;
     }
+    public Void visit(UndefinedFunction func) {
+	resolveFunctionHeader(func);
+	return null;
+    }
+    private void resolveFunctionHeader(Function func) {
+	bindType(func.typeNode());
+	for (Parameter param : func.parameters()) {
+	    Type t = typeTable.getParamType(param.typeNode().typeRef());
+	    param.typeNode().setType(t);
+	}
+    }
     public Void visit(UndefinedVariable var) {
-	//	bindType(var.typeNode());
+	bindType(var.typeNode());
 	return null;
     }
     public Void visit(DefinedVariable var) {
