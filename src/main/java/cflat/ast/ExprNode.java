@@ -10,10 +10,18 @@ abstract public class ExprNode extends Node {
     abstract public Type type();
     protected Type origType() { return type(); }
     //
+    public boolean isConstant() { return false; }
+    //
     public boolean isLvalue() { return false; }
-    //
-    public boolean isLoadable() { return false; }    
-    //
+    public boolean isAssignable() { return false; }
+    public boolean isLoadable() { return false; }
+    public boolean isCallable() {
+	try {
+	    return type().isCallable();
+	} catch (SemanticError err) {
+	    return false;
+	}
+    }
     public boolean isPointer() {
 	try {
 	    return type().isPointer();

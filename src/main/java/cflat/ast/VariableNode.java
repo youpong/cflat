@@ -15,24 +15,21 @@ public class VariableNode extends LHSNode {
     }
 
     public boolean isResolved() {
-	//return (entity != null);
-	return false;
+	return (entity != null);
     }
-    /*
+
     public Entity entity() {
 	if (entity == null) 
 	    throw new Error("VariableNode.entity == null");
 	return entity;
     }
-    */
 
     public void setEntity(Entity entity) {
 	this.entity = entity;
     }
-    // TODO: implement
+    // TODO: test
     protected Type origType() {
-	//return entity().type();
-	return null;
+	return entity().type();
     }
     public String name() {
 	return name;

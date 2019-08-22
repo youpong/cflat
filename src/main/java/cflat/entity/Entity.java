@@ -4,6 +4,8 @@ import cflat.ast.Dumpable;
 import cflat.ast.Dumper;
 import cflat.ast.TypeNode;
 import cflat.ast.Location;
+import cflat.ast.ExprNode;
+import cflat.type.Type;
 
 abstract public class Entity implements Dumpable {
     protected String name;
@@ -17,14 +19,24 @@ abstract public class Entity implements Dumpable {
 	this.name = name;
 	this.nRefered = 0;
     }
-    public void refered() {
-	nRefered++;
-    }
     public String name() {
 	return name;
     }
+    //
+    public boolean isConstant() { return false; }
+
+    public ExprNode value() {
+	throw new Error("Entity#value");
+    }
+    //
+    public void refered() {
+	nRefered++;
+    }
     public TypeNode typeNode() {
 	return typeNode;
+    }
+    public Type type() {
+	return typeNode.type();
     }
     public Location location() {
 	return typeNode.location();

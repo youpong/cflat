@@ -8,8 +8,18 @@ public abstract class Type {
 
     public boolean isPointer() { return false; }
     public boolean isArray() { return false; }
+    public boolean isCompositeType() { return false; }
+    //
+    public boolean isCallable() { return false; }
+    //
     
     public Type baseType() {
 	throw new SemanticError("#baseType called for undereferable type");
     }
+
+    // Cast methods
+    public PointerType getPointerType() { return (PointerType)this; }
+    //
+    public CompositeType getCompositeType() { return (CompositeType)this; }
+    //
 }

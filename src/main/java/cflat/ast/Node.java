@@ -2,6 +2,7 @@ package cflat.ast;
 
 import java.io.*;
 
+// TODO: test
 abstract public class Node implements Dumpable {
     public Node() {
     }

@@ -1,6 +1,7 @@
 package cflat.ast;
 
 import cflat.type.Type;
+import cflat.type.CompositeType;
 import cflat.exception.SemanticError;
 
 /**
@@ -15,7 +16,6 @@ public class MemberNode extends LHSNode {
 	this.member = member;
     }
 
-    /*
     public CompositeType baseType() {
 	try {
 	    return expr.type().getCompositeType();
@@ -24,14 +24,16 @@ public class MemberNode extends LHSNode {
 	    throw new SemanticError(err.getMessage());
 	}
     }
-    */
-    // TODO: implement
+
+    // TODO: test
     protected Type origType() {
-	//return baseType().memberType(member);
-	return null;
+	return baseType().memberType(member);
     }
     public ExprNode expr() {
 	return expr;
+    }
+    public String member() {
+	return member;
     }
     public Location location() {
 	return expr.location();

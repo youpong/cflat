@@ -1,6 +1,9 @@
 package cflat.ast;
 
 import cflat.type.Type;
+import cflat.type.PointerType;
+import cflat.type.CompositeType;
+import cflat.exception.SemanticError;
 
 /**
  * ポインタ間接メンバ参照 ptr-&gt;memb
@@ -14,8 +17,17 @@ public class PtrMemberNode extends LHSNode {
 	this.expr = expr;
 	this.member = member;
     }
-    /*
-    public Type dereferencedType() {
+
+    public CompositeType dereferedCompositeType() {
+	try {
+	    PointerType pt = expr().type().getPointerType();
+	    return pt.baseType().getCompositeType();
+	} catch (ClassCastException err) {
+	    throw new SemanticError(err.getMessage());
+	}
+    }
+    
+    public Type dereferedType() {
 	try {
 	    PointerType pt = expr.type().getPointerType();
 	    return pt.baseType();
@@ -24,15 +36,19 @@ public class PtrMemberNode extends LHSNode {
 	    throw new SemanticError(err.getMessage());
 	}
     }
-    */
-    // TODO: implement
+
+    // TODO: test
     protected Type origType(){
-	//return dereferencedCompositeType().memberType(member);
-	return null;
+	return dereferedCompositeType().memberType(member);
     }
     public ExprNode expr() {
 	return expr;
     }
+
+    public String member() {
+	return member;
+    }
+
     public Location location() {
 	return expr.location();
     }
