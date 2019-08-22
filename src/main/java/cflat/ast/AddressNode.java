@@ -20,6 +20,12 @@ public class AddressNode extends ExprNode {
     public ExprNode expr() {
 	return expr;
     }
+    /** Decides type of this node.
+     * This method is called from DereferenceChecker */
+    public void setType(Type type) {
+	if (this.type != null) throw new Error("type set twice");
+	this.type = type;
+    }
     public Location location() {
 	return expr.location();
     }

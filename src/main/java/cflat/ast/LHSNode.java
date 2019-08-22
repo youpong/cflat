@@ -8,7 +8,9 @@ abstract public class LHSNode extends ExprNode {
     public Type type() {
 	return type != null ? type : origType();
     }
-
+    public void setType(Type t) {
+	this.type = t;
+    }
     abstract protected Type origType();
     
 }
