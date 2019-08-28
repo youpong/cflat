@@ -20,6 +20,16 @@ abstract public class ParamSlots<T> {
 	this.paramDescriptors = paramDescs;
 	this.vararg = vararg;
     }
+    public int argc() {
+	if (vararg) {
+	    throw new Error("must not happen: Param#argc for vararg");
+	}
+	return paramDescriptors.size();
+    }
+    public int minArgc() {
+	return paramDescriptors.size();
+    }
+    //
     public Location location() {
 	return location;
     }

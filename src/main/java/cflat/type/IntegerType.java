@@ -11,4 +11,32 @@ public class IntegerType extends Type {
 	this.isSigned = isSigned;
 	this.name = name;
     }
+
+    
+    //
+    public long minValue() {
+	return isSigned ? (long)-Math.pow(2, size * 8 - 1) : 0;
+    }
+    public long maxValue() {
+	return isSigned ? (long)Math.pow(2, size * 8 - 1) - 1
+	    : (long)Math.pow(2, size * 8) - 1;
+    }
+    public boolean isInDomain(long i) {
+	return (minValue() <= i && i <= maxValue());
+    }
+    
+    public boolean isSameType(Type other) {
+	if (! other.isInteger()) return false;
+	return equals(other.getIntegerType());
+    }
+    public boolean isCompatible(Type other) {
+	return (other.isInteger() && size <= other.size());
+    }
+    public boolean isCastableTo(Type target) {
+	return (target.isInteger() || target.isPointer());
+    }
+    public long size() {
+	return size;
+    }
+    //
 }

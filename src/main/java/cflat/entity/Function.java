@@ -1,6 +1,7 @@
 package cflat.entity;
 
 import cflat.ast.TypeNode;
+import cflat.type.Type;
 import java.util.*;
 
 abstract public class Function extends Entity {
@@ -10,4 +11,8 @@ abstract public class Function extends Entity {
     }
 
     abstract public List<Parameter> parameters();
+
+    public Type returnType() {
+	return type().getFunctionType().returnType();
+    }
 }

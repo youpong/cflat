@@ -98,9 +98,47 @@ public class TypeTable {
 	Type t = get(ref);
 	return t.isArray() ? pointerTo(t.baseType()) : t;
     }
-
+    //
+    public Type ptrDiffType() {
+	return get(ptrDiffTypeRef());
+    }
+    public TypeRef ptrDiffTypeRef() {
+	return new IntegerTypeRef(ptrDiffTypeName());
+    }
+    public String ptrDiffTypeName() {
+	if (signedLong().size == pointerSize) return "long";
+	if (signedInt().size == pointerSize) return "int";
+	if (signedShort().size == pointerSize) return "short";
+	throw new Error("must not happen: integer.size != pointer.size");
+    }
+    //
     public Collection<Type> types() {
 	return table.values();
+    }
+    //
+    public IntegerType signedChar() {
+	return (IntegerType)table.get(IntegerTypeRef.charRef());
+    }
+    public IntegerType signedShort() {
+	return (IntegerType)table.get(IntegerTypeRef.shortRef());
+    }
+    public IntegerType signedInt() {
+	return (IntegerType)table.get(IntegerTypeRef.intRef());
+    }
+    public IntegerType signedLong() {
+	return (IntegerType)table.get(IntegerTypeRef.longRef());
+    }
+    public IntegerType unsignedChar() {
+	return (IntegerType)table.get(IntegerTypeRef.ucharRef());
+    }
+    public IntegerType unsignedShort() {
+	return (IntegerType)table.get(IntegerTypeRef.ushortRef());
+    }
+    public IntegerType unsignedInt() {
+	return (IntegerType)table.get(IntegerTypeRef.uintRef());
+    }
+    public IntegerType unsignedLong() {
+	return (IntegerType)table.get(IntegerTypeRef.ulongRef());
     }
     // TODO: test20
     public PointerType pointerTo(Type baseType) {

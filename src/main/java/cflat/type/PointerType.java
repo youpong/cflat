@@ -8,4 +8,29 @@ public class PointerType extends Type {
 	this.size = size;
 	this.baseType = baseType;
     }
+    //
+    public boolean isCallable() { return baseType.isFunction(); }
+
+    public long size() {
+	return size;
+    }
+    //
+    public boolean isSameType(Type other) {
+	if (!other.isPointer()) return false;
+	return baseType.isSameType(other.baseType());
+    }
+    public boolean isCompatible(Type other) {
+	if (!other.isPointer()) return false;
+	if (baseType.isVoid()) {
+	    return true;
+	}
+	if (other.baseType().isVoid()) {
+	    return true;
+	}
+	return baseType.isCompatible(other.baseType());
+    }
+    public boolean isCastableTo(Type other) {
+	return other.isPointer() || other.isInteger();
+    }
+    //
 }

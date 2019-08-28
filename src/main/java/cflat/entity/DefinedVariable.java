@@ -23,6 +23,9 @@ public class DefinedVariable extends Variable {
     public ExprNode initializer() {
 	return initializer;
     }
+    public void setInitializer(ExprNode expr) {
+	this.initializer = expr;
+    }
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("isPrivate", isPrivate);

@@ -5,6 +5,7 @@ import cflat.type.Type;
 public class Slot extends Node {
     protected TypeNode typeNode;
     protected String name;
+    protected long offset;
     
     public Slot(TypeNode t, String n) {
 	this.typeNode = t;
@@ -18,6 +19,16 @@ public class Slot extends Node {
     }
     public String name() {
 	return name;
+    }
+    // size
+    public long allocSize() {
+	return type().allocSize();
+    }
+    public long alignment() {
+	return type().alignment();
+    }
+    public void setOffset(long offset) {
+	this.offset = offset;
     }
     public Location location() {
 	return typeNode.location();
