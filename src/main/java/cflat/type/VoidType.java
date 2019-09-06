@@ -4,6 +4,7 @@ public class VoidType extends Type {
     public VoidType() { }
 
     public boolean isVoid() { return true; }
+    
     public long size() {
 	return 1;
     }

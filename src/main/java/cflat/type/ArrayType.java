@@ -14,8 +14,19 @@ public class ArrayType extends Type {
 	this.length = length;
 	this.pointerSize = pointerSize;
     }
-    //
-    
+
+    public boolean isArray() { return true; }
+
+    public boolean isAllocatedArray() {
+	return length != undefined &&
+	    (! baseType.isArray() || baseType.isAllocatedArray());
+    }
+
+    public boolean isIncompleteArray() {
+	if (! baseType.isArray()) return false;
+	return ! baseType.isAllocatedArray();
+    }
+
     // Value size as pointer
     public long size() {
 	return length;

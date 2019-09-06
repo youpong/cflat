@@ -8,7 +8,10 @@ public class PointerType extends Type {
 	this.size = size;
 	this.baseType = baseType;
     }
-    //
+    
+    public boolean isPointer() { return true; }
+    public boolean isScalar() { return true; }
+    // isSigned()
     public boolean isCallable() { return baseType.isFunction(); }
 
     public long size() {

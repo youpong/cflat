@@ -12,8 +12,10 @@ public class IntegerType extends Type {
 	this.name = name;
     }
 
+    public boolean isInteger() { return true; }
+    // isSigned()
+    public boolean isScalar() { return true; }
     
-    //
     public long minValue() {
 	return isSigned ? (long)-Math.pow(2, size * 8 - 1) : 0;
     }

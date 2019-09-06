@@ -8,7 +8,10 @@ public class FunctionType extends Type {
 	returnType = ret;
 	paramTypes = partypes;
     }
-    //
+
+    public boolean isFunction() { return true; }
+    public boolean isCallable() { return true; }
+
     public boolean isSameType(Type other) {
 	if (! other.isFunction()) return false;
 	FunctionType t = other.getFunctionType();
