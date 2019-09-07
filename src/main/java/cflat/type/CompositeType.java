@@ -17,7 +17,10 @@ abstract public class CompositeType extends NamedType {
     }
 
     public boolean isCompositeType() { return true; }
-    // isSameType()
+
+    public boolean isSameType(Type other) {
+	return compareMemberTypes(other, "isSameType");
+    }
     public boolean isCompatible(Type target) {
 	return compareMemberTypes(target, "isCompatible");
     }

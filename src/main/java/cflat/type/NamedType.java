@@ -10,7 +10,7 @@ abstract public class NamedType extends Type {
 	this.name = name;
 	this.loc = loc;
     }
-
+    // name()
     public Location location() {
 	return loc;
     }
