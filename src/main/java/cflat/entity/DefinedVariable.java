@@ -3,12 +3,14 @@ package cflat.entity;
 import cflat.ast.Dumper;
 import cflat.ast.ExprNode;
 import cflat.ast.TypeNode;
+import cflat.ir.Expr;
 
 /**
  * 変数定義
  */
 public class DefinedVariable extends Variable {
     protected ExprNode initializer;
+    protected Expr ir;
     protected long sequence;
     
     public DefinedVariable(boolean priv, TypeNode type,
@@ -17,6 +19,7 @@ public class DefinedVariable extends Variable {
 	this.initializer = init;
 	this.sequence = -1;
     }
+    //    public boolean isDefined() 
     public boolean hasInitializer() {
 	return (initializer != null);
     }
@@ -26,6 +29,9 @@ public class DefinedVariable extends Variable {
     public void setInitializer(ExprNode expr) {
 	this.initializer = expr;
     }
+    //    setIR
+    public Expr ir() { return ir; }
+    
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("isPrivate", isPrivate);

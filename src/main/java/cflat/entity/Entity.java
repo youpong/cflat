@@ -28,6 +28,10 @@ abstract public class Entity implements Dumpable {
     public ExprNode value() {
 	throw new Error("Entity#value");
     }
+    // isParameter()
+    public boolean isPrivate() {
+	return isPrivate;
+    }
     //
     public void refered() {
 	nRefered++;

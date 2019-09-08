@@ -2,6 +2,7 @@ package cflat.compiler;
 
 import java.util.*;
 
+// TODO: test
 /**
  * enum of compiler modes.
  */
@@ -15,12 +16,6 @@ enum CompilerMode {
     DumpReference ("--dump-reference"),
     DumpIR ("--dump-ir"),
     DumpAsm ("--dump-asm");
-
-    private final String option;
-    
-    CompilerMode(String option) {
-	this.option = option;
-    }
 
     static public boolean isModeOption(String opt) {
 	for(CompilerMode mode : CompilerMode.values()) {
@@ -36,6 +31,12 @@ enum CompilerMode {
 		return mode;
 	}
 	throw new Error("must not happen: unknown mode option: " + opt);
+    }
+    
+    private final String option;
+    
+    CompilerMode(String option) {
+	this.option = option;
     }
     
     public String toOption() {

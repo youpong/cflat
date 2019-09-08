@@ -84,7 +84,7 @@ public class Compiler {
 	link(opts);
     }
 
-    // TODO: implement
+    // TODO: test
     public void compile(String srcPath, String destPath, Options opts)
 	throws CompileException {
 	AST ast = parseFile(srcPath, opts);
@@ -92,8 +92,11 @@ public class Compiler {
 	TypeTable types = opts.typeTable();
 	AST sem = semanticAnalyze(ast, types, opts);
 	if (dumpSemant(sem, opts.mode())) return;
-	IR ir = new IRGenerator(errorHandler).generate(sem, types);
+	IR ir = new IRGenerator(types, errorHandler).generate(sem);
+	if (dumpIR(ir, opts.mode())) return;
 	AssemblyCode asm = generateAssembly(ir, opts);
+	if (dumpAsm(asm, opts.mode())) return;
+	if (printAsm(asm, opts.mode())) return;
 	writeFile(destPath, asm);
     }
 
@@ -176,6 +179,21 @@ public class Compiler {
 	default:
 	    return false;
 	}
+    }
+    private boolean dumpIR(IR ir, CompilerMode mode) {
+	if (mode == CompilerMode.DumpIR) {
+	    ir.dump();
+	    return true;
+	}
+	return false;
+    }
+    // TODO: implement
+    private boolean dumpAsm(AssemblyCode asm, CompilerMode mode) {
+	return false;
+    }
+    // TODO: implement
+    private boolean printAsm(AssemblyCode asm, CompilerMode mode) {
+	return false;
     }
     private void errorExit(String msg) {
 	errorHandler.error(msg);

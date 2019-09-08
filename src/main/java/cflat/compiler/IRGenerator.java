@@ -6,11 +6,11 @@ import cflat.type.TypeTable;
 import cflat.ir.IR;
 
 public class IRGenerator {
-    public IRGenerator(ErrorHandler errorHandler) {
-	// TODO
+    public IRGenerator(TypeTable types, ErrorHandler errorHandler) {
+	// TODO: implement
     }
-    public IR generate(AST sem, TypeTable types) {
-	// TODO
+    public IR generate(AST sem) {
+	// TODO: implement
 	return null;
     }
 }
