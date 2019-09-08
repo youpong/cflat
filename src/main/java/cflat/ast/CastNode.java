@@ -26,6 +26,10 @@ public class CastNode extends ExprNode {
     public ExprNode expr() {
 	return expr;
     }
+    
+    public boolean isLvalue() { return expr.isLvalue(); }
+    public boolean isAssignable() { return expr.isAssignable(); }
+    
     public Location location() {
 	return typeNode.location();
     }

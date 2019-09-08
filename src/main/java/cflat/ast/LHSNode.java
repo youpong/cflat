@@ -12,5 +12,11 @@ abstract public class LHSNode extends ExprNode {
 	this.type = t;
     }
     abstract protected Type origType();
-    
+    //
+    public boolean isLvalue() { return true; }
+    public boolean isAssignable() { return isLoadable(); }
+    public boolean isLoadable() {
+	Type t = origType();
+	return !t.isArray() && !t.isFunction();
+    }
 }

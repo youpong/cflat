@@ -107,7 +107,7 @@ class DereferenceChecker extends Visitor
     // Assignment Expressions
     //
 
-    public Void visit(AssignNode node ) {
+    public Void visit(AssignNode node) {
 	super.visit(node);
 	checkAssignment(node);
 	return null;
