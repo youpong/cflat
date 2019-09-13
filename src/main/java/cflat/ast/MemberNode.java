@@ -24,7 +24,10 @@ public class MemberNode extends LHSNode {
 	    throw new SemanticError(err.getMessage());
 	}
     }
-
+    //
+    public long offset() {
+	return baseType().memberOffset(member);
+    }
     // TODO: test
     protected Type origType() {
 	return baseType().memberType(member);

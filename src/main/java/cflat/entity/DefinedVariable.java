@@ -4,6 +4,7 @@ import cflat.ast.Dumper;
 import cflat.ast.ExprNode;
 import cflat.ast.TypeNode;
 import cflat.ir.Expr;
+import cflat.type.Type;
 
 /**
  * 変数定義
@@ -19,17 +20,31 @@ public class DefinedVariable extends Variable {
 	this.initializer = init;
 	this.sequence = -1;
     }
-    //    public boolean isDefined() 
+    
+    static private long tmpSeq = 0;
+
+    static public DefinedVariable tmp(Type t) {
+	return new DefinedVariable(false,
+				   new TypeNode(t), "@tmp" + tmpSeq++, null);
+    }
+    
+    public boolean isDefined() { return true; }
+    //    public void setSequence(long seq);
+    //public String symbolString();
+    
     public boolean hasInitializer() {
 	return (initializer != null);
     }
+    //    public boolean isInitialized()
     public ExprNode initializer() {
 	return initializer;
     }
     public void setInitializer(ExprNode expr) {
 	this.initializer = expr;
     }
-    //    setIR
+    public void setIR(Expr expr) {
+	this.ir = expr;
+    }
     public Expr ir() { return ir; }
     
     protected void _dump(Dumper d) {

@@ -1,6 +1,6 @@
 package cflat.ir;
 
-//import cflat.asm.Label;
+import cflat.asm.Label;
 import cflat.ast.Location;
 import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
@@ -38,10 +38,10 @@ public class Dumper {
     public void printMember(String name, String memb) {
 	printPair(name, memb);
     }
-    // TODO: test
-    //    public void printMember(String name, Label memb) {
-    //	printPair(name, Integer.toHexString(memb.hashCode()));
-    //}
+
+    public void printMember(String name, Label memb) {
+    	printPair(name, Integer.toHexString(memb.hashCode()));
+    }
     public void printMember(String name, cflat.asm.Type memb) {
 	printPair(name, "" + memb);
     }

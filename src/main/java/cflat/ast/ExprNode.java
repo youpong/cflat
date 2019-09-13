@@ -9,7 +9,8 @@ abstract public class ExprNode extends Node {
     }
     abstract public Type type();
     protected Type origType() { return type(); }
-    //
+    public long allocSize() { return type().allocSize(); }
+
     public boolean isConstant() { return false; }
     //
     public boolean isLvalue() { return false; }

@@ -1,6 +1,8 @@
 package cflat.entity;
 
 import cflat.exception.SemanticException;
+import cflat.utils.ErrorHandler;
+import cflat.type.Type;
 import java.util.*;
 
 // TODO: implement
@@ -27,10 +29,26 @@ public class LocalScope extends Scope {
 	}
 	variables.put(var.name(), var);
     }
+    public DefinedVariable allocateTmp(Type t) {
+	DefinedVariable var = DefinedVariable.tmp(t);
+	defineVariable(var);
+	return var;
+    }
     public Entity get(String name) throws SemanticException {
 	DefinedVariable var = variables.get(name);
 	if (var != null)
 	    return var;
 	return parent.get(name);
+    }
+    //
+    public void checkReferences(ErrorHandler h) {
+	for (DefinedVariable var : variables.values()) {
+	    if (!var.isRefered()) {
+		h.warn(var.location(), "unused variable: " + var.name());
+	    }
+	}
+	for (LocalScope c : children) {
+	    c.checkReferences(h);
+	}
     }
 }

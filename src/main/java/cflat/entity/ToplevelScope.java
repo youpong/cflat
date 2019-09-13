@@ -28,16 +28,18 @@ public class ToplevelScope extends Scope {
 	}
 	entities.put(entity.name(), entity);
     }
+    
     // TODO: test
     public void defineEntity(Entity entity) throws SemanticException {
 	Entity e = entities.get(entity.name());
-	if (e != null) {
+	if (e != null && e.isDefined()) {
 	    throw new SemanticException("duplicated definition: " +
 					entity.name() + ": " + e.location() +
 					" and " + entity.location());
 	}
 	entities.put(entity.name(), entity);
     }
+    
     public Entity get(String name) throws SemanticException {
 	Entity ent = entities.get(name);
 	if (ent == null)
@@ -46,5 +48,19 @@ public class ToplevelScope extends Scope {
     }
     // TODO: implement
     public void checkReferences(ErrorHandler h) {
+	for (Entity ent : entities.values()) {
+	    if (ent.isDefined()
+		&& ent.isPrivate()
+		&& !ent.isConstant()
+		&& !ent.isRefered()) {
+		h.warn(ent.location(), "unused variable: " + ent.name());
+	    }
+	}
+	// do not check parameters
+	for (LocalScope funcScope : children) {
+	    for (LocalScope s : funcScope.children) {
+		s.checkReferences(h);
+	    }
+	}
     }
 }

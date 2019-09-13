@@ -8,7 +8,7 @@ import cflat.entity.DefinedVariable;
 import cflat.entity.DefinedFunction;
 import cflat.entity.ToplevelScope;
 import cflat.entity.ConstantTable;
-
+import cflat.ir.IR;
 
 public class AST extends Node {
     protected Location source;
@@ -75,6 +75,16 @@ public class AST extends Node {
 	}
 	this.constantTable = table;
     }
+    
+    public IR ir() {
+	return new IR(source,
+		      declarations.defvars(),
+		      declarations.defuns(),
+		      declarations.funcdecls(),
+		      scope,
+		      constantTable);
+    }
+    
     protected void _dump(Dumper d) {
 	d.printNodeList("variables", definedVariables());
 	d.printNodeList("functions", definedFunctions());

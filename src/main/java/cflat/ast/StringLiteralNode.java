@@ -19,6 +19,9 @@ public class StringLiteralNode extends LiteralNode {
     public String value() {
 	return value;
     }
+    public ConstantEntry entry() {
+	return entry;
+    }
     public void setEntry(ConstantEntry ent) {
 	entry = ent;
     }

@@ -80,7 +80,15 @@ abstract public class CompositeType extends NamedType {
     public Type memberType(String name) {
 	return fetch(name).type();
     }
-    //
+
+    public long memberOffset(String name) {
+	Slot s = fetch(name);
+	if (s.offset() == Type.sizeUnknown) {
+	    computeOffsets();
+	}
+	return s.offset();
+    }
+    
     abstract protected void computeOffsets();
     
     protected Slot fetch(String name) {

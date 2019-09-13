@@ -10,9 +10,16 @@ abstract public class Function extends Entity {
 	super(priv, t, name);
     }
 
+    //    public boolean isInitialized() { return true; }
+
+    abstract public boolean isDefined();
     abstract public List<Parameter> parameters();
 
     public Type returnType() {
 	return type().getFunctionType().returnType();
     }
+    //    public boolean isVoid()
+    //    public void setCallingSymbol(Symbol sym)
+    //    public Symbol callingSymbol()
+    //    public Label label()
 }

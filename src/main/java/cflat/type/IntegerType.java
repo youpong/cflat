@@ -13,7 +13,7 @@ public class IntegerType extends Type {
     }
 
     public boolean isInteger() { return true; }
-    // isSigned()
+    public boolean isSigned() { return isSigned; }
     public boolean isScalar() { return true; }
     
     public long minValue() {

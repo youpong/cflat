@@ -11,8 +11,9 @@ public class UndefinedVariable extends Variable {
 	super(false, t, name);
     }
 
+    public boolean isDefined() { return false; }
     public boolean isPrivate() { return false; }
-    
+    //    public boolean isInitialized()
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("isPrivate", isPrivate());

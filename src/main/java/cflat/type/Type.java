@@ -14,7 +14,9 @@ public abstract class Type {
     public boolean isVoid() { return false; }
     //
     public boolean isInteger() { return false; }
-    //
+    public boolean isSigned() {
+	throw new Error("#isSigned for non-integer type");
+    }
     public boolean isPointer() { return false; }
     public boolean isArray() { return false; }
     public boolean isCompositeType() { return false; }

@@ -11,7 +11,7 @@ public class PointerType extends Type {
     
     public boolean isPointer() { return true; }
     public boolean isScalar() { return true; }
-    // isSigned()
+    public boolean isSigned() { return false; }
     public boolean isCallable() { return baseType.isFunction(); }
 
     public long size() {

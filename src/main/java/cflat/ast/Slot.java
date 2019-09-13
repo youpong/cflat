@@ -27,6 +27,9 @@ public class Slot extends Node {
     public long alignment() {
 	return type().alignment();
     }
+    public long offset() {
+	return offset;
+    }
     public void setOffset(long offset) {
 	this.offset = offset;
     }

@@ -9,6 +9,9 @@ public class LabelNode extends StmtNode {
 	this.name = name;
 	this.stmt = stmt;
     }
+    public String name() {
+	return name;
+    }
     public StmtNode stmt() {
 	return stmt;
     }

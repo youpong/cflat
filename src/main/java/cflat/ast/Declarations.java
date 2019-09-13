@@ -72,6 +72,10 @@ public class Declarations {
     public void addFuncdecl(UndefinedFunction func) {
 	funcdecls.add(func);
     }
+    public List<UndefinedFunction> funcdecls() {
+	return new ArrayList<UndefinedFunction>(funcdecls);
+    }
+    //	
     public void addTypedef(TypedefNode n) {
 	typedefs.add(n);
     }

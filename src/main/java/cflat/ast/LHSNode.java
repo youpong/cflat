@@ -12,7 +12,9 @@ abstract public class LHSNode extends ExprNode {
 	this.type = t;
     }
     abstract protected Type origType();
-    //
+
+    public long allocSize() { return origType().allocSize(); }
+
     public boolean isLvalue() { return true; }
     public boolean isAssignable() { return isLoadable(); }
     public boolean isLoadable() {

@@ -18,6 +18,7 @@ import cflat.type.Type;
 import cflat.type.IntegerType;
 import cflat.utils.ErrorHandler;
 
+// TODO: implement
 /**
  * 静的型チェック
  */

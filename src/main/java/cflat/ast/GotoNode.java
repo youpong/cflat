@@ -7,9 +7,15 @@ public class GotoNode extends StmtNode {
 	super(loc);
 	this.target = target;
     }
+    
+    public String target() {
+	return target;
+    }
+    
     protected void _dump(Dumper d) {
 	d.printMember("target", target);
     }
+    
     public <S,E> S accept(ASTVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }

@@ -15,6 +15,9 @@ public class UnaryOpNode extends ExprNode {
 	this.expr = expr;
     }
 
+    public String operator() {
+	return operator;
+    }
     public Type type() {
 	return expr.type();
     }

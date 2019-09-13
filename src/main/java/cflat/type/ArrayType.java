@@ -31,6 +31,14 @@ public class ArrayType extends Type {
     public long size() {
 	return length;
     }
+
+    public long allocSize() {
+	if (length == undefined) {
+	    return size();
+	} else {
+	    return baseType.allocSize() * length;
+	}
+    }
     //
     public boolean isSameType(Type other) {
 	// length is not important

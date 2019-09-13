@@ -3,6 +3,7 @@ package cflat.ast;
 import cflat.type.Type;
 import cflat.type.TypeRef;
 
+// TODO: test
 /**
  * For type operator "sizeof"
  */
@@ -14,12 +15,14 @@ public class SizeofTypeNode extends ExprNode {
 	this.operand = operand;
 	this.typeNode = new TypeNode(type);
     }
-
-    public Type type() {
-	return typeNode.type();
+    public Type operand() {
+	return operand.type();
     }
     public TypeNode operandTypeNode() {
 	return operand;
+    }
+    public Type type() {
+	return typeNode.type();
     }
     public TypeNode typeNode() {
 	return typeNode;

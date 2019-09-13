@@ -22,7 +22,9 @@ public class DefinedFunction extends Function {
 	this.params = params;
 	this.body = body;
     }
-    //    public boolean isDefined();
+    
+    public boolean isDefined() { return true; }
+    
     public List<Parameter> parameters() {
 	return params.parameters();
     }
@@ -32,11 +34,14 @@ public class DefinedFunction extends Function {
     public List<Stmt> ir() {
 	return ir;
     }
-    //public void setIR(List<Stmt> ir);
+    public void setIR(List<Stmt> ir) {
+	this.ir = ir;
+    }
     public void setScope(LocalScope scope) {
 	this.scope = scope;
     }
-    //
+    //    public List<DefinedVariable> localVariables()
+
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("isPrivate", isPrivate);

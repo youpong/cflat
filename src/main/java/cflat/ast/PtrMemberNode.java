@@ -48,7 +48,10 @@ public class PtrMemberNode extends LHSNode {
     public String member() {
 	return member;
     }
-
+    public long offset() {
+	return dereferedCompositeType().memberOffset(member);
+    }
+    //
     public Location location() {
 	return expr.location();
     }

@@ -98,6 +98,15 @@ public class TypeTable {
 	Type t = get(ref);
 	return t.isArray() ? pointerTo(t.baseType()) : t;
     }
+    public int intSize() {
+	return this.intSize;
+    }
+    public int longSize() {
+	return this.longSize;
+    }
+    public int pointerSize() {
+	return this.pointerSize();
+    }
     //
     public Type ptrDiffType() {
 	return get(ptrDiffTypeRef());

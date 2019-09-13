@@ -21,6 +21,10 @@ public class BlockNode extends StmtNode {
     public List<StmtNode> stmts() {
 	return stmts;
     }
+    //    public StmtNode tailStmt()
+    public LocalScope scope() {
+	return scope;
+    }
     public void setScope(LocalScope scope) {
 	this.scope = scope;
     }

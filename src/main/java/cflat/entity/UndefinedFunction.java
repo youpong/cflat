@@ -4,6 +4,7 @@ import cflat.ast.Dumper;
 import cflat.ast.TypeNode;
 import java.util.*;
 
+// TODO: test
 /**
  * 関数宣言
  */
@@ -17,6 +18,8 @@ public class UndefinedFunction extends Function {
     public List<Parameter> parameters() {
 	return params.parameters();
     }
+    public boolean isDefined() { return false; }
+    
     protected void _dump(Dumper d) {
 	d.printMember("name", name);
 	d.printMember("isPrivate", isPrivate);

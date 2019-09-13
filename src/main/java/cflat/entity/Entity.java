@@ -22,7 +22,10 @@ abstract public class Entity implements Dumpable {
     public String name() {
 	return name;
     }
-    //
+    //    public String symbolString()
+    abstract public boolean isDefined();
+    //    abstract public boolean isInitialized();
+    
     public boolean isConstant() { return false; }
 
     public ExprNode value() {
@@ -36,12 +39,20 @@ abstract public class Entity implements Dumpable {
     public void refered() {
 	nRefered++;
     }
+    public boolean isRefered() {
+	return (nRefered > 0);
+    }
+    //
     public TypeNode typeNode() {
 	return typeNode;
     }
     public Type type() {
 	return typeNode.type();
     }
+    public long allocSize() {
+	return type().allocSize();
+    }
+    //
     public Location location() {
 	return typeNode.location();
     }
