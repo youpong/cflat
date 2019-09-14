@@ -35,5 +35,7 @@ public class PointerType extends Type {
     public boolean isCastableTo(Type other) {
 	return other.isPointer() || other.isInteger();
     }
-    //
+    public String toString() {
+	return baseType.toString() + "*";
+    }
 }

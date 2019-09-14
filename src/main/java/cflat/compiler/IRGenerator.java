@@ -205,7 +205,6 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 	// do not use transformStmt here, to receive compiled tree.
 	Expr e = node.expr().accept(this);
 	if (e != null) {
-	    //stmt.add(new ExprStmt(node.expr().location(), e));
 	    errorHandler.warn(node.location(), "useless expression");
 	}
 	return null;
@@ -478,12 +477,22 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 	    return ref(tmp);
 	}
     }
-    // TODO: implement
+    // TODO: test
     public Expr visit(OpAssignNode node) {
-	return null;
+	// Evaluate RHS before LHS.
+	Expr rhs = transformExpr(node.rhs());
+	Expr lhs = transformExpr(node.lhs());
+	Type t = node.lhs().type();
+	Op op = Op.internBinary(node.operator(), t.isSigned());
+	return transformOpAssign(node.location(), op, t, lhs, rhs);
     }
+    // TODO: test
     public Expr visit(PrefixOpNode node) {
-	return null;
+	// ++expr -> expr += 1
+	Type t = node.expr().type();
+	return transformOpAssign(node.location(),
+				 binOp(node.operator()), t,
+				 transformExpr(node.expr()), imm(t, 1));
     }
     public Expr visit(SuffixOpNode node) {
 	Expr expr = transformExpr(node.expr());
@@ -511,14 +520,31 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 	    return ref(v);
 	}
     }
-    // TODO: implement
+    // TODO: test
     private Expr transformOpAssign(Location loc, Op op, Type lhsType,
 				   Expr lhs, Expr rhs) {
-	return null;
+	if (lhs.isVar()) {
+	    // cont(lhs += rhs) -> lhs = lhs + rhs; cont(lhs)
+	    assign(loc, lhs, bin(op, lhsType, lhs, rhs));
+	    return isStatement() ? null : lhs;
+	} else {
+	    // cont(lhs += rhs) -> a = &lhs; *a = *a + rhs; cont(*a)
+	    DefinedVariable a = tmpVar(pointerTo(lhsType));
+	    assign(loc, ref(a), addressOf(lhs));
+	    assign(loc, mem(a), bin(op, lhsType, mem(a), rhs));
+	    return isStatement() ? null : mem(a);
+	}
     }
-    // TODO: implement
+    
+    // TODO: test
     private Bin bin(Op op, Type leftType, Expr left, Expr right) {
-	return null;
+	if (isPointerArithmetic(op, leftType)) {
+	    return new Bin(left.type(), op, left,
+			   new Bin(right.type(), Op.MUL,
+				   right, ptrBaseSize(leftType)));
+	} else {
+	    return new Bin(left.type(), op, left, right);
+	}
     }
     // TODO: implement    
     public Expr visit(FuncallNode node) {

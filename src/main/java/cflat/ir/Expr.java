@@ -8,7 +8,8 @@ abstract public class Expr implements Dumpable {
     Expr(Type type) {
 	this.type = type;
     }
-    //    public Type type() { return type; }
+
+    public Type type() { return type; }
 
     public boolean isVar() { return false; }
     //public boolean isAddr() { return false; }

@@ -40,5 +40,7 @@ public class IntegerType extends Type {
     public long size() {
 	return size;
     }
-    //
+    public String toString() {
+	return name;
+    }
 }

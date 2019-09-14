@@ -105,7 +105,7 @@ public class TypeTable {
 	return this.longSize;
     }
     public int pointerSize() {
-	return this.pointerSize();
+	return this.pointerSize;
     }
     //
     public Type ptrDiffType() {
