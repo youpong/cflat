@@ -2,10 +2,24 @@ package cflat.ir;
 
 import cflat.asm.Type;
 
+/**
+ * 二項演算 (l OP r)
+ */
 public class Bin extends Expr {
+    /** 演算の種類 */
     protected Op op;
-    protected Expr left, right;
+    /** 左の式 */
+    protected Expr left;
+    /** 右の式 */
+    protected Expr right;
 
+    /**
+     * 二項演算の中間表現
+     * @param type この式の型
+     * @param op 二項演算の種類
+     * @param left 二項演算の左の式(x + y の x)
+     * @param right 二項演算の右の式(x + y の y)
+     */
     public Bin(Type type, Op op, Expr left, Expr right) {
 	super(type);
 	this.op = op;

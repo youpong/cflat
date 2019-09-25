@@ -3,7 +3,11 @@ package cflat.ir;
 import cflat.ast.Location;
 import cflat.asm.Label;
 
+/**
+ * ラベル (分岐先)
+ */
 public class LabelStmt extends Stmt {
+    /** ラベル(ジャンプ先を指定するオブジェクト) */
     protected Label label;
 
     public LabelStmt(Location loc, Label label) {

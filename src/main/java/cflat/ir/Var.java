@@ -3,7 +3,12 @@ package cflat.ir;
 import cflat.asm.Type;
 import cflat.entity.Entity;
 
+/**
+ * 変数参照
+ * VariableNode の r-value の中間表現
+ */
 public class Var extends Expr {
+    /** DefinedVariable オブジェクト */
     protected Entity entity;
 
     public Var(Type type, Entity entity) {

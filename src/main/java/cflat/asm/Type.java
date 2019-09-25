@@ -1,8 +1,17 @@
 package cflat.asm;
 
 // TODO: test
+/**
+ * 中間表現での型
+ */
 public enum Type {
-    INT8, INT16, INT32, INT64;
+    /** 8ビット整数 */
+    INT8,
+    /** 16 ビット整数 */
+    INT16,
+    /** 32 ビット整数 */
+    INT32,
+    INT64;
 
     static public Type get(long size) {
 	switch((int)size) {

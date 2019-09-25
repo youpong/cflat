@@ -2,7 +2,11 @@ package cflat.ir;
 
 import cflat.asm.Type;
 
+/**
+ * デリファレンス (*var)
+ */
 public class Mem extends Expr {
+    /** デリファレンスする式 */
     protected Expr expr;
 
     public Mem(Type type, Expr expr) {

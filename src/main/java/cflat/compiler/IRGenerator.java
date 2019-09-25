@@ -70,6 +70,9 @@ import cflat.exception.SemanticException;
 import cflat.exception.JumpError;
 import java.util.*;
 
+/**
+ * 抽象構文木から中間表現へ変換する
+ */
 public class IRGenerator implements ASTVisitor<Void, Expr> {
     private final TypeTable typeTable;
     private final ErrorHandler errorHandler;
@@ -93,13 +96,19 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 	}
 	return ast.ir();
     }
-    
+
+    /** 文を変換した中間表現ノード(Stmt)を蓄積する */
     List<Stmt> stmts;
+    /** テンポラリ変数を生成するときに「現在の」スコープを得るために使う */
     LinkedList<LocalScope> scopeStack;
+    /** break 文の「現在の」ジャンプ先を表すスタック */
     LinkedList<Label> breakStack;
+    /** continue 文の「現在の」ジャンプ先を表すスタック */
     LinkedList<Label> continueStack;
+    /** goto 文で使うラベルを記録する */
     Map<String, JumpEntry> jumpMap;
 
+    /** 関数本体の変換 */
     public List<Stmt> compileFunctionBody(DefinedFunction f) {
 	stmts = new ArrayList<Stmt>();
 	scopeStack = new LinkedList<LocalScope>();
@@ -133,28 +142,40 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     private DefinedVariable tmpVar(Type t) {
     	return scopeStack.getLast().allocateTmp(t);
     }
-    private void label(Label label) {
-	stmts.add(new LabelStmt(null, label));
+    /** ラベル lab を定義する */
+    private void label(Label lab) {
+	stmts.add(new LabelStmt(null, lab));
     }
     private void jump(Location loc, Label target) {
 	stmts.add(new Jump(loc, target));
     }
-    private void jump(Label target) {
-	stmts.add(new Jump(null, target));
+    /**
+     * 無条件ジャンプ
+     * ラベル lab にジャンプ
+     */
+    private void jump(Label lab) {
+	stmts.add(new Jump(null, lab));
     }
+    /**
+     *条件付きジャンプ。　
+     *条件式 cond が真ならラベル t にジャンプ、偽ならラベル e にジャンプ
+     */
     private void cjump(Location loc, Expr cond,
-		       Label thenLabel, Label elseLabel) {
-	stmts.add(new CJump(loc, cond, thenLabel, elseLabel));
+		       Label t, Label e) {
+	stmts.add(new CJump(loc, cond, t, e));
     }
+    /** ラベル label をスタックに積む */
     private void pushBreak(Label label) {
 	breakStack.add(label);
     }
+    /** スタックからラベルを一つ降ろす */
     private void popBreak() {
 	if (breakStack.isEmpty()) {
 	    throw new Error("unmatched push/pop for break stack");
 	}
 	breakStack.removeLast();
     }
+    /** スタック先頭のラベルを返す */
     private Label currentBreakTarget() {
 	if (breakStack.isEmpty()) {
 	    throw new JumpError("break from out of loop");
@@ -569,7 +590,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 	    return new Bin(asmType(t), Op.S_DIV, tmp, ptrBaseSize(l));
 	} else if (isPointerArithmetic(op, l)) {
 	    // ptr + int -> ptr + (int * ptrBaseSize)
-	    return new Bin(asmType(t), op, left,
+	    return new Bin(asmType(t), op,
+			   left,
 			   new Bin(asmType(r), Op.MUL, right, ptrBaseSize(l)));
 	} else if (isPointerArithmetic(op, r)) {
 	    // int + ptr -> (int * ptrBaseSize) + ptr
@@ -672,6 +694,14 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     private Op binOp(String uniOp) {
 	return uniOp.equals("++") ? Op.ADD : Op.SUB;
     }
+    /**
+     * 右辺値を左辺値に変換する
+     * <ol>
+     * <li>右辺値が Var ノードなら Addr ノードに変換する</li>
+     * <li>右辺値が Mem ノードなら Mem ノードを取り外す</li>
+     * <li>それ以外の場合は致命的なエラー（コンパイラのバグ）</li>
+     *</ol>
+     */
     private Expr addressOf(Expr expr) {
 	return expr.addressNode(ptr_t());
     }

@@ -10,6 +10,9 @@ import cflat.entity.ConstantTable;
 import java.io.*;
 import java.util.*;
 
+/**
+ * 中間表現のルート
+ */
 public class IR {
     Location source;
     List<DefinedVariable> defvars;

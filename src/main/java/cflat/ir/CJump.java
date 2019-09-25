@@ -3,9 +3,15 @@ package cflat.ir;
 import cflat.ast.Location;
 import cflat.asm.Label;
 
+/**
+ * 条件付きジャンプ
+ */
 public class CJump extends Stmt {
+    /** 条件式 */
     protected Expr cond;
+    /** 条件が真の場合のジャンプ先 */
     protected Label thenLabel;
+    /** 条件が偽の場合のジャンプ先 */
     protected Label elseLabel;
 
     public CJump(Location loc, Expr cond, Label thenLabel, Label elseLabel) {

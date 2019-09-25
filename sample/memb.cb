@@ -1,0 +1,13 @@
+struct point {
+  int x;
+  int y;
+  int z;
+};
+
+int main(void) {
+  struct point a;
+
+  a.y = 3;
+
+  return a.y;
+}

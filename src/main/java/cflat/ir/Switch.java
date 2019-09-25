@@ -4,10 +4,17 @@ import cflat.ast.Location;
 import cflat.asm.Label;
 import java.util.*;
 
+/**
+ * 多方向ジャンプ (switch)
+ */
 public class Switch extends Stmt {
+    /** 条件式 */
     protected Expr cond;
+    /** 比較値とそのジャンプ先の組のリスト */
     protected List<Case> cases;
-    protected Label defaultLabel, endLabel;
+    /** デフォルトのジャンプ先 */
+    protected Label defaultLabel;
+    protected Label endLabel;
 
     public Switch(Location loc, Expr cond,
 		  List<Case> cases, Label defaultLabel, Label endLabel) {

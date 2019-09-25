@@ -28,5 +28,5 @@ public class StructType extends CompositeType {
 	cachedSize = AsmUtils.align(offset, maxAlign);
 	cachedAlign = maxAlign;
     }
-    //
+    //    public String toString() {	return "struct " + name;
 }

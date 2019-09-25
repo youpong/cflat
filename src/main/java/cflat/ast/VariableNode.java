@@ -4,6 +4,9 @@ import cflat.type.Type;
 import cflat.entity.Entity;
 
 // TODO: implement
+/**
+ * 変数参照
+ */
 public class VariableNode extends LHSNode {
     private Location location;
     private String name;

@@ -2,8 +2,14 @@ package cflat.ir;
 
 import cflat.ast.Location;
 
+/**
+ * 代入
+ */
 public class Assign extends Stmt {
-    protected Expr lhs, rhs;
+    /** 代入の左辺 */
+    protected Expr lhs;
+    /** 代入の右辺 */
+    protected Expr rhs;
     
     public Assign(Location loc, Expr lhs, Expr rhs) {
 	super(loc);

@@ -3,7 +3,11 @@ package cflat.ir;
 import cflat.entity.ConstantEntry;
 import cflat.asm.Type;
 
+/**
+ * 文字列定数
+ */
 public class Str extends Expr {
+    /** ConstantEntry オブジェクト */
     protected ConstantEntry entry;
 
     public Str(Type type, ConstantEntry entry) {

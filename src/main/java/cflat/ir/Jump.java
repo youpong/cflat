@@ -3,7 +3,11 @@ package cflat.ir;
 import cflat.ast.Location;
 import cflat.asm.Label;
 
+/**
+ * 無条件ジャンプ
+ */
 public class Jump extends Stmt {
+    /** ジャンプ先 */
     protected Label target;
     
     public Jump(Location loc, Label target) {

@@ -2,7 +2,11 @@ package cflat.ir;
 
 import cflat.asm.Type;
 
+/**
+ * 整数定数
+ */
 public class Int extends Expr {
+    /** 値 */
     protected long value;
 
     public Int(Type type, long value) {

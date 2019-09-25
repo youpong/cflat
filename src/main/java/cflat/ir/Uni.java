@@ -2,8 +2,13 @@ package cflat.ir;
 
 import cflat.asm.Type;
 
+/**
+ * 単項演算 (OP e)
+ */
 public class Uni extends Expr {
+    /** 演算の種類 */
     protected Op op;
+    /** 演算を適用する式 */
     protected Expr expr;
 
     public Uni(Type type, Op op, Expr expr) {
