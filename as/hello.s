@@ -1,3 +1,4 @@
+/* original */
 	.file	"hello.cb"
 	.section	.rodata
 LC0:

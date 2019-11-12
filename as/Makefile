@@ -1,7 +1,8 @@
 clean:
 	rm -f a.out *.o Hello Hello.s \
               hello \
-              hello64 
+              hello64 \
+              hello64a
 Hello: Hello.o
 	$(CC) -o Hello Hello.o
 Hello.o: Hello.s
