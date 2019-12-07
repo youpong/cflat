@@ -6,25 +6,24 @@
 # F64.asm:      x86-64 att_syntax f()
 # F64_main.asm: x86-64 att_syntax main()
 #
-# TODO f.c:          c
-# test_f.c:     test driver for assembly code
+# f.c:          c
+# test_f.c:     test driver for assembly code, f()
 
 AS = nasm
 CFLAGS = -g
 
-all: f F F_att F64
+all: f F F_intel F64
 clean:
-	rm -f a.out *.o \
-	      f F F_att F64 test_f
+	rm -f a.out *.o f F F_intel F64 test_f
 
 # F
 F: F.o
 F.o: F.asm
 	nasm -f elf32 -g -F dwarf F.asm -l F.lst
-# F_att
-F_att: F_att.o
-F_att.o: F_att.asm
-	nasm -f elf32 -g -F dwarf F_att.asm -l F_att.lst
+# F_intel
+F_intel: F_intel.o
+F_intel.o: F_intel.asm
+	nasm -f elf32 -g -F dwarf F_intel.asm -l F_intel.lst
 
 # F64
 F64: F64.o F64_main.o
