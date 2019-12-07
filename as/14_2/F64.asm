@@ -1,28 +1,27 @@
-	.global f
+; nasm
+	global f
+; int f(int x, int y)		
 f:
-	// variable table
-	// x -> 16(%rbp), y ->  24(%rbp)
-	// i -> -8(%rbp), j -> -16(%rbp)
+	; variable table
+	;args  x -> edi,      y -> esi
+	;local i -> [rbp-4], j -> [rbp-8]
 	
-	// prologue
-	pushq	%rbp
-	movq	%rsp, %rbp
-	subq	$16, %rsp	
+	; prologue
+	push	rbp		
+	mov	rbp, rsp
+	sub	rsp, 8
 	
-	// i = x
-	movq	16(%rbp), %rax
-	movq 	%rax, -8(%rbp)
+	; i = x
+	mov 	dword [rbp-4], edi
 	
-	// j = i * y
-	movq	24(%rbp), %rax
-	imulq	-8(%rbp), %rax	
-	movq	%rax, -16(%rbp)
-		
-	// set eax to return value
-	movq	-16(%rbp), %rax
+	; j = i * y
+	imul	esi, dword [rbp-4]
+	mov	dword [rbp-8], esi
 	
-	// epilogue
-	movq	%rbp, %rsp
-	popq	%rbp
-	ret
+	; set eax to return value
+	mov	eax, dword [rbp-8]
 
+	; epilogue
+	mov	rsp, rbp
+	pop	rbp
+	ret

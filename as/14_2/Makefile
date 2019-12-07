@@ -9,7 +9,8 @@
 # TODO f.c:          c
 # test_f.c:     test driver for assembly code
 
-#.SUFFIXES:.o .asm
+AS = nasm
+CFLAGS = -g
 
 all: f F F_att F64
 clean:
@@ -28,7 +29,7 @@ F_att.o: F_att.asm
 # F64
 F64: F64.o F64_main.o
 F64.o: F64.asm
-	$(AS) -o $@ $<
+	$(AS) -f elf64 -g -F dwarf $<
 F64_main.o: F64_main.asm
 	$(AS) -o $@ $<
 
