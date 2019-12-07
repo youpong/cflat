@@ -1,27 +1,27 @@
 # 14.2 のサンプル assembly code を assemble する。
 #
-# f32_att.asm:  x86 att_syntax
-# f32.asm:      x86    f()
-# f32_main.asm: x86    main()
-# f64.asm:      x86-64 f()
-# f64_main.asm: x86-64 main()
+# f32_gas.asm:  gas  x86
+# f32.asm:      nasm x86    f()
+# f32_main.asm: nasm x86    main()
+# f64.asm:      nasm x86-64 f()
+# f64_main.asm: nasm x86-64 main()
 #
 # f.c:          original c source code
-# test_f.c:     test driver for assembly code, f()
+# test_f.c:     test driver for assembly code
 
 AS = nasm
 CFLAGS = -g
 
 .PHONY: all clean
 
-all: f32_att f32 f64
+all: f32_gas f32 f64
 clean:
-	rm -f a.out *.o *.lst test_f32 test_f64 f f32_att f32 f64
+	rm -f a.out *.o *.lst test_f32 test_f64 f f32_gas f32 f64
 
-# f32_att
-f32_att: f32_att.o
+# f32_gas
+f32_gas: f32_gas.o
 	$(CC) -m32 -o $@ $^
-f32_att.o: f32_att.asm
+f32_gas.o: f32_gas.asm
 	as -g --32 -o $@ $^
 
 # f32
