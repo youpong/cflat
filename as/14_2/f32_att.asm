@@ -1,6 +1,5 @@
 # gas x86 full assembly code
 # AT&T syntax
-# TODO: pass assemble
 	.global main
 f:
 	# variable table
