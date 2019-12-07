@@ -1,35 +1,35 @@
-	.global main
+; nasm
+extern f	
+global main
 main:
-	// variable table
-	// i -> -8(%rbp)
+	; variable table
+	; i -> [rbp-4]
 	
-	// prologue
-	pushq	%rbp
-	movq	%rsp, %rbp
-	subq	$8, %rsp
+	; prologue
+	push	rbp
+	mov	rbp, rsp
+	sub	rsp, 4
 	
-	// i = 77
-	movq	$77, -8(%rbp)	
+	; i = 77
+	mov	dword [rbp-4], 77	
 	
-	// i = f(i, 8)
-	pushq	$8		
-	movq	-8(%rbp), %rax
-	pushq	%rax
+	; i = f(i, 8)
+	mov	esi, 8
+	mov	edi, dword [rbp-4]
 	call	f
-	addq	$16, %rsp		
-	movq	%rax, -8(%rbp)	
+	mov	dword [rbp-4], eax
 
-	// i %= 5
-	movq	$5, %rcx
-	movq	-8(%rbp), %rax
-	cltd
-	idivq	%rcx		
-	movq	%rdx, -8(%rbp)	
+	; i %= 5
+	mov	eax, dword [rbp-4]	
+	mov	ecx, 5
+	cdq
+	idiv	ecx		
+	mov	dword [rbp-4], edx	
 	
-	// set return value of function
-	movq	-8(%rbp), %rax
+	; set return value of function
+	mov	eax, dword [rbp-4]
 	
-	// epilogue
-	movq	%rbp, %rsp
-	popq	%rbp
+	; epilogue
+	mov	rsp, rbp
+	pop	rbp
 	ret

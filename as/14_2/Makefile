@@ -31,7 +31,7 @@ F64: F64.o F64_main.o
 F64.o: F64.asm
 	$(AS) -f elf64 -g -F dwarf $<
 F64_main.o: F64_main.asm
-	$(AS) -o $@ $<
+	$(AS) -f elf64 -g -F dwarf $<
 
 # f
 f: f.o
