@@ -14,14 +14,16 @@ CFLAGS = -g
 
 all: f F F_intel F64
 clean:
-	rm -f a.out *.o f F F_intel F64 test_f
+	rm -f a.out *.o *.lst f F F_intel F64 test_f
 
 # F
 F: F.o
 F.o: F.asm
 	nasm -f elf32 -g -F dwarf F.asm -l F.lst
+
 # F_intel
 F_intel: F_intel.o
+	$(CC) -m32 -o $@ $< 
 F_intel.o: F_intel.asm
 	nasm -f elf32 -g -F dwarf F_intel.asm -l F_intel.lst
 
