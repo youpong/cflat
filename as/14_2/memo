@@ -2,3 +2,7 @@ memo
 
 $ gcc -S -Os -masm=intel f.c
 -> f.s
+
+F_intel.asm -> F_intel.asm, F_intel_main()
+
+F32.asm -> F32.asm, F_main.asm
