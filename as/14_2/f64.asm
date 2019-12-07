@@ -1,5 +1,5 @@
-; nasm
-	global f
+; nasm x86-64
+global f
 ; int f(int x, int y)		
 f:
 	; variable table

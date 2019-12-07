@@ -1,41 +1,46 @@
 # 14.2 のサンプル assembly code を assemble する。
 #
-# F.asm:        x86 intel_syntax 
-# F_att.asm:    x86 att_syntax
+# f32_att.asm:  x86 att_syntax
+# f32.asm:      x86    f()
+# f32_main.asm: x86    main()
+# f64.asm:      x86-64 f()
+# f64_main.asm: x86-64 main()
 #
-# F64.asm:      x86-64 att_syntax f()
-# F64_main.asm: x86-64 att_syntax main()
-#
-# f.c:          c
+# f.c:          original c source code
 # test_f.c:     test driver for assembly code, f()
 
 AS = nasm
 CFLAGS = -g
 
-all: f F F_intel F64
+.PHONY: all clean
+
+all: f32_att f32 f64
 clean:
-	rm -f a.out *.o *.lst f F F_intel F64 test_f
+	rm -f a.out *.o *.lst test_f f f32_att f32 f64
 
-# F
-F: F.o
-F.o: F.asm
-	nasm -f elf32 -g -F dwarf F.asm -l F.lst
+# f32_att
+f32_att: f32_att.o
+	$(CC) -m32 -o $@ $^
+f32_att.o: f32_att.asm
+	$(AS) -f elf32 -g -F dwarf $^ -l $*.lst
 
-# F_intel
-F_intel: F_intel.o
-	$(CC) -m32 -o $@ $< 
-F_intel.o: F_intel.asm
-	nasm -f elf32 -g -F dwarf F_intel.asm -l F_intel.lst
+# f32
+f32: f32.o f32_main.o
+	$(CC) -m32 -o $@ $^
+f32.o: f32.asm
+	$(AS) -f elf32 -g -F dwarf $^ -l $*.lst
+f32_main.o: f32_main.asm
+	$(AS) -f elf32 -g -F dwarf $^ -l $*.lst
 
-# F64
-F64: F64.o F64_main.o
-F64.o: F64.asm
-	$(AS) -f elf64 -g -F dwarf $<
-F64_main.o: F64_main.asm
-	$(AS) -f elf64 -g -F dwarf $<
+# f64
+f64: f64.o f64_main.o
+f64.o: f64.asm
+	$(AS) -f elf64 -g -F dwarf $^
+f64_main.o: f64_main.asm
+	$(AS) -f elf64 -g -F dwarf $^
 
 # f
 f: f.o
 
 # test_f
-test_f: test_f.o F64.o
+test_f: test_f.o f64.o

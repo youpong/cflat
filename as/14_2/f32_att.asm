@@ -1,6 +1,5 @@
-;  x86 version full source
-;  これを nasm でアセンブルできるかなぁ。？
-
+; nasm x86 full assembly code
+; AT&T syntax 
 f:
 	; variable table		
 	; x ->  8(%ebp), y -> 12(%ebp)

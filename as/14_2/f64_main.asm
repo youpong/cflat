@@ -1,4 +1,4 @@
-; nasm
+; nasm x86-64
 extern f	
 global main
 main:
