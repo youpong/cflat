@@ -6,3 +6,5 @@ $ gcc -S -Os -masm=intel f.c
 F_intel.asm -> F_intel.asm, F_intel_main()
 
 F32.asm -> F32.asm, F_main.asm
+
+f32_att.asm -> f32_gas.asm

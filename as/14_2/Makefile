@@ -16,13 +16,13 @@ CFLAGS = -g
 
 all: f32_att f32 f64
 clean:
-	rm -f a.out *.o *.lst test_f f f32_att f32 f64
+	rm -f a.out *.o *.lst test_f32 test_f64 f f32_att f32 f64
 
 # f32_att
 f32_att: f32_att.o
 	$(CC) -m32 -o $@ $^
 f32_att.o: f32_att.asm
-	$(AS) -f elf32 -g -F dwarf $^ -l $*.lst
+	as --32 -o $@ $^
 
 # f32
 f32: f32.o f32_main.o
@@ -42,5 +42,14 @@ f64_main.o: f64_main.asm
 # f
 f: f.o
 
-# test_f
-test_f: test_f.o f64.o
+# test_f64
+test_f64: test_f64.o f64.o
+	$(CC) -o $@ $^
+test_f64.o: test_f.c
+	$(CC) -c -o $@ $^
+
+# test_f32
+test_f32: test_f32.o f32.o
+	$(CC) -m32 -o $@ $^
+test_f32.o: test_f.c
+	$(CC) -m32 -c -o $@ $^
