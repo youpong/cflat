@@ -62,5 +62,5 @@ main:
 	
 	# epilogue
 	movl	%ebp, %esp
-	popl	%esp
+	popl	%ebp
 	ret

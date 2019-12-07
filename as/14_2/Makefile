@@ -22,7 +22,7 @@ clean:
 f32_att: f32_att.o
 	$(CC) -m32 -o $@ $^
 f32_att.o: f32_att.asm
-	as --32 -o $@ $^
+	as -g --32 -o $@ $^
 
 # f32
 f32: f32.o f32_main.o
