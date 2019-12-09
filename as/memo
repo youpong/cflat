@@ -1,0 +1,7 @@
+eflags
+CF Carry Flag           演算結果の桁上がり、桁借り
+PF Parity Flag          演算結果のパリティビット
+AF Auxiliary carry Flag 演算結果のビット3からの桁上がり、桁借り
+ZF Zero Flag            比較結果が0のとき1
+SF Sign Flag            演算結果が負数の時1
+OF Overflow Flag        演算結果が正負の限界を超えた

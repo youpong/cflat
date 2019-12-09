@@ -1,4 +1,5 @@
-/* original */
+# gas x86
+# may be output which cflat compile hello.cb
 	.file	"hello.cb"
 	.section	.rodata
 LC0:
@@ -20,5 +21,3 @@ L0:
 	popl	%ebp
 	ret
 	.size	main,.-main
-	
-	

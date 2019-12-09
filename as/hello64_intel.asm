@@ -1,4 +1,4 @@
-/* x86-64 intel_syntax minimum */
+# gas x86-64 intel_syntax 
 	.intel_syntax noprefix
 	.global main	
 msg:
@@ -6,7 +6,7 @@ msg:
 main:
 	push	rbp
 	mov	rbp, rsp
-	lea	rdi, msg[rip]
+	lea	rdi, msg[rip]	# TODO
 	call	printf
 	mov	rax, 0
 	mov	rsp, rbp
