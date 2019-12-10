@@ -6,7 +6,7 @@ msg:
 main:
 	push	rbp
 	mov	rbp, rsp
-	lea	rdi, msg[rip]	# TODO
+	lea	rdi, msg
 	call	printf
 	mov	rax, 0
 	mov	rsp, rbp

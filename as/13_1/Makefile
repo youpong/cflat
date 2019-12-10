@@ -4,7 +4,7 @@
 # hello64.asm:       gas x86-64 AT&T syntax
 # hello64_intel.asm: gas x86-64 intel syntax
 
-LDFLAGS = -g
+LDFLAGS = -g -no-pie
 
 .PHONY: all clean
 

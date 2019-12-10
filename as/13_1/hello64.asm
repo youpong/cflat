@@ -5,7 +5,7 @@ LC0:
 main:
 	pushq	%rbp
 	movq	%rsp, %rbp
-	leaq	LC0(%rip), %rdi # TODO
+	leaq	LC0, %rdi
 	call	printf
 	movq	$0, %rax
 	jmp	L0
