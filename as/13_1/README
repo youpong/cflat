@@ -1,0 +1,18 @@
+FILES
+
+Makefile:	   This file.
+
+hello.s:           chapter 13.1 original hello.s (for x86)
+Hello.c:           equivalent in c source to assembly hello.s
+
+hello64.asm:       gas AT&T syntax for x86-64
+hello64_intel.asm: gas Intel syntax for x86-64
+
+hello_cflat.asm:   assembly which cflat compiles hello.cb
+
+how to build from hello.s
+$ make hello
+
+TODO:
+So that to build a pie object, change the assembly code or assemble option.
+# /usr/bin/ld: hello64.o: relocation R_X86_64_32S against `.text' can not be used when making a PIE object; recompile with -fPIE

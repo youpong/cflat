@@ -1,5 +1,5 @@
+# chapter 13.1 original hello.s
 # gas x86 att style
-# 13_1 hello.s	
 	.file	"hello.c"
 	.section	.rodata.str1.1,"aMS",@progbits,1
 .LC0:
@@ -23,5 +23,5 @@ main:
 	leal	-4(%ecx), %esp
 	ret
 	.size	main, .-main
-	.ident	"GCC: (Ubuntu 9.2.1-9ubuntu2) 9.2.1 20191008"
+	.ident	"GCC: (GNU) 4.1.2 20061115 (prerelease) (Debian 4.1.1-21)"
 	.section	.note.GNU-stack,"",@progbits

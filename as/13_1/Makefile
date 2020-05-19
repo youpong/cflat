@@ -1,8 +1,10 @@
-# Hello.c:           equivalent in c source to assembly hello.s
-# hello.s:           13.1 hello.s(assembly which gcc compiles Hello.c)
-# hello_cflat.asm:   assembly which cflat compiles hello.cb
-# hello64.asm:       gas x86-64 AT&T syntax
-# hello64_intel.asm: gas x86-64 intel syntax
+# linkder option without -no-pie cause error:
+# --- 8< ---
+# cc -g -fPIE  hello64.o   -o hello64
+# /usr/bin/ld: hello64.o: relocation R_X86_64_32S against `.text' can not be used when making a PIE object; recompile with -fPIE
+# collect2: error: ld returned 1 exit status
+# make: *** [<builtin>: hello64] Error 1
+# --- 8< ---
 
 LDFLAGS = -g -no-pie
 
