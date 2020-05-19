@@ -1,13 +1,13 @@
-# gas x86-64 intel_syntax 
+# gas intel_syntax for x86-64
 	.intel_syntax noprefix
 	.global main	
 msg:
-	.string	"Hello\n"
+	.string	"Hello, World!"
 main:
 	push	rbp
 	mov	rbp, rsp
-	lea	rdi, msg
-	call	printf
+	lea	rdi, msg[rip]
+	call	puts
 	mov	rax, 0
 	mov	rsp, rbp
 	pop	rbp

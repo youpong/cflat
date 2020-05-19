@@ -1,12 +1,4 @@
-# linkder option without -no-pie cause error:
-# --- 8< ---
-# cc -g -fPIE  hello64.o   -o hello64
-# /usr/bin/ld: hello64.o: relocation R_X86_64_32S against `.text' can not be used when making a PIE object; recompile with -fPIE
-# collect2: error: ld returned 1 exit status
-# make: *** [<builtin>: hello64] Error 1
-# --- 8< ---
-
-LDFLAGS = -g -no-pie
+LDFLAGS = -g
 
 .PHONY: all clean
 
