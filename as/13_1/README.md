@@ -22,3 +22,6 @@ To debug type like bellow.
 ```
 $ gdb ./hello
 ```
+
+# URLs
+* https://stackoverflow.com/questions/52344336/gas-asm-pie-x86-64-access-variable-with-lea-instruction
