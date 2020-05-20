@@ -13,7 +13,9 @@
 # How to build
 
 ```
-$ make all
+$ make hello
+file hello.o
+hello.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), with debug_info, not stripped
 ```
 
 # How to debug
@@ -22,6 +24,16 @@ To debug type like bellow.
 ```
 $ gdb ./hello
 ```
+
+# How to output assembly in various Arch, style
+```
+$ make all_assembly
+```
+produce
+* Hello64_intel.s: intel style for x86-64
+* Hello64_att.s    att style for x86-64
+* Hello32_intel.s  intel style for x86
+* Hello32_att.s    att style for x86
 
 # URLs
 * https://stackoverflow.com/questions/52344336/gas-asm-pie-x86-64-access-variable-with-lea-instruction

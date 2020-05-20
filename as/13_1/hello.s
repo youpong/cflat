@@ -1,5 +1,5 @@
 # chapter 13.1 original hello.s
-# gas x86 att style
+# gas att style for x86
 	.file	"hello.c"
 	.section	.rodata.str1.1,"aMS",@progbits,1
 .LC0:
