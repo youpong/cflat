@@ -14,8 +14,10 @@
 
 ```
 $ make hello
+...
 file hello.o
 hello.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), with debug_info, not stripped
+...
 ```
 
 # How to debug
@@ -26,6 +28,9 @@ $ gdb ./hello
 ```
 
 # How to output assembly in various Arch, style
+
+produce assembly code in various arch, style from Hello.c, sample C source.
+
 ```
 $ make all_assembly
 ```
@@ -36,4 +41,7 @@ produce
 * Hello32_att.s    att style for x86
 
 # URLs
+
+PIE
+
 * https://stackoverflow.com/questions/52344336/gas-asm-pie-x86-64-access-variable-with-lea-instruction
