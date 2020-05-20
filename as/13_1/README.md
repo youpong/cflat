@@ -11,6 +11,7 @@
 * hello_cflat.asm:   assembly which cflat compiles hello.cb
 
 # How to build from hello.s
-'''sh
+
+```
 $ make hello
-'''
+```
