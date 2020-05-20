@@ -10,8 +10,15 @@
 
 * hello_cflat.asm:   assembly which cflat compiles hello.cb
 
-# How to build from hello.s
+# How to build
 
 ```
-$ make hello
+$ make all
+```
+
+# How to debug
+
+To debug type like bellow.
+```
+$ gdb ./hello
 ```
