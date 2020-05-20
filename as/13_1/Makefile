@@ -1,4 +1,3 @@
-LDFLAGS = -g
 ASFLAGS = -g
 
 .PHONY: all clean
@@ -10,13 +9,13 @@ clean:
 
 # hello
 hello: hello.o
-	$(CC) $(LDFLAGS) -m32 -o $@ $^
+	$(CC) -m32 -o $@ $^
 hello.o: hello.s
 	$(AS) $(ASFLAGS) --32 -o $@ $^
 
 # hello_cflat
 hello_cflat: hello_cflat.o
-	$(CC) $(LDFLAGS) -m32 -o $@ $^
+	$(CC) -m32 -o $@ $^
 hello_cflat.o: hello_cflat.asm
 	$(AS) $(ASFLAGS) --32 -o $@ $^
 
