@@ -1,11 +1,25 @@
+CFLAGS = -Os
 ASFLAGS = -g
 
 .PHONY: all clean
 
 all: hello hello_cflat hello64 hello64_intel
+all_assembly: Hello64_intel.s Hello64_att.s Hello32_intel.s Hello32_att.s
+
 clean:
 	rm -f a.out *.o \
-              hello hello_cflat hello64 hello64_intel
+              hello hello_cflat hello64 hello64_intel \
+	      Hello64_intel.s Hello64_att.s Hello32_intel.s Hello32_att.s
+
+# Hello.s
+Hello64_intel.s: Hello.c
+	$(CC) $(CFLAGS) -m64 -masm=intel -S -o $@ $^
+Hello64_att.s: Hello.c
+	$(CC) $(CFLAGS) -m64 -masm=att   -S -o $@ $^
+Hello32_intel.s: Hello.c
+	$(CC) $(CFLAGS) -m32 -masm=intel -S -o $@ $^
+Hello32_att.s: Hello.c
+	$(CC) $(CFLAGS) -m32 -masm=intel -S -o $@ $^
 
 # hello
 hello: hello.o
