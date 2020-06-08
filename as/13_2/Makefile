@@ -1,18 +1,16 @@
-# comment_gas.asm:   gas comment sample
-# comment_nasm.asm:  nasm comment sample
+# syntax_gas.asm:   GNU as(gas) syntax sample code
+# syntax_nasm.asm:  nasm syntax sample code
 
 LDFLAGS = -g
 
 .PHONY: all clean
 
-all: comment_gas comment_nasm
+all: syntax_gas syntax_nasm
 clean:
-	rm -f a.out *.o comment_gas comment_nasm
+	rm -f a.out *.o syntax_gas syntax_nasm
 
-# comment_gas
-comment_gas.o: comment_gas.asm
+syntax_gas.o: syntax_gas.asm
 	$(AS) -g -o $@ $^
 
-# comment_nasm
-comment_nasm.o: comment_nasm.asm
+syntax_nasm.o: syntax_nasm.asm
 	nasm -f elf64 -g -F dwarf $^
