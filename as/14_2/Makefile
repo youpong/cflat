@@ -4,7 +4,11 @@
 
 AS = as
 ASFLAGS = -g
-CFLAGS = -O0
+CC = gcc
+CFLAGS = -O0 -fcf-protection=none -fno-pie
+#CFLAGS = -O0 -fcf-protection=none -pie
+#CFLAGS = -O0 -fcf-protection=none -fpie
+#CFLAGS = -O0 -fcf-protection=none -no-pie
 
 .PHONY: all clean
 
