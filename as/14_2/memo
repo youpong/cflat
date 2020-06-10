@@ -1,4 +1,0 @@
-memo
-
-$ gcc -S -Os -masm=intel f.c
--> f.s
