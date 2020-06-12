@@ -6,6 +6,7 @@ AS = as
 ASFLAGS = -g
 CC = gcc
 CFLAGS = -O0 -fcf-protection=none -fno-pie
+# below doesn't work
 #CFLAGS = -O0 -fcf-protection=none -pie
 #CFLAGS = -O0 -fcf-protection=none -fpie
 #CFLAGS = -O0 -fcf-protection=none -no-pie
@@ -14,7 +15,7 @@ CFLAGS = -O0 -fcf-protection=none -fno-pie
 
 all: f
 clean:
-	rm -f a.out *.o *.s f
+	rm -f a.out *.o *.s f *.tmp
 
 # f
 f: f.o
@@ -23,4 +24,5 @@ f.o: f.s
 	$(AS) $(ASFLAGS) --32 -o $@ $^
 f.s: f.c
 	$(CC) $(CFLAGS) -S -m32 $^
-
+	cp $@ $@.tmp
+	sed -r -f filter.sed $@.tmp >$@
