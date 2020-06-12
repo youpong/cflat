@@ -25,4 +25,5 @@ f.o: f.s
 f.s: f.c
 	$(CC) $(CFLAGS) -S -m32 $^
 	cp $@ $@.tmp
-	sed -r -f filter.sed $@.tmp >$@
+	#sed -r -f filter.sed $@.tmp >$@
+	sed -i -r -f filter.sed $@

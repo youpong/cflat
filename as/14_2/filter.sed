@@ -1,14 +1,14 @@
-# label
+# print all label then delete from pattern space
 /^[ \t]*[^"]+:/ { 
     p
     d
 }
-# directive to print
+# print directive ".globl"
 /^[ \t]*\.globl/ {
     p
+}
+# delete all directive on pattern space
+/^[ \t]*\./ {
     d
 }
-# directive to cut
-/^[ \t]*\./ {
-	d
-}
+# here. print string still on pattern space
