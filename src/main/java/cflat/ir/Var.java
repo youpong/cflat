@@ -1,5 +1,6 @@
 package cflat.ir;
 
+import cflat.asm.MemoryReference;
 import cflat.asm.Operand;
 import cflat.asm.Type;
 import cflat.entity.Entity;
@@ -26,9 +27,10 @@ public class Var extends Expr {
 	return entity.address();
     }
     
-    // ...
+    public MemoryReference memref() {
+	return entity.memref();
+    }
 
-    // 36
     public Addr addressNode(Type type) {
 	return new Addr(type, entity);
     }

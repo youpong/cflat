@@ -1,7 +1,9 @@
 package cflat.ir;
 
-import cflat.entity.ConstantEntry;
+import cflat.asm.ImmediateValue;
+import cflat.asm.MemoryReference;
 import cflat.asm.Type;
+import cflat.entity.ConstantEntry;
 
 /**
  * 文字列定数
@@ -16,9 +18,21 @@ public class Str extends Expr {
     }
 
     //    public ConstantEntry entry() { return entry; }
-    //
+    
+    // ...
+    
     public boolean isConstant() { return true; }
-    //
+
+    public MemoryReference memref() {
+	return entry.memref();
+    }
+    
+    // ...
+
+    public ImmediateValue asmValue() {
+	return entry.address();
+    }
+    
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }

@@ -1,5 +1,6 @@
 package cflat.ir;
 
+import cflat.asm.MemoryReference;
 import cflat.asm.Type;
 import cflat.entity.Entity;
 
@@ -15,10 +16,21 @@ public class Addr extends Expr {
 	super(type);
 	this.entity = entity;
     }
+    
     //    public boolean isAddr() { return true; }
+    
     public Entity entity() {
 	return entity;
     }
+    
+    // ...
+
+    public MemoryReference memref() {
+	return entity.memref();
+    }
+    
+    // ...
+    
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }

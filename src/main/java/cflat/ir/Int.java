@@ -1,7 +1,11 @@
 package cflat.ir;
 
+import cflat.asm.ImmediateValue;
+import cflat.asm.IntegerLiteral;
+import cflat.asm.MemoryReference;
 import cflat.asm.Type;
 
+// TODO: test
 /**
  * 整数定数
  */
@@ -18,11 +22,18 @@ public class Int extends Expr {
 
     public boolean isConstant() { return true; }
 
-    //    public ImmediateValue asmValue()
-    //    public MemoryReference memref()
+    public ImmediateValue asmValue() {
+	return new ImmediateValue(new IntegerLiteral(value));
+    }
+    
+    public MemoryReference memref() {
+	throw new Error("must not happen: IntValue#memref");
+    }
+    
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }
+    
     protected void _dump(Dumper d) {
 	d.printMember("value", value);
     }
