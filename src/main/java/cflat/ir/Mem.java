@@ -13,7 +13,11 @@ public class Mem extends Expr {
 	super(type);
 	this.expr = expr;
     }
-    //
+
+    public Expr expr() {
+	return expr;
+    }
+    
     public Expr addressNode(Type type) {
 	return expr;
     }

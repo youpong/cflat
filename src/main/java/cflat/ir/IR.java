@@ -2,11 +2,13 @@ package cflat.ir;
 
 import cflat.ast.Location;
 import cflat.ir.Dumper;
+import cflat.entity.ConstantTable;
 import cflat.entity.DefinedVariable;
 import cflat.entity.DefinedFunction;
-import cflat.entity.UndefinedFunction;
+import cflat.entity.Function;
 import cflat.entity.ToplevelScope;
-import cflat.entity.ConstantTable;
+import cflat.entity.UndefinedFunction;
+import cflat.entity.Variable;
 import java.io.*;
 import java.util.*;
 
@@ -36,9 +38,32 @@ public class IR {
 	this.constantTable = constantTable;
     }
     
+    //...
+    
+    // 57
+    public List<Function> allFunctions() {
+	List<Function> result = new ArrayList<Function>();
+	result.addAll(defuns);
+	result.addAll(funcdecls);
+	return result;
+    }
+
+    /** a list of all defined/declared global-scope variables */
+    public List<Variable> allGlobalVariables() {
+	return scope.allGlobalVariables();
+    }
+    
+    // ...
+
+    // 109
+    public ConstantTable constantTable() {
+	return constantTable;
+    }
+
     public void dump() {
 	dump(System.out);
     }
+    
     public void dump(PrintStream s) {
 	Dumper d = new Dumper(s);
 	d.printClass(this, source);

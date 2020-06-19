@@ -1,5 +1,6 @@
 package cflat.ir;
 
+import cflat.asm.Operand;
 import cflat.asm.Type;
 import cflat.entity.Entity;
 
@@ -17,11 +18,24 @@ public class Var extends Expr {
     }
 
     public boolean isVar() { return true; }
-    //
+    
+    // ...
+
+    // 27
+    public Operand address() {
+	return entity.address();
+    }
+    
+    // ...
+
+    // 36
     public Addr addressNode(Type type) {
 	return new Addr(type, entity);
     }
-    //
+    
+    // ...
+
+    // 45
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }

@@ -1,6 +1,7 @@
-mvn test
-mvn package
-java -jar target/cbc-XXX.jar ...
---check-syntax
---dump-tokens(AST を実装してから)
-mvn javadoc:javadoc
+$ mvn test
+$ mvn package
+$ mvn javadoc:javadoc
+
+$ java -jar target/cbc-XXX.jar [options] [files...]
+options
+--help          show help message

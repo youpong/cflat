@@ -1,6 +1,7 @@
 *~
 \#*
 .\#*
+a.out
 *.o
 *.class
 lex.yy.[ch]

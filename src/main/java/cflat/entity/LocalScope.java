@@ -40,7 +40,40 @@ public class LocalScope extends Scope {
 	    return var;
 	return parent.get(name);
     }
-    //
+    
+    // ...
+
+    /**
+     * Returns all static local variables defined in this scope.
+     */
+    public List<DefinedVariable> staticLocalVariables() {
+	List<DefinedVariable> result = new ArrayList<DefinedVariable>();
+	for (LocalScope s : allLocalScopes()) {
+	    for (DefinedVariable var : s.variables.values()) {
+		if (var.isPrivate()) {
+		    result.add(var);
+		}
+	    }
+	}
+	return result;
+    }
+
+    /**
+     * Returns a list of all child scopes including this scope.
+     */
+    protected List<LocalScope> allLocalScopes() {
+	List<LocalScope> result = new ArrayList<LocalScope>();
+	collectScope(result);
+	return result;
+    }
+
+    protected void collectScope(List<LocalScope> buf) {
+	buf.add(this);
+	for (LocalScope s : children) {
+	    s.collectScope(buf);
+	}
+    }
+
     public void checkReferences(ErrorHandler h) {
 	for (DefinedVariable var : variables.values()) {
 	    if (!var.isRefered()) {

@@ -9,9 +9,9 @@ public class ConstantTable implements Iterable<ConstantEntry> {
     public ConstantTable() {
 	table = new LinkedHashMap<String, ConstantEntry>();
     }
-    public Iterator<ConstantEntry> iterator() {
-	return table.values().iterator();
-    }
+
+    //    public boolean isEmpty() {}
+
     public ConstantEntry intern(String s) {
 	ConstantEntry ent = table.get(s);
 	if (ent == null) {
@@ -19,5 +19,13 @@ public class ConstantTable implements Iterable<ConstantEntry> {
 	    table.put(s, ent);
 	}
 	return ent;
+    }
+
+    public Collection<ConstantEntry> entries() {
+	return table.values();
+    }
+
+    public Iterator<ConstantEntry> iterator() {
+	return table.values().iterator();
     }
 }

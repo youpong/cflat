@@ -29,7 +29,11 @@ public class DefinedVariable extends Variable {
     }
     
     public boolean isDefined() { return true; }
-    //    public void setSequence(long seq);
+
+    public void setSequence(long seq) {
+	this.sequence = seq;
+    }
+
     //public String symbolString();
     
     public boolean hasInitializer() {
