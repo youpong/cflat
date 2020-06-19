@@ -10,26 +10,38 @@ import java.io.*;
 
 public class Options {
 
-    private CompilerMode mode;
-    private Platform platform = new X86Linux();
-    
-    private LibraryLoader loader = new LibraryLoader();
-    private boolean debugParser = false;
-
-    private List<LdArg> ldArgs;
-    private List<SourceFile> sourceFiles;
-
-    
-    public static Options parse(String[] args) {
+    static Options parse(String[] args) {
 	Options opts = new Options();
 	opts.parseArgs(args);
 	return opts;
     }
 
-    boolean doesDebugParser() {
-	return this.debugParser;
+    private CompilerMode mode;
+    private Platform platform = new X86Linux();
+    //    private String outputFileName;
+    //    private boolean verbose = false;
+    private LibraryLoader loader = new LibraryLoader();
+    private boolean debugParser = false;
+    //    private CodeGeneratorOptions genOptions = new CodeGeneratorOptions();
+    //    private AssemblerOptions asOptions = new AssemblerOptions();
+    //    private LinkerOptions ldOptions = new LinkerOptions();
+    private List<LdArg> ldArgs;
+    private List<SourceFile> sourceFiles;
+
+    CompilerMode mode() {
+	return mode;
     }
     
+    boolean isAssembleRequired() {
+	return mode.requires(CompilerMode.Assemble);
+    }
+
+    /** returns false always now */
+    boolean isLinkRequired() {
+	return false;
+	//	return mode.requires(CompilerMode.Link);
+    }
+
     List<SourceFile> sourceFiles() {
 	return sourceFiles;
     }
@@ -38,15 +50,31 @@ public class Options {
 	// TODO: CompileMode.Compile
 	return src.asmFileName();
     }
+    
     String objFileNameOf(SourceFile src) {
 	// TODO: CompileMode.Assemble
 	return src.objFileName();
     }
+
+    // ...
+
+    // 93
+    boolean doesDebugParser() {
+	return this.debugParser;
+    }
+
+    LibraryLoader loader() {
+	return this.loader;
+    }
+
     // TODO: test
     TypeTable typeTable() {
 	return platform.typeTable();
     }
-    
+
+    // ...
+
+    // 137
     void parseArgs(String[] origArgs) {
 	// TODO: set sourceFiles
 	// sourceFiles = new ArrayList<SourceFile>();
@@ -96,6 +124,12 @@ public class Options {
 	throw new OptionParseError(msg);
     }
 
+    /*
+    private void addLdArg(String arg) {
+	ldArgs.ad(new LdOption(arg));
+    }
+    */
+    
     private List<SourceFile> selectSourceFiles(List<LdArg> args) {
 	List<SourceFile> result = new ArrayList<SourceFile>();
 	for(LdArg arg : args) {
@@ -106,12 +140,6 @@ public class Options {
 	return result;	
     }
 
-    public CompilerMode mode() {
-	return mode;
-    }
-    LibraryLoader loader() {
-	return loader;
-    }
     
     void printUsage(PrintStream out) {
 	String msg = "Usage: cbc [options] file...\n" +

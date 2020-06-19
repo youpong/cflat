@@ -33,7 +33,6 @@ public class Compiler {
     }
 
     public void commandMain(String[] args) {
-	// TODO:
 	Options opts = Options.parse(args);
 	if(opts.mode() == CompilerMode.CheckSyntax) {
 	    System.exit(checkSyntax(opts) ? 0 : 1);
@@ -41,6 +40,7 @@ public class Compiler {
 	try {
 	    List<SourceFile> srcs = opts.sourceFiles();
 	    build(srcs, opts);
+	    System.exit(0);
 	}
 	catch(CompileException ex) {
 	    errorHandler.error(ex.getMessage());
@@ -77,10 +77,20 @@ public class Compiler {
     
     public void build(List<SourceFile> srcs, Options opts)
 	throws CompileException {
-	for(SourceFile src : srcs) {
-	    compile(src.path(), opts.asmFileNameOf(src), opts);
-	    assemble(src.path(), opts.objFileNameOf(src), opts);
+	for (SourceFile src : srcs) {
+	    if (src.isCflatSource()) {
+		String destPath = opts.asmFileNameOf(src);
+		compile(src.path(), destPath, opts);
+		src.setCurrentName(destPath);
+	    }
+	    if (! opts.isAssembleRequired()) continue;
+	    if (src.isAssemblySource()) {
+		String destPath = opts.objFileNameOf(src);
+		assemble(src.path(), destPath, opts);
+		src.setCurrentName(destPath);
+	    }
 	}
+	if (! opts.isLinkRequired()) return;
 	link(opts);
     }
 

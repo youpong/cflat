@@ -15,7 +15,9 @@ enum CompilerMode {
     DumpSemantic ("--dump-semantic"),
     DumpReference ("--dump-reference"),
     DumpIR ("--dump-ir"),
-    DumpAsm ("--dump-asm");
+    DumpAsm ("--dump-asm"),
+    Assemble ("-c");
+    //    Link("--link");
 
     static public boolean isModeOption(String opt) {
 	for(CompilerMode mode : CompilerMode.values()) {
