@@ -17,6 +17,9 @@ public class Uni extends Expr {
 	this.expr = expr;
     }
 
+    public Op op() { return op; }
+    public Expr expr() { return expr; }
+    
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }

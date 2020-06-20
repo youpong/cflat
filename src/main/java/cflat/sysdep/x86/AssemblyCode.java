@@ -89,11 +89,9 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 	assemblies.add(new Instruction(op, typeSuffix(t), a, b));
     }
 
-    /*
     protected String typeSuffix(Type t1, Type t2) {
 	return typeSuffix(t1) + typeSuffix(t2);
     }
-    */
 
     protected String typeSuffix(Type t) {
 	switch(t) {
@@ -108,20 +106,66 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 
     // ...
 
+    //
+    // instructions
+    //
+
+    // ...
+    
+    // 343
+    void sete(Register reg) {
+	insn("sete", reg);
+    }
+    
+    // ...
+
+    // 383
+    void test(Register a, Register b) {
+	insn(b.type, "test", a, b);
+    }
+
+    // ...
+    
     // 409
     void mov(Register src, Register dest) {
 	insn(naturalType, "mov", src, dest);
     }
+    
     void mov(Operand src, Register dest) {
 	insn(dest.type, "mov", src, dest);
     }
+    
     void mov(Register src, Operand dest) {
 	insn(src.type, "mov", src, dest);
-    } // 426
+    } 
 
+    // ...
+
+    // 428
+    void movsx(Register src, Register dest) {
+	insn("movs", typeSuffix(src.type, dest.type), src, dest);
+    }
+    
+    void movzx(Register src, Register dest) {
+	insn("movz", typeSuffix(src.type, dest.type), src, dest);
+    }
+    
+    // ...
+    
     // 440
     void lea(Operand src, Register dest) {
 	insn(naturalType, "lea", src, dest);
+    }
+
+    void neg(Register reg) {
+	insn(reg.type, "neg", reg);
+    }
+    
+    // ...
+
+    // 472
+    void not(Register reg) {
+	insn(reg.type, "not", reg);
     }
 
     // ...

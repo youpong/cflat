@@ -101,7 +101,32 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator,
     // private Label epilogue;
     
     public Void visit(Uni node) {
-	// TODO
+	Type src = node.expr().type();
+	Type dest = node.type();
+
+	compile(node.expr());
+	switch (node.op()) {
+	case UMINUS:
+	    as.neg(ax(src));
+	    break;
+	case BIT_NOT:
+	    as.not(ax(src));
+	    break;
+	case NOT:
+	    as.test(ax(src), ax(src));
+	    as.sete(al());
+	    as.movzx(al(), ax(dest));
+	    break;
+	case S_CAST:
+	    as.movsx(ax(src), ax(dest));
+	    break;
+	case U_CAST:
+	    as.movzx(ax(src), ax(dest));
+	    break;
+	default:
+	    throw new Error("unknown unary operator: " + node.op());
+	}
+	    
 	return null;
     }
     
@@ -242,12 +267,17 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator,
     }
     
     private Register ax() { return ax(naturalType); }
+    private Register al() { return ax(Type.INT8); }
 
+    // ...
+    
     // 1051
     private Register ax(Type t) {
 	return new Register(RegisterClass.AX, t);
     }
+    
     // ...
+    
     // 1085
     private DirectMemoryReference mem(Symbol sym) {
 	return new DirectMemoryReference(sym);
