@@ -29,7 +29,9 @@ public class Addr extends Expr {
 	return entity.memref();
     }
     
-    // ...
+    public Entity getEntityForce() {
+	return entity;
+    }
     
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);

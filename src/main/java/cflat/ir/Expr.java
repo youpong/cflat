@@ -3,6 +3,7 @@ package cflat.ir;
 import cflat.asm.Type;
 import cflat.asm.ImmediateValue;
 import cflat.asm.MemoryReference;
+import cflat.entity.Entity;
 
 abstract public class Expr implements Dumpable {
     final Type type;
@@ -15,7 +16,7 @@ abstract public class Expr implements Dumpable {
 
     public boolean isVar() { return false; }
     
-    //public boolean isAddr() { return false; }
+    public boolean isAddr() { return false; }
 
     public boolean isConstant() { return false; }
 
@@ -34,6 +35,10 @@ abstract public class Expr implements Dumpable {
     }
     
     // ...
+
+    public Entity getEntityForce() {
+	return null;
+    }
 
     abstract public <S,E> E accept(IRVisitor<S,E> visitor);
     

@@ -2,6 +2,7 @@ package cflat.ir;
 
 import cflat.asm.Type;
 
+// TODO: test
 /**
  * 二項演算 (l OP r)
  */
@@ -27,6 +28,18 @@ public class Bin extends Expr {
 	this.right = right;
     }
 
+    public Expr left() {
+	return left;
+    }
+    
+    public Expr right() {
+	return right;
+    }
+    
+    public Op op() {
+	return op;
+    }
+    
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }

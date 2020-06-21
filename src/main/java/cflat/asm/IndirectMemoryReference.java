@@ -13,7 +13,9 @@ public class IndirectMemoryReference extends MemoryReference {
 	this(offset, base, true);
     }
 
-    // ...
+    static public IndirectMemoryReference relocatable(long offset, Register base) {
+	return new IndirectMemoryReference(new IntegerLiteral(offset), base, false);
+    }
 
     private IndirectMemoryReference(Literal offset, Register base,
 				    boolean fixed) {

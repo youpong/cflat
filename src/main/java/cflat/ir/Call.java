@@ -18,9 +18,11 @@ public class Call extends Expr {
 	this.expr = expr;
 	this.args = args;
     }
+    
     public <S,E> E accept(IRVisitor<S,E> visitor) {
 	return visitor.visit(this);
     }
+    
     protected void _dump(Dumper d) {
 	d.printMember("expr", expr);
 	d.printMembers("args", args);

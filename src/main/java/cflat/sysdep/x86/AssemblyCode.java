@@ -2,6 +2,7 @@ package cflat.sysdep.x86;
 
 import cflat.asm.Assembly;
 import cflat.asm.Comment;
+import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Instruction;
 import cflat.asm.Operand;
 import cflat.asm.SymbolTable;
@@ -15,7 +16,7 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     final long stackWordSize;
     final SymbolTable labelSymbols;
     final boolean verbose;
-    //    final VirtualStack virtualStack = new VirtualStack();
+    final VirtualStack virtualStack = new VirtualStack();
     private List<Assembly> assemblies = new ArrayList<Assembly>();
     private int commentIndentLevel = 0;
     //    private Statistics statistics;
@@ -104,22 +105,127 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 	}
     }
 
+    //
+    // directives
+    //
+    
     // ...
 
+    //
+    // Virtual Stack
+    //
+    class VirtualStack {
+	private long offset;
+	private long max;
+	private List<IndirectMemoryReference> memrefs =
+	    new ArrayList<IndirectMemoryReference>();
+
+	VirtualStack() {
+	    reset();
+	}
+
+	void reset() {
+	    offset = 0;
+	    max = 0;
+	    memrefs.clear();
+	}
+
+	//long maxSize()
+	void extend(long len) {
+	    offset += len;
+	    max = Math.max(offset, max);
+	}
+	
+	void rewind(long len) {
+	    offset -= len;
+	}
+	
+	IndirectMemoryReference top() {
+	    IndirectMemoryReference mem = relocatableMem(-offset, bp());
+	    memrefs.add(mem);
+	    return mem;
+	}
+
+	private IndirectMemoryReference relocatableMem(long offset, Register base) {
+	    return IndirectMemoryReference.relocatable(offset, base);
+	}
+
+	private Register bp() {
+	    return new Register(RegisterClass.BP, naturalType);
+	}
+	//void fixOffset(long diff)
+    }
+
+    // ...
+
+    // 304
+    void virtualPush(Register reg) {
+	if (verbose) {
+	    comment("push " + reg.baseName() + " -> " + virtualStack.top());
+	}
+	virtualStack.extend(stackWordSize);
+	mov(reg, virtualStack.top());
+    }
+
+    void virtualPop(Register reg) {
+	if (verbose) {
+	    comment("pop " + reg.baseName() + " <- " + virtualStack.top());
+	}
+	mov(virtualStack.top(), reg);
+	virtualStack.rewind(stackWordSize);
+    }
+    
     //
     // instructions
     //
 
     // ...
-    
-    // 343
+
+    // 339
+    void cmp(Operand a, Register b) {
+	insn(b.type, "cmp", a, b);
+    }
+
     void sete(Register reg) {
 	insn("sete", reg);
     }
     
-    // ...
+    void setne(Register reg) {
+	insn("setne", reg);
+    }
 
-    // 383
+    void seta(Register reg) {
+	insn("seta", reg);
+    }
+
+    void setae(Register reg) {
+	insn("setae", reg);
+    }
+
+    void setb(Register reg) {
+	insn("setb", reg);
+    }
+
+    void setbe(Register reg) {
+	insn("setbe", reg);
+    }
+
+    void setg(Register reg) {
+	insn("setg", reg);
+    }
+    
+    void setge(Register reg) {
+	insn("setge", reg);
+    }
+
+    void setl(Register reg) {
+	insn("setl", reg);
+    }
+
+    void setle(Register reg) {
+	insn("setle", reg);
+    }
+
     void test(Register a, Register b) {
 	insn(b.type, "test", a, b);
     }
@@ -160,13 +266,56 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     void neg(Register reg) {
 	insn(reg.type, "neg", reg);
     }
-    
-    // ...
 
-    // 472
+    void add(Operand diff, Register base) {
+	insn(base.type, "add", diff, base);
+    }
+
+    void sub(Operand diff, Register base) {
+	insn(base.type, "sub", diff, base);
+    }
+
+    void imul(Operand m, Register base) {
+	insn(base.type, "imul", m, base);
+    }
+
+    void cltd() {
+	insn("cltd");
+    }
+
+    void div(Register base) {
+	insn(base.type, "div", base);
+    }
+    
+    void idiv(Register base) {
+	insn(base.type, "idiv", base);
+    }
+    
     void not(Register reg) {
 	insn(reg.type, "not", reg);
     }
+    
+    void and(Operand bits, Register base) {
+	insn(base.type, "and", bits, base);
+    }
+    
+    void or(Operand bits, Register base) {
+	insn(base.type, "or", bits, base);
+    }
+    
+    void xor(Operand bits, Register base) {
+	insn(base.type, "xor", bits, base);
+    }
 
-    // ...
+    void sar(Register bits, Register base) {
+	insn(base.type, "sar", bits, base);
+    }
+    
+    void sal(Register bits, Register base) {
+	insn(base.type, "sal", bits, base);
+    }
+
+    void shr(Register bits, Register base) {
+	insn(base.type, "shr", bits, base);
+    }
 }
