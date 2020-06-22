@@ -15,41 +15,46 @@ public class DefinedFunction extends Function {
     protected BlockNode body;
     protected LocalScope scope;
     protected List<Stmt> ir;
-    
-    public DefinedFunction(boolean priv, TypeNode type, String name,
-			   Params params, BlockNode body) {
-	super(priv, type, name);
-	this.params = params;
-	this.body = body;
+
+    public DefinedFunction(boolean priv, TypeNode type, String name, Params params, BlockNode body) {
+        super(priv, type, name);
+        this.params = params;
+        this.body = body;
     }
-    
-    public boolean isDefined() { return true; }
-    
+
+    public boolean isDefined() {
+        return true;
+    }
+
     public List<Parameter> parameters() {
-	return params.parameters();
+        return params.parameters();
     }
+
     public BlockNode body() {
-	return body;
+        return body;
     }
+
     public List<Stmt> ir() {
-	return ir;
+        return ir;
     }
+
     public void setIR(List<Stmt> ir) {
-	this.ir = ir;
+        this.ir = ir;
     }
+
     public void setScope(LocalScope scope) {
-	this.scope = scope;
+        this.scope = scope;
     }
-    //    public List<DefinedVariable> localVariables()
+    // public List<DefinedVariable> localVariables()
 
     protected void _dump(Dumper d) {
-	d.printMember("name", name);
-	d.printMember("isPrivate", isPrivate);
-	d.printMember("params", params);
-	d.printMember("body", body);
+        d.printMember("name", name);
+        d.printMember("isPrivate", isPrivate);
+        d.printMember("params", params);
+        d.printMember("body", body);
     }
 
     public <T> T accept(EntityVisitor<T> visitor) {
-	return visitor.visit(this);
+        return visitor.visit(this);
     }
 }

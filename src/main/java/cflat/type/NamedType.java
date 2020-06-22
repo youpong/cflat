@@ -7,11 +7,12 @@ abstract public class NamedType extends Type {
     protected Location loc;
 
     public NamedType(String name, Location loc) {
-	this.name = name;
-	this.loc = loc;
+        this.name = name;
+        this.loc = loc;
     }
+
     // name()
     public Location location() {
-	return loc;
+        return loc;
     }
 }

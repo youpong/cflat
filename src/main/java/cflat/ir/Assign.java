@@ -11,27 +11,27 @@ public class Assign extends Stmt {
     protected Expr lhs;
     /** 代入の右辺 */
     protected Expr rhs;
-    
+
     public Assign(Location loc, Expr lhs, Expr rhs) {
-	super(loc);
-	this.lhs = lhs;
-	this.rhs = rhs;
+        super(loc);
+        this.lhs = lhs;
+        this.rhs = rhs;
     }
 
     public Expr lhs() {
-	return lhs;
+        return lhs;
     }
 
     public Expr rhs() {
-	return rhs;
+        return rhs;
     }
-    
-    public <S,E> S accept(IRVisitor<S,E> visitor) {
-	return visitor.visit(this);
+
+    public <S, E> S accept(IRVisitor<S, E> visitor) {
+        return visitor.visit(this);
     }
-    
+
     protected void _dump(Dumper d) {
-	d.printMember("lhs", lhs);
-	d.printMember("rhs", rhs);
+        d.printMember("lhs", lhs);
+        d.printMember("rhs", rhs);
     }
 }

@@ -1,18 +1,17 @@
 package cflat.ast;
 
-import java.util.*;
-import cflat.entity.DefinedVariable;
-import cflat.entity.DefinedFunction;
-import cflat.entity.Constant;
-import cflat.entity.UndefinedVariable;
-import cflat.entity.UndefinedFunction;
 import cflat.ast.StructNode;
-import cflat.ast.UnionNode;
 import cflat.ast.TypedefNode;
+import cflat.ast.UnionNode;
+import cflat.entity.Constant;
+import cflat.entity.DefinedFunction;
+import cflat.entity.DefinedVariable;
+import cflat.entity.UndefinedFunction;
+import cflat.entity.UndefinedVariable;
+import java.util.*;
 
-/** 
- * Set<Constant> constants 
- * List<Constant> constants()
+/**
+ * Set<Constant> constants List<Constant> constants()
  */
 public class Declarations {
     Set<DefinedVariable> defvars = new LinkedHashSet<DefinedVariable>();
@@ -26,60 +25,74 @@ public class Declarations {
 
     // TODO: test
     public void add(Declarations decls) {
-	defvars.addAll(decls.defvars);
-	vardecls.addAll(decls.vardecls);
-	//defuns.addAll(decls.defuns);
-	funcdecls.addAll(decls.funcdecls);
-	constants.addAll(decls.constants);
-	defstructs.addAll(decls.defstructs);
-	defunions.addAll(decls.defunions);
-	typedefs.addAll(decls.typedefs);
+        defvars.addAll(decls.defvars);
+        vardecls.addAll(decls.vardecls);
+        // defuns.addAll(decls.defuns);
+        funcdecls.addAll(decls.funcdecls);
+        constants.addAll(decls.constants);
+        defstructs.addAll(decls.defstructs);
+        defunions.addAll(decls.defunions);
+        typedefs.addAll(decls.typedefs);
     }
 
     public void addDefvars(List<DefinedVariable> vars) {
-	defvars.addAll(vars);
+        defvars.addAll(vars);
     }
+
     public List<DefinedVariable> defvars() {
-	return new ArrayList<DefinedVariable>(defvars);
+        return new ArrayList<DefinedVariable>(defvars);
     }
+
     public List<Constant> constants() {
-	return new ArrayList<Constant>(constants);
+        return new ArrayList<Constant>(constants);
     }
+
     public void addVardecl(UndefinedVariable var) {
-	vardecls.add(var);
+        vardecls.add(var);
     }
+
     public void addDefun(DefinedFunction func) {
-	defuns.add(func);
+        defuns.add(func);
     }
+
     public List<DefinedFunction> defuns() {
-	return new ArrayList<DefinedFunction>(defuns);
+        return new ArrayList<DefinedFunction>(defuns);
     }
-    public void	addConstant(Constant c) {
-	constants.add(c);
+
+    public void addConstant(Constant c) {
+        constants.add(c);
     }
+
     public void addDefstruct(StructNode n) {
-	defstructs.add(n);
+        defstructs.add(n);
     }
+
     public List<StructNode> defstructs() {
-	return new ArrayList<StructNode>(defstructs);
+        return new ArrayList<StructNode>(defstructs);
     }
+
     public void addDefunion(UnionNode n) {
-	defunions.add(n);
+        defunions.add(n);
     }
+
     public List<UnionNode> defunions() {
-	return new ArrayList<UnionNode>(defunions);
+        return new ArrayList<UnionNode>(defunions);
     }
+
     public void addFuncdecl(UndefinedFunction func) {
-	funcdecls.add(func);
+        funcdecls.add(func);
     }
+
     public List<UndefinedFunction> funcdecls() {
-	return new ArrayList<UndefinedFunction>(funcdecls);
+        return new ArrayList<UndefinedFunction>(funcdecls);
     }
-    //	
+
+    //
     public void addTypedef(TypedefNode n) {
-	typedefs.add(n);
+        typedefs.add(n);
     }
+
     public List<TypedefNode> typedefs() {
-	return new ArrayList<TypedefNode>(typedefs);
+        return new ArrayList<TypedefNode>(typedefs);
     }
 }

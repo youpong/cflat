@@ -1,38 +1,38 @@
 package cflat.asm;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Statistics {
     protected Map<Register, Integer> registerUsage;
-    //    protected Map<String, Integer> insnUsage;
+    // protected Map<String, Integer> insnUsage;
     protected Map<Symbol, Integer> symbolUsage;
 
     public Statistics() {
-	registerUsage = new HashMap<Register, Integer>();
+        registerUsage = new HashMap<Register, Integer>();
     }
 
     // TODO
     public void registerUsed(Register reg) {
-	incrementCount(registerUsage, reg);
+        incrementCount(registerUsage, reg);
     }
 
     // ...
 
     public void symbolUsed(Symbol sym) {
-	incrementCount(symbolUsage, sym);
+        incrementCount(symbolUsage, sym);
     }
 
     protected <K> int fetchCount(Map<K, Integer> m, K key) {
-	Integer n = m.get(key);
-	if (n == null) {
-	    return 0;
-	} else {
-	    return n;
-	}
+        Integer n = m.get(key);
+        if (n == null) {
+            return 0;
+        } else {
+            return n;
+        }
     }
 
     protected <K> void incrementCount(Map<K, Integer> m, K key) {
-	m.put(key, fetchCount(m, key) + 1);
+        m.put(key, fetchCount(m, key) + 1);
     }
 }

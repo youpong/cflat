@@ -1,7 +1,7 @@
 package cflat.asm;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SymbolTable {
     protected String base;
@@ -9,23 +9,23 @@ public class SymbolTable {
     protected long seq = 0;
 
     public SymbolTable(String base) {
-	this.base = base;
-	this.map = new HashMap<UnnamedSymbol, String>();
+        this.base = base;
+        this.map = new HashMap<UnnamedSymbol, String>();
     }
 
     // ...
     public String symbolString(UnnamedSymbol sym) {
-	String str = map.get(sym);
-	if (str != null) {
-	    return str;
-	} else {
-	    String newStr = newString();
-	    map.put(sym, newStr);
-	    return newStr;
-	}
+        String str = map.get(sym);
+        if (str != null) {
+            return str;
+        } else {
+            String newStr = newString();
+            map.put(sym, newStr);
+            return newStr;
+        }
     }
 
     protected String newString() {
-	return base + seq++;
+        return base + seq++;
     }
 }

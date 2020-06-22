@@ -7,25 +7,25 @@ public class ConstantTable implements Iterable<ConstantEntry> {
     protected Map<String, ConstantEntry> table;
 
     public ConstantTable() {
-	table = new LinkedHashMap<String, ConstantEntry>();
+        table = new LinkedHashMap<String, ConstantEntry>();
     }
 
-    //    public boolean isEmpty() {}
+    // public boolean isEmpty() {}
 
     public ConstantEntry intern(String s) {
-	ConstantEntry ent = table.get(s);
-	if (ent == null) {
-	    ent = new ConstantEntry(s);
-	    table.put(s, ent);
-	}
-	return ent;
+        ConstantEntry ent = table.get(s);
+        if (ent == null) {
+            ent = new ConstantEntry(s);
+            table.put(s, ent);
+        }
+        return ent;
     }
 
     public Collection<ConstantEntry> entries() {
-	return table.values();
+        return table.values();
     }
 
     public Iterator<ConstantEntry> iterator() {
-	return table.values().iterator();
+        return table.values().iterator();
     }
 }

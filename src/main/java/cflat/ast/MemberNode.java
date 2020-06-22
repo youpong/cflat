@@ -1,8 +1,8 @@
 package cflat.ast;
 
-import cflat.type.Type;
-import cflat.type.CompositeType;
 import cflat.exception.SemanticError;
+import cflat.type.CompositeType;
+import cflat.type.Type;
 
 /**
  * Member 参照 st.memb
@@ -10,45 +10,50 @@ import cflat.exception.SemanticError;
 public class MemberNode extends LHSNode {
     private ExprNode expr;
     private String member;
-    
+
     public MemberNode(ExprNode expr, String member) {
-	this.expr = expr;
-	this.member = member;
+        this.expr = expr;
+        this.member = member;
     }
 
     public CompositeType baseType() {
-	try {
-	    return expr.type().getCompositeType();
-	}
-	catch(ClassCastException err) {
-	    throw new SemanticError(err.getMessage());
-	}
+        try {
+            return expr.type().getCompositeType();
+        } catch (ClassCastException err) {
+            throw new SemanticError(err.getMessage());
+        }
     }
+
     //
     public long offset() {
-	return baseType().memberOffset(member);
+        return baseType().memberOffset(member);
     }
+
     // TODO: test
     protected Type origType() {
-	return baseType().memberType(member);
+        return baseType().memberType(member);
     }
+
     public ExprNode expr() {
-	return expr;
+        return expr;
     }
+
     public String member() {
-	return member;
+        return member;
     }
+
     public Location location() {
-	return expr.location();
+        return expr.location();
     }
 
     protected void _dump(Dumper d) {
-	if(type!=null)
-	    d.printMember("type", type);
-	d.printMember("expr", expr);
-	d.printMember("member", member);
+        if (type != null)
+            d.printMember("type", type);
+        d.printMember("expr", expr);
+        d.printMember("member", member);
     }
-    public <S,E> E accept(ASTVisitor<S,E> visitor) {
-	return visitor.visit(this);
+
+    public <S, E> E accept(ASTVisitor<S, E> visitor) {
+        return visitor.visit(this);
     }
 }

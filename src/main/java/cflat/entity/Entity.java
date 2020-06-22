@@ -1,15 +1,14 @@
 package cflat.entity;
 
-import cflat.asm.Operand;
 import cflat.asm.MemoryReference;
+import cflat.asm.Operand;
 import cflat.ast.Dumper;
-import cflat.ast.TypeNode;
-import cflat.ast.Location;
 import cflat.ast.ExprNode;
+import cflat.ast.Location;
+import cflat.ast.TypeNode;
 import cflat.type.Type;
 
-abstract public class Entity
-    implements cflat.ast.Dumpable {
+abstract public class Entity implements cflat.ast.Dumpable {
     protected String name;
     protected boolean isPrivate;
     protected TypeNode typeNode;
@@ -17,89 +16,90 @@ abstract public class Entity
     protected MemoryReference memref;
     protected Operand address;
 
-    
     public Entity(boolean priv, TypeNode type, String name) {
-	this.isPrivate = priv;
-	this.typeNode = type;
-	this.name = name;
-	this.nRefered = 0;
+        this.isPrivate = priv;
+        this.typeNode = type;
+        this.name = name;
+        this.nRefered = 0;
     }
-    
+
     public String name() {
-	return name;
+        return name;
     }
-    
-    //    public String symbolString()
-    
+
+    // public String symbolString()
+
     abstract public boolean isDefined();
-    
-    //    abstract public boolean isInitialized();
-    
-    public boolean isConstant() { return false; }
+
+    // abstract public boolean isInitialized();
+
+    public boolean isConstant() {
+        return false;
+    }
 
     public ExprNode value() {
-	throw new Error("Entity#value");
-    }
-    
-    // isParameter()
-    
-    public boolean isPrivate() {
-	return isPrivate;
-    }
-    
-    public TypeNode typeNode() {
-	return typeNode;
-    }
-    
-    public Type type() {
-	return typeNode.type();
-    }
-    
-    public long allocSize() {
-	return type().allocSize();
-    }
-    
-    //    alignment()
-    
-    public void refered() {
-	nRefered++;
-    }
-    
-    public boolean isRefered() {
-	return (nRefered > 0);
+        throw new Error("Entity#value");
     }
 
-    //    setMemref(MemoryReference mem)
+    // isParameter()
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public TypeNode typeNode() {
+        return typeNode;
+    }
+
+    public Type type() {
+        return typeNode.type();
+    }
+
+    public long allocSize() {
+        return type().allocSize();
+    }
+
+    // alignment()
+
+    public void refered() {
+        nRefered++;
+    }
+
+    public boolean isRefered() {
+        return (nRefered > 0);
+    }
+
+    // setMemref(MemoryReference mem)
 
     public MemoryReference memref() {
-	checkAddress();
-	return memref();
+        checkAddress();
+        return memref();
     }
 
     // ...
 
     // 91
     public Operand address() {
-	checkAddress();
-	return address;
+        checkAddress();
+        return address;
     }
 
     protected void checkAddress() {
-	if (memref == null && address == null) {
-	    throw new Error("address did not resolved: " + name);
-	}
+        if (memref == null && address == null) {
+            throw new Error("address did not resolved: " + name);
+        }
     }
 
     public Location location() {
-	return typeNode.location();
+        return typeNode.location();
     }
 
     abstract public <T> T accept(EntityVisitor<T> visitor);
-    
+
     public void dump(Dumper d) {
-	d.printClass(this, location());
-	_dump(d);
+        d.printClass(this, location());
+        _dump(d);
     }
-    
+
     abstract protected void _dump(Dumper d);
 }

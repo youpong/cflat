@@ -1,28 +1,31 @@
 package cflat.ast;
 
-import cflat.type.TypeRef;
 import cflat.type.Type;
+import cflat.type.TypeRef;
 
 abstract public class LiteralNode extends ExprNode {
     protected Location location;
     protected TypeNode typeNode;
 
     public LiteralNode(Location loc, TypeRef ref) {
-	super();
-	this.location = loc;
-	this.typeNode = new TypeNode(ref);
+        super();
+        this.location = loc;
+        this.typeNode = new TypeNode(ref);
     }
 
     public Location location() {
-	return location;
+        return location;
     }
+
     public Type type() {
-	return typeNode.type();
+        return typeNode.type();
     }
+
     public TypeNode typeNode() {
-	return typeNode;
+        return typeNode;
     }
+
     public boolean isConstant() {
-	return true;
+        return true;
     }
 }

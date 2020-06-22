@@ -6,14 +6,14 @@ public abstract class TypeRef {
     protected Location location;
 
     public TypeRef(Location loc) {
-	this.location = loc;
+        this.location = loc;
     }
 
     public Location location() {
-	return location;
+        return location;
     }
 
     public int hashCode() {
-	return toString().hashCode();
+        return toString().hashCode();
     }
 }

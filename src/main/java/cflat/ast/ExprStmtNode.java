@@ -4,16 +4,19 @@ public class ExprStmtNode extends StmtNode {
     protected ExprNode expr;
 
     public ExprStmtNode(Location loc, ExprNode expr) {
-	super(loc);
-	this.expr = expr;
+        super(loc);
+        this.expr = expr;
     }
+
     public ExprNode expr() {
-	return expr;
+        return expr;
     }
+
     protected void _dump(Dumper d) {
-	d.printMember("expr", expr);
+        d.printMember("expr", expr);
     }
-    public <S,E> S accept(ASTVisitor<S,E> visitor) {
-	return visitor.visit(this);
+
+    public <S, E> S accept(ASTVisitor<S, E> visitor) {
+        return visitor.visit(this);
     }
 }

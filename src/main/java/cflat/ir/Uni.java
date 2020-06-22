@@ -12,20 +12,25 @@ public class Uni extends Expr {
     protected Expr expr;
 
     public Uni(Type type, Op op, Expr expr) {
-	super(type);
-	this.op = op;
-	this.expr = expr;
+        super(type);
+        this.op = op;
+        this.expr = expr;
     }
 
-    public Op op() { return op; }
-    public Expr expr() { return expr; }
-    
-    public <S,E> E accept(IRVisitor<S,E> visitor) {
-	return visitor.visit(this);
+    public Op op() {
+        return op;
+    }
+
+    public Expr expr() {
+        return expr;
+    }
+
+    public <S, E> E accept(IRVisitor<S, E> visitor) {
+        return visitor.visit(this);
     }
 
     public void _dump(Dumper d) {
-	d.printMember("op", "" + op);
-	d.printMember("expr", expr);
+        d.printMember("op", "" + op);
+        d.printMember("expr", expr);
     }
 }

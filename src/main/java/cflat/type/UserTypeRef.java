@@ -6,20 +6,25 @@ public class UserTypeRef extends TypeRef {
     protected String name;
 
     public UserTypeRef(String name) {
-	this(null, name);
+        this(null, name);
     }
+
     public UserTypeRef(Location loc, String name) {
-	super(loc);
-	this.name = name;
+        super(loc);
+        this.name = name;
     }
+
     public String name() {
-	return name;
+        return name;
     }
+
     public boolean equals(Object other) {
-	if (! (other instanceof UserTypeRef)) return false;
-	return name.equals(((UserTypeRef)other).name);
+        if (!(other instanceof UserTypeRef))
+            return false;
+        return name.equals(((UserTypeRef) other).name);
     }
+
     public String toString() {
-	return name;
+        return name;
     }
 }

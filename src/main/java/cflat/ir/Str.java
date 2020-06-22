@@ -13,30 +13,33 @@ public class Str extends Expr {
     protected ConstantEntry entry;
 
     public Str(Type type, ConstantEntry entry) {
-	super(type);
-	this.entry = entry;
+        super(type);
+        this.entry = entry;
     }
 
-    //    public ConstantEntry entry() { return entry; }
-    
+    // public ConstantEntry entry() { return entry; }
+
     // ...
-    
-    public boolean isConstant() { return true; }
+
+    public boolean isConstant() {
+        return true;
+    }
 
     public MemoryReference memref() {
-	return entry.memref();
+        return entry.memref();
     }
-    
+
     // ...
 
     public ImmediateValue asmValue() {
-	return entry.address();
+        return entry.address();
     }
-    
-    public <S,E> E accept(IRVisitor<S,E> visitor) {
-	return visitor.visit(this);
+
+    public <S, E> E accept(IRVisitor<S, E> visitor) {
+        return visitor.visit(this);
     }
+
     protected void _dump(Dumper d) {
-	d.printMember("entry", "" + entry);
+        d.printMember("entry", "" + entry);
     }
 }

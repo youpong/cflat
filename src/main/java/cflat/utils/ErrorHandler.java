@@ -1,7 +1,7 @@
 package cflat.utils;
 
-import java.io.*;
 import cflat.ast.Location;
+import java.io.*;
 
 // TODO: implement
 /**
@@ -14,26 +14,30 @@ public class ErrorHandler {
     protected long nWarning;
 
     public ErrorHandler(String programid) {
-	this.programId = programid;
-	stream = System.err;
+        this.programId = programid;
+        stream = System.err;
     }
 
     public void error(Location loc, String msg) {
-	error(loc.toString() + ": " + msg);
+        error(loc.toString() + ": " + msg);
     }
+
     public void error(String msg) {
-	stream.println(programId + ": error: " + msg);
-	nError++;
+        stream.println(programId + ": error: " + msg);
+        nError++;
     }
+
     public void warn(Location loc, String msg) {
-	warn(loc.toString() + ": " + msg);
+        warn(loc.toString() + ": " + msg);
     }
+
     public void warn(String msg) {
-	stream.println(programId + ": warning: " + msg);
-	nWarning++;
+        stream.println(programId + ": warning: " + msg);
+        nWarning++;
     }
+
     // TODO: test
     public boolean errorOccured() {
-	return (nError > 0);
+        return (nError > 0);
     }
 }

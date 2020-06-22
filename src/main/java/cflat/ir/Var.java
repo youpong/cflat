@@ -6,44 +6,45 @@ import cflat.asm.Type;
 import cflat.entity.Entity;
 
 /**
- * 変数参照
- * VariableNode の r-value の中間表現
+ * 変数参照 VariableNode の r-value の中間表現
  */
 public class Var extends Expr {
     /** DefinedVariable オブジェクト */
     protected Entity entity;
 
     public Var(Type type, Entity entity) {
-	super(type);
-	this.entity = entity;
+        super(type);
+        this.entity = entity;
     }
 
-    public boolean isVar() { return true; }
-    
+    public boolean isVar() {
+        return true;
+    }
+
     // ...
 
     // 27
     public Operand address() {
-	return entity.address();
+        return entity.address();
     }
-    
+
     public MemoryReference memref() {
-	return entity.memref();
+        return entity.memref();
     }
 
     public Addr addressNode(Type type) {
-	return new Addr(type, entity);
+        return new Addr(type, entity);
     }
-    
+
     public Entity getEntityForce() {
-	return entity;
+        return entity;
     }
-    
-    public <S,E> E accept(IRVisitor<S,E> visitor) {
-	return visitor.visit(this);
+
+    public <S, E> E accept(IRVisitor<S, E> visitor) {
+        return visitor.visit(this);
     }
-    
+
     protected void _dump(Dumper d) {
-	d.printMember("entity", entity.name());
+        d.printMember("entity", entity.name());
     }
 }
