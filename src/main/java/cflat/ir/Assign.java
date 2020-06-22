@@ -2,6 +2,7 @@ package cflat.ir;
 
 import cflat.ast.Location;
 
+// TODO: test
 /**
  * 代入
  */
@@ -15,6 +16,14 @@ public class Assign extends Stmt {
 	super(loc);
 	this.lhs = lhs;
 	this.rhs = rhs;
+    }
+
+    public Expr lhs() {
+	return lhs;
+    }
+
+    public Expr rhs() {
+	return rhs;
     }
     
     public <S,E> S accept(IRVisitor<S,E> visitor) {

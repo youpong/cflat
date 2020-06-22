@@ -359,7 +359,22 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator,
     //
 
     public Void visit(Assign node) {
-	// TODO:
+	if (node.lhs().isAddr() && node.lhs().memref() != null) {
+	    compile(node.rhs());
+	    store(ax(node.lhs().type()), node.lhs().memref());
+	} else if (node.rhs().isConstant()) {
+	    compile(node.lhs());
+	    as.mov(ax(), cx());
+	    loadConstant(node.rhs(), ax());
+	    store(ax(node.lhs().type()), mem(cx()));
+	} else {
+	    compile(node.rhs());
+	    as.virtualPush(ax());
+	    compile(node.lhs());
+	    as.mov(ax(), cx());
+	    as.virtualPop(ax());
+	    store(ax(node.lhs().type()), mem(cx()));
+	}
 	return null;
     }
     
@@ -456,18 +471,20 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator,
     private ImmediateValue imm(long n) {
 	return new ImmediateValue(n);
     }
+
     private ImmediateValue imm(Symbol sym) {
 	return new ImmediateValue(sym);
     }
+
     private ImmediateValue imm(Literal lit) {
 	return new ImmediateValue(lit);
     }
+
     private void load(MemoryReference mem, Register reg) {
 	as.mov(mem, reg);
     }
-    /*
+
     private void store(Register reg, MemoryReference mem) {
 	as.mov(reg, mem);
     }
-    */
 }
