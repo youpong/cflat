@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles version="19">
+  <profile kind="CodeFormatterProfile" name="Cflat Project Formatter" version="19">
+    <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="85"/>
+  </profile>
+</profiles>
