@@ -36,12 +36,17 @@ import cflat.ir.Var;
 import cflat.sysdep.CodeGeneratorOptions;
 import cflat.utils.ErrorHandler;
 
-public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void, Void>, ELFConstants {
+public class CodeGenerator
+        implements
+            cflat.sysdep.CodeGenerator,
+            IRVisitor<Void, Void>,
+            ELFConstants {
     final CodeGeneratorOptions options;
     final Type naturalType;
     final ErrorHandler errorHandler;
 
-    public CodeGenerator(CodeGeneratorOptions options, Type naturalType, ErrorHandler errorHandler) {
+    public CodeGenerator(CodeGeneratorOptions options, Type naturalType,
+            ErrorHandler errorHandler) {
         this.options = options;
         this.naturalType = naturalType;
         this.errorHandler = errorHandler;
@@ -107,7 +112,8 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
 
     // 644
     /**
-     * Implements cdecl function call: * All arguments are on stack. * Caller rewinds stack pointer.
+     * Implements cdecl function call: * All arguments are on stack. * Caller
+     * rewinds stack pointer.
      */
     public Void visit(Call node) {
         // TODO
@@ -132,7 +138,7 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
     }
 
     public Void visit(LabelStmt node) {
-        // TODO
+        as.label(node.label());
         return null;
     }
 
@@ -186,7 +192,8 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
             compile(node.left());
             loadAddress(node.right().getEntityForce(), cx(t));
             compileBinaryOp(op, ax(t), cx(t));
-        } else if (node.left().isConstant() || node.left().isVar() || node.left().isAddr()) {
+        } else if (node.left().isConstant() || node.left().isVar()
+                || node.left().isAddr()) {
             compile(node.right());
             as.mov(ax(), cx());
             compile(node.left());
@@ -203,99 +210,99 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
 
     private boolean doesRequireRegisterOperand(Op op) {
         switch (op) {
-        case S_DIV:
-        case U_DIV:
-        case S_MOD:
-        case U_MOD:
-        case BIT_LSHIFT:
-        case BIT_RSHIFT:
-        case ARITH_RSHIFT:
+        case S_DIV :
+        case U_DIV :
+        case S_MOD :
+        case U_MOD :
+        case BIT_LSHIFT :
+        case BIT_RSHIFT :
+        case ARITH_RSHIFT :
             return true;
-        default:
+        default :
             return false;
         }
     }
 
     private void compileBinaryOp(Op op, Register left, Operand right) {
         switch (op) {
-        case ADD:
+        case ADD :
             as.add(right, left);
             break;
-        case SUB:
+        case SUB :
             as.sub(right, left);
             break;
-        case MUL:
+        case MUL :
             as.imul(right, left);
             break;
-        case S_DIV:
-        case S_MOD:
+        case S_DIV :
+        case S_MOD :
             as.cltd();
             as.idiv(cx(left.type));
             if (op == Op.S_MOD) {
                 as.mov(dx(), left);
             }
             break;
-        case U_DIV:
-        case U_MOD:
+        case U_DIV :
+        case U_MOD :
             as.mov(imm(0), dx());
             as.div(cx(left.type));
             if (op == Op.U_MOD) {
                 as.mov(dx(), left);
             }
             break;
-        case BIT_AND:
+        case BIT_AND :
             as.and(right, left);
             break;
-        case BIT_OR:
+        case BIT_OR :
             as.or(right, left);
             break;
-        case BIT_XOR:
+        case BIT_XOR :
             as.xor(right, left);
             break;
-        case BIT_LSHIFT:
+        case BIT_LSHIFT :
             as.sal(cl(), left);
             break;
-        case BIT_RSHIFT:
+        case BIT_RSHIFT :
             as.shr(cl(), left);
             break;
-        case ARITH_RSHIFT:
+        case ARITH_RSHIFT :
             as.sar(cl(), left);
             break;
-        default:
+        default :
             // Comparison operators
             as.cmp(right, ax(left.type));
             switch (op) {
-            case EQ:
+            case EQ :
                 as.sete(al());
                 break;
-            case NEQ:
+            case NEQ :
                 as.setne(al());
                 break;
-            case S_GT:
+            case S_GT :
                 as.setg(al());
                 break;
-            case S_GTEQ:
+            case S_GTEQ :
                 as.setge(al());
                 break;
-            case S_LT:
+            case S_LT :
                 as.setl(al());
                 break;
-            case S_LTEQ:
+            case S_LTEQ :
                 as.setle(al());
                 break;
-            case U_GT:
+            case U_GT :
                 as.seta(al());
                 break;
-            case U_GTEQ:
+            case U_GTEQ :
                 as.setae(al());
                 break;
-            case U_LT:
+            case U_LT :
                 as.setb(al());
                 break;
-            case U_LTEQ:
+            case U_LTEQ :
                 as.setbe(al());
                 break;
-            default:
+            default :
                 throw new Error("unknown binary operator: " + op);
             }
             as.movzx(al(), left);
@@ -308,24 +315,24 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
 
         compile(node.expr());
         switch (node.op()) {
-        case UMINUS:
+        case UMINUS :
             as.neg(ax(src));
             break;
-        case BIT_NOT:
+        case BIT_NOT :
             as.not(ax(src));
             break;
-        case NOT:
+        case NOT :
             as.test(ax(src), ax(src));
             as.sete(al());
             as.movzx(al(), ax(dest));
             break;
-        case S_CAST:
+        case S_CAST :
             as.movsx(ax(src), ax(dest));
             break;
-        case U_CAST:
+        case U_CAST :
             as.movzx(ax(src), ax(dest));
             break;
-        default:
+        default :
             throw new Error("unknown unary operator: " + node.op());
         }
 
@@ -387,7 +394,8 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
     //
 
     /**
-     * Loads constant value. You must check node by #isConstant before calling this method.
+     * Loads constant value. You must check node by #isConstant before calling this
+     * method.
      */
     private void loadConstant(Expr node, Register reg) {
         if (node.asmValue() != null) {

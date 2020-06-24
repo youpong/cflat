@@ -2,5 +2,12 @@
 <profiles version="19">
   <profile kind="CodeFormatterProfile" name="Cflat Project Formatter" version="19">
     <setting id="org.eclipse.jdt.core.formatter.lineSplit" value="85"/>
+    <setting id="org.eclipse.jdt.core.formatter.tabulation.char" value="space"/>
+    <setting id="org.eclipse.jdt.core.formatter.indent_switchstatements_compare_to_switch" value="false"/>
+<!--
+    <setting id="org.eclipse.jdt.core.formatter.indentation.size" value="4"/>
+    <setting id="org.eclipse.jdt.core.formatter.tabulation.size" value="4"/>
+    <setting id="org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations" value="false"/>
+-->
   </profile>
 </profiles>

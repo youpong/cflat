@@ -4,7 +4,9 @@ import cflat.asm.Assembly;
 import cflat.asm.Comment;
 import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Instruction;
+import cflat.asm.Label;
 import cflat.asm.Operand;
+import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
 import java.io.PrintStream;
@@ -21,7 +23,8 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     private int commentIndentLevel = 0;
     // private Statistics statistics;
 
-    AssemblyCode(Type naturalType, long stackWordSize, SymbolTable labelSymbols, boolean verbose) {
+    AssemblyCode(Type naturalType, long stackWordSize, SymbolTable labelSymbols,
+            boolean verbose) {
         this.naturalType = naturalType;
         this.stackWordSize = stackWordSize;
         this.labelSymbols = labelSymbols;
@@ -34,7 +37,8 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     public String toSource() {
         StringBuffer buf = new StringBuffer();
         /*
-         * TODO for (Assembly asm : assemblies) { buf.append(asm.toSource(labelSymbols)); buf.append("\n"); }
+         * TODO for (Assembly asm : assemblies) {
+         * buf.append(asm.toSource(labelSymbols)); buf.append("\n"); }
          */
         return buf.toString();
     }
@@ -62,6 +66,14 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 
     void unindentComment() {
         commentIndentLevel--;
+    }
+
+    void label(Symbol sym) {
+        assemblies.add(new Label(sym));
+    }
+
+    void label(Label label) {
+        assemblies.add(label);
     }
 
     // ...
@@ -97,15 +109,15 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 
     protected String typeSuffix(Type t) {
         switch (t) {
-        case INT8:
+        case INT8 :
             return "b";
-        case INT16:
+        case INT16 :
             return "w";
-        case INT32:
+        case INT32 :
             return "l";
-        case INT64:
+        case INT64 :
             return "q";
-        default:
+        default :
             throw new Error("unknown register type: " + t.size());
         }
     }
