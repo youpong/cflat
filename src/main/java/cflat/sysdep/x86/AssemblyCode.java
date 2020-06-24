@@ -200,6 +200,10 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
         insn("jmp", new DirectMemoryReference(label.symbol()));
     }
 
+    void jnz(Label label) {
+        insn("jnz", new DirectMemoryReference(label.symbol()));
+    }
+
     // ...
 
     // 339

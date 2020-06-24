@@ -3,6 +3,7 @@ package cflat.ir;
 import cflat.asm.Label;
 import cflat.ast.Location;
 
+// TODO: test
 /**
  * 条件付きジャンプ
  */
@@ -19,6 +20,18 @@ public class CJump extends Stmt {
         this.cond = cond;
         this.thenLabel = thenLabel;
         this.elseLabel = elseLabel;
+    }
+
+    public Expr cond() {
+        return cond;
+    }
+
+    public Label thenLabel() {
+        return thenLabel;
+    }
+
+    public Label elseLabel() {
+        return elseLabel;
     }
 
     public <S, E> S accept(IRVisitor<S, E> visitor) {

@@ -148,7 +148,11 @@ public class CodeGenerator
     }
 
     public Void visit(CJump node) {
-        // TODO
+        compile(node.cond());
+        Type t = node.cond().type();
+        as.test(ax(t), ax(t));
+        as.jnz(node.thenLabel());
+        as.jmp(node.elseLabel());
         return null;
     }
 
