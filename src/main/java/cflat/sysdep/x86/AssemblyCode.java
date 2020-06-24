@@ -2,6 +2,7 @@ package cflat.sysdep.x86;
 
 import cflat.asm.Assembly;
 import cflat.asm.Comment;
+import cflat.asm.DirectMemoryReference;
 import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Instruction;
 import cflat.asm.Label;
@@ -194,6 +195,10 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     //
     // instructions
     //
+
+    void jmp(Label label) {
+        insn("jmp", new DirectMemoryReference(label.symbol()));
+    }
 
     // ...
 

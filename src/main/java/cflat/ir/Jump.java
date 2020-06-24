@@ -8,11 +8,15 @@ import cflat.ast.Location;
  */
 public class Jump extends Stmt {
     /** ジャンプ先 */
-    protected Label target;
+    protected Label label;
 
-    public Jump(Location loc, Label target) {
+    public Jump(Location loc, Label label) {
         super(loc);
-        this.target = target;
+        this.label = label;
+    }
+
+    public Label label() {
+        return label;
     }
 
     public <S, E> S accept(IRVisitor<S, E> visitor) {
@@ -20,6 +24,6 @@ public class Jump extends Stmt {
     }
 
     protected void _dump(Dumper d) {
-        d.printMember("target", target);
+        d.printMember("label", label);
     }
 }

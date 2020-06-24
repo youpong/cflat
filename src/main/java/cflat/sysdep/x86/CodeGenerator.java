@@ -143,7 +143,7 @@ public class CodeGenerator
     }
 
     public Void visit(Jump node) {
-        // TODO
+        as.jmp(node.label());
         return null;
     }
 
