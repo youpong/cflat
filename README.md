@@ -1,10 +1,32 @@
+# Test
+```
 $ mvn test
-$ mvn package
-$ mvn javadoc:javadoc
+```
 
+# Package
+```
+$ mvn package
+```
+
+# Document
+```
+$ mvn javadoc:javadoc
+```
+
+# Usage
+JAR file
+```
 $ java -jar target/cbc-XXX.jar [options] [files...]
 options
 --help          show help message
+```
 
+Class files
+```
 $ java -classpath target/classes cflat.compiler.Compiler [options] [files...]
+```
+
+# How to use debugger
+```
 $ jdb -classpath target/classes cflat.compiler.Compiler [options] [files...]
+```
