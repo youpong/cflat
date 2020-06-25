@@ -35,6 +35,7 @@ import cflat.ir.Uni;
 import cflat.ir.Var;
 import cflat.sysdep.CodeGeneratorOptions;
 import cflat.utils.ErrorHandler;
+import cflat.utils.ListUtils;
 
 public class CodeGenerator
         implements
@@ -104,19 +105,89 @@ public class CodeGenerator
 
     // ...
 
+    // 338
+    // Compile Function
+    //
+
+    /*
+     * Standard IA-32 stack frame layout
+     *
+     * ====================== esp #3 (stack top just before function call)
+     * next arg 1
+     * ---------------------
+     * next arg 2
+     * ---------------------
+     * next arg 3
+     * --------------------- esp #2 (stack top after alloca call)
+     * alloca area
+     * --------------------- esp #1 (stack top just after prelude)
+     * temporary
+     * variables...
+     * --------------------- -16(%ebp)
+     * lvar 3
+     * --------------------- -12(%ebp)
+     * lvar 2
+     * --------------------- -8(%ebp)
+     * lvar 1
+     * --------------------- -4(%ebp)
+     * callee-saved register
+     * ====================== 0(%ebp)
+     * saved ebp
+     * --------------------- 4(%ebp)
+     * return address
+     * --------------------- 8(%ebp)
+     * arg 1
+     * --------------------- 12(%ebp)
+     * arg 2
+     * --------------------- 16(%ebp)
+     * arg 3
+     * ...
+     * ...
+     * ====================== stack bottom
+     */
+
+    static final private long STACK_WORD_SIZE = 4;
+
+    // ...
+
+    // 389
+    private long stackSizeFromWordNum(long numWords) {
+        return numWords * STACK_WORD_SIZE;
+    }
+
+    // ...
+
     // 483
     private AssemblyCode as;
     // private Label epilogue;
 
     // ...
 
-    // 644
+    // 637
+    private void rewindStack(AssemblyCode file, long len) {
+        if (len > 0) {
+            file.add(imm(len), sp());
+        }
+    }
+
     /**
-     * Implements cdecl function call: * All arguments are on stack. * Caller
-     * rewinds stack pointer.
+     * Implements cdecl function call:
+     * * All arguments are on stack.
+     * * Caller rewinds stack pointer.
      */
     public Void visit(Call node) {
-        // TODO
+        for (Expr arg : ListUtils.reverse(node.args())) {
+            compile(arg);
+            as.push(ax());
+        }
+        if (node.isStaticCall()) {
+            as.call(node.function().callingSymbol());
+        } else {
+            compile(node.expr());
+            as.callAbsolute(ax());
+        }
+        // >4 bytes arguments are not supported.
+        rewindStack(as, stackSizeFromWordNum(node.numArgs()));
         return null;
     }
 
@@ -472,7 +543,11 @@ public class CodeGenerator
 
     // ...
 
-    // 1085
+    // 1080
+    private Register sp() {
+        return new Register(RegisterClass.SP, naturalType);
+    }
+
     private DirectMemoryReference mem(Symbol sym) {
         return new DirectMemoryReference(sym);
     }

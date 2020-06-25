@@ -1,5 +1,6 @@
 package cflat.sysdep.x86;
 
+import cflat.asm.AbsoluteAddress;
 import cflat.asm.Assembly;
 import cflat.asm.Comment;
 import cflat.asm.DirectMemoryReference;
@@ -255,9 +256,24 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
         insn(b.type, "test", a, b);
     }
 
-    // ...
+    void push(Register reg) {
+        insn("push", typeSuffix(naturalType), reg);
+    }
 
-    // 409
+    // void pop(Register reg)
+
+    // call function by relative address
+    void call(Symbol sym) {
+        insn("call", new DirectMemoryReference(sym));
+    }
+
+    // call function by absolute address
+    void callAbsolute(Register reg) {
+        insn("call", new AbsoluteAddress(reg));
+    }
+
+    // void ret()
+
     void mov(Register src, Register dest) {
         insn(naturalType, "mov", src, dest);
     }
