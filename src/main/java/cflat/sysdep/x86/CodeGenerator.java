@@ -4,6 +4,7 @@ import cflat.asm.BaseSymbol;
 import cflat.asm.DirectMemoryReference;
 import cflat.asm.ImmediateValue;
 import cflat.asm.IndirectMemoryReference;
+import cflat.asm.Label;
 import cflat.asm.Literal;
 import cflat.asm.MemoryReference;
 import cflat.asm.Operand;
@@ -159,7 +160,7 @@ public class CodeGenerator
 
     // 483
     private AssemblyCode as;
-    // private Label epilogue;
+    private Label epilogue;
 
     // ...
 
@@ -192,12 +193,15 @@ public class CodeGenerator
     }
 
     public Void visit(Return node) {
-        // TODO
+        if (node.expr() != null) {
+            compile(node.expr());
+        }
+        as.jmp(epilogue);
         return null;
     }
 
-    //
-    // 679 Statements
+    // 679
+    // Statements
     //
 
     // ...
