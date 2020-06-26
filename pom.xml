@@ -42,6 +42,7 @@
 	<artifactId>maven-compiler-plugin</artifactId>
 	<version>3.8.1</version>
 	<configuration>
+	  <useIncrementalCompilation>true</useIncrementalCompilation>
 	  <compilerArgs>
 	    <arg>-Xdiags:verbose</arg>
 	  </compilerArgs>
