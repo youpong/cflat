@@ -12,8 +12,12 @@ import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
 import cflat.entity.ConstantEntry;
+import cflat.entity.DefinedFunction;
+import cflat.entity.DefinedVariable;
 import cflat.entity.Entity;
 import cflat.entity.Function;
+import cflat.entity.LocalScope;
+import cflat.entity.Parameter;
 import cflat.entity.Variable;
 import cflat.ir.Addr;
 import cflat.ir.Assign;
@@ -30,13 +34,19 @@ import cflat.ir.LabelStmt;
 import cflat.ir.Mem;
 import cflat.ir.Op;
 import cflat.ir.Return;
+import cflat.ir.Stmt;
 import cflat.ir.Str;
 import cflat.ir.Switch;
 import cflat.ir.Uni;
 import cflat.ir.Var;
 import cflat.sysdep.CodeGeneratorOptions;
+import cflat.utils.AsmUtils;
 import cflat.utils.ErrorHandler;
 import cflat.utils.ListUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class CodeGenerator
         implements
@@ -104,6 +114,11 @@ public class CodeGenerator
         return null;
     }
 
+    private AssemblyCode newAssemblyCode() {
+        return new AssemblyCode(naturalType, STACK_WORD_SIZE,
+                new SymbolTable(LABEL_SYMBOL_BASE), options.isVerboseAsm());
+    }
+
     // ...
 
     // 338
@@ -149,22 +164,201 @@ public class CodeGenerator
 
     static final private long STACK_WORD_SIZE = 4;
 
-    // ...
+    private long alignStack(long size) {
+        return AsmUtils.align(size, STACK_WORD_SIZE);
+    }
 
-    // 389
     private long stackSizeFromWordNum(long numWords) {
         return numWords * STACK_WORD_SIZE;
     }
 
-    // ...
+    class StackFrameInfo {
+        List<Register> saveRegs;
+        long lvarSize;
+        long tempSize;
 
-    // 483
+        long saveRegsSize() {
+            return saveRegs.size() * STACK_WORD_SIZE;
+        }
+        long lvarOffset() {
+            return saveRegsSize();
+        }
+        long tempOffset() {
+            return saveRegsSize() + lvarSize;
+        }
+        long frameSize() {
+            return saveRegsSize() + lvarSize + tempSize;
+        }
+    }
+
+    private void compileFunctionBody(AssemblyCode file, DefinedFunction func) {
+        StackFrameInfo frame = new StackFrameInfo();
+        locateParameters(func.parameters());
+        frame.lvarSize = locateLocalVariables(func.lvarScope());
+
+        AssemblyCode body = optimize(compileStmts(func));
+        frame.saveRegs = usedCalleeSaveRegisters(body);
+        frame.tempSize = body.virtualStack.maxSize();
+
+        fixLocalVariableOffsets(func.lvarScope(), frame.lvarOffset());
+        fixTempVariableOffsets(body, frame.tempOffset());
+
+        if (options.isVerboseAsm()) {
+            printStackFrameLayout(file, frame, func.localVariables());
+        }
+        generateFunctionBody(file, body, frame);
+    }
+
+    private AssemblyCode optimize(AssemblyCode body) {
+        return body;
+        /*
+         * TODO
+         * if (options.optimizeLevel() < 1) {
+         * return body;
+         * }
+         * body.apply(PeepholeOptimizer.defaultSet());
+         * body.reduceLabels();
+         * return body;
+         */
+    }
+
+    private void printStackFrameLayout(AssemblyCode file, StackFrameInfo frame,
+            List<DefinedVariable> lvars) {
+        List<MemInfo> vars = new ArrayList<MemInfo>();
+        for (DefinedVariable var : lvars) {
+            vars.add(new MemInfo(var.memref(), var.name()));
+        }
+        vars.add(new MemInfo(mem(0, bp()), "return address"));
+        vars.add(new MemInfo(mem(4, bp()), "saved %ebp"));
+        if (frame.saveRegsSize() > 0) {
+            vars.add(new MemInfo(mem(-frame.saveRegsSize(), bp()),
+                    "saved callee-saved registers (" + frame.saveRegsSize()
+                            + " bytes)"));
+        }
+        if (frame.tempSize > 0) {
+            vars.add(new MemInfo(mem(-frame.frameSize(), bp()),
+                    "tmp variables (" + frame.tempSize + " bytes)"));
+        }
+        Collections.sort(vars, new Comparator<MemInfo>() {
+            public int compare(MemInfo x, MemInfo y) {
+                return x.mem.compareTo(y.mem);
+            }
+        });
+        file.comment("---- Stack Frame Layout -----------");
+        for (MemInfo info : vars) {
+            file.comment(info.mem.toString() + ": " + info.name);
+        }
+        file.comment("-----------------------------------");
+    }
+
+    class MemInfo {
+        MemoryReference mem;
+        String name;
+
+        MemInfo(MemoryReference mem, String name) {
+            this.mem = mem;
+            this.name = name;
+        }
+    }
+
     private AssemblyCode as;
     private Label epilogue;
 
+    private AssemblyCode compileStmts(DefinedFunction func) {
+        as = newAssemblyCode();
+        epilogue = new Label();
+        for (Stmt s : func.ir()) {
+            compileStmt(s);
+        }
+        as.label(epilogue);
+        return as;
+    }
+
+    private List<Register> usedCalleeSaveRegisters(AssemblyCode body) {
+        List<Register> result = new ArrayList<Register>();
+        for (Register reg : calleeSaveRegisters()) {
+            if (body.doesUses(reg)) {
+                result.add(reg);
+            }
+        }
+        result.remove(bp());
+        return result;
+    }
+
+    static final RegisterClass[] CALLEE_SAVE_REGISTERS = {RegisterClass.BX,
+            RegisterClass.BP, RegisterClass.SI, RegisterClass.DI};
+
+    private List<Register> calleeSaveRegistersCache = null;
+
+    private List<Register> calleeSaveRegisters() {
+        if (calleeSaveRegistersCache == null) {
+            List<Register> regs = new ArrayList<Register>();
+            for (RegisterClass c : CALLEE_SAVE_REGISTERS) {
+                regs.add(new Register(c, naturalType));
+            }
+            calleeSaveRegistersCache = regs;
+        }
+        return calleeSaveRegistersCache;
+    }
+
+    private void generateFunctionBody(AssemblyCode file, AssemblyCode body,
+            StackFrameInfo frame) {
+        // TODO
+    }
+
     // ...
 
-    // 637
+    // 567
+    /** return addr and saved bp */
+    static final private long PARAM_START_WORD = 2;
+
+    private void locateParameters(List<Parameter> params) {
+        long numWords = PARAM_START_WORD;
+        for (Parameter var : params) {
+            var.setMemref(mem(stackSizeFromWordNum(numWords), bp()));
+            numWords++;
+        }
+    }
+
+    /**
+     * Allocates addresses of local variables, but offset is still not detemined,
+     * assign unfixed IndirectMemoryReference
+     */
+    private long locateLocalVariables(LocalScope scope) {
+        return locateLocalVariables(scope, 0);
+    }
+
+    private long locateLocalVariables(LocalScope scope, long parentStackLen) {
+        long len = parentStackLen;
+        for (DefinedVariable var : scope.localVariables()) {
+            len = alignStack(len + var.allocSize());
+            var.setMemref(relocatableMem(-len, bp()));
+        }
+
+        long maxLen = len;
+        for (LocalScope s : scope.children()) {
+            long childLen = locateLocalVariables(s, len);
+            maxLen = Math.max(maxLen, childLen);
+        }
+        return maxLen;
+    }
+
+    private IndirectMemoryReference relocatableMem(long offset, Register base) {
+        return IndirectMemoryReference.relocatable(offset, base);
+    }
+
+    private void fixLocalVariableOffsets(LocalScope scope, long len) {
+        for (DefinedVariable var : scope.allLocalVariables()) {
+            var.memref().fixOffset(-len);
+        }
+    }
+
+    private void fixTempVariableOffsets(AssemblyCode asm, long len) {
+        asm.virtualStack.fixOffset(-len);
+    }
+
+    // private void extendStack(AssemblyCode file, long len)
+
     private void rewindStack(AssemblyCode file, long len) {
         if (len > 0) {
             file.add(imm(len), sp());
@@ -204,9 +398,15 @@ public class CodeGenerator
     // Statements
     //
 
-    // ...
+    private void compileStmt(Stmt stmt) {
+        if (options.isVerboseAsm()) {
+            if (stmt.location() != null) {
+                as.comment(stmt.location().numberedLine());
+            }
+        }
+        stmt.accept(this);
+    }
 
-    // 694
     public Void visit(ExprStmt stmt) {
         // TODO
         return null;
@@ -547,7 +747,11 @@ public class CodeGenerator
 
     // ...
 
-    // 1080
+    // 1076
+    private Register bp() {
+        return new Register(RegisterClass.BP, naturalType);
+    }
+
     private Register sp() {
         return new Register(RegisterClass.SP, naturalType);
     }

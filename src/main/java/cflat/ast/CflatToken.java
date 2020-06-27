@@ -26,6 +26,13 @@ public class CflatToken implements Iterable<CflatToken> {
         return token.beginLine;
     }
 
+    // ...
+
+    // 47
+    public String image() {
+        return token.image;
+    }
+
     public String dumpedImage() {
         return TextUtils.dumpString(token.image);
     }
@@ -34,8 +41,13 @@ public class CflatToken implements Iterable<CflatToken> {
         return buildTokenList(token, false).iterator();
     }
 
+    protected List<CflatToken> tokensWithoutFirstSpecials() {
+        return buildTokenList(token, true);
+    }
+
     // TODO: test
-    protected List<CflatToken> buildTokenList(Token first, boolean rejectFirstSpecials) {
+    protected List<CflatToken> buildTokenList(Token first,
+            boolean rejectFirstSpecials) {
         List<CflatToken> result = new ArrayList<CflatToken>();
         boolean rejectSpecials = rejectFirstSpecials;
         for (Token t = first; t != null; t = t.next) {
@@ -58,5 +70,21 @@ public class CflatToken implements Iterable<CflatToken> {
             s = s.specialToken;
         }
         return s;
+    }
+
+    // ...
+
+    // TODO: test
+    public String includedLine() {
+        StringBuffer buf = new StringBuffer();
+        for (CflatToken t : tokensWithoutFirstSpecials()) {
+            int idx = t.image().indexOf("\n");
+            if (idx >= 0) {
+                buf.append(t.image().substring(0, idx));
+                break;
+            }
+            buf.append(t.image());
+        }
+        return buf.toString();
     }
 }

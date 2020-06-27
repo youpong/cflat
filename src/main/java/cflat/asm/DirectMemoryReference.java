@@ -13,6 +13,10 @@ public class DirectMemoryReference extends MemoryReference {
         value.collectStatistics(stats);
     }
 
+    public void fixOffset(long diff) {
+        throw new Error("DirectMemoryReference#fixOffset");
+    }
+
     // ...
 
     public String toSource(SymbolTable table) {

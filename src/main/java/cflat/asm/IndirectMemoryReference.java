@@ -25,6 +25,17 @@ public class IndirectMemoryReference extends MemoryReference {
 
     // ...
 
+    public void fixOffset(long diff) {
+        if (fixed) {
+            throw new Error("must not happen: fixed = true");
+        }
+        long curr = ((IntegerLiteral) offset).value;
+        this.offset = new IntegerLiteral(curr + diff);
+        this.fixed = true;
+    }
+
+    // ...
+
     public void collectStatistics(Statistics stats) {
         base.collectStatistics(stats);
     }
@@ -35,7 +46,8 @@ public class IndirectMemoryReference extends MemoryReference {
         if (!fixed) {
             throw new Error("must not happen: writing unfixed variable");
         }
-        return (offset.isZero() ? "" : offset.toSource(table)) + "(" + base.toSource(table) + ")";
+        return (offset.isZero() ? "" : offset.toSource(table)) + "("
+                + base.toSource(table) + ")";
     }
 
     public int compareTo(MemoryReference mem) {
@@ -51,6 +63,7 @@ public class IndirectMemoryReference extends MemoryReference {
     }
 
     public String dump() {
-        return "(IndirectMemoryReference " + (fixed ? "" : "*") + offset.dump() + " " + base.dump() + ")";
+        return "(IndirectMemoryReference " + (fixed ? "" : "*") + offset.dump() + " "
+                + base.dump() + ")";
     }
 }
