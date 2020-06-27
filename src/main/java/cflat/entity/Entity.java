@@ -69,7 +69,9 @@ abstract public class Entity implements cflat.ast.Dumpable {
         return (nRefered > 0);
     }
 
-    // setMemref(MemoryReference mem)
+    public void setMemref(MemoryReference mem) {
+        this.memref = mem;
+    }
 
     public MemoryReference memref() {
         checkAddress();

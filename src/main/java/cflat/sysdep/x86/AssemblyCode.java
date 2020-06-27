@@ -8,6 +8,7 @@ import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Instruction;
 import cflat.asm.Label;
 import cflat.asm.Operand;
+import cflat.asm.Statistics;
 import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
@@ -23,7 +24,7 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     final VirtualStack virtualStack = new VirtualStack();
     private List<Assembly> assemblies = new ArrayList<Assembly>();
     private int commentIndentLevel = 0;
-    // private Statistics statistics;
+    private Statistics statistics;
 
     AssemblyCode(Type naturalType, long stackWordSize, SymbolTable labelSymbols,
             boolean verbose) {
@@ -57,7 +58,18 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 
     // ...
 
-    // 68
+    // 57
+    private Statistics statistics() {
+        if (statistics == null) {
+            statistics = Statistics.collect(assemblies);
+        }
+        return statistics;
+    }
+
+    boolean doesUses(Register reg) {
+        return statistics().doesRegisterUsed(reg);
+    }
+
     void comment(String str) {
         assemblies.add(new Comment(str, commentIndentLevel));
     }
@@ -148,7 +160,10 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
             memrefs.clear();
         }
 
-        // long maxSize()
+        long maxSize() {
+            return max;
+        }
+
         void extend(long len) {
             offset += len;
             max = Math.max(offset, max);
@@ -171,7 +186,12 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
         private Register bp() {
             return new Register(RegisterClass.BP, naturalType);
         }
-        // void fixOffset(long diff)
+
+        void fixOffset(long diff) {
+            for (IndirectMemoryReference mem : memrefs) {
+                mem.fixOffset(diff);
+            }
+        }
     }
 
     // ...

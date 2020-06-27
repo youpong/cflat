@@ -1,5 +1,7 @@
 package cflat.asm;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,11 +10,29 @@ public class Statistics {
     // protected Map<String, Integer> insnUsage;
     protected Map<Symbol, Integer> symbolUsage;
 
-    public Statistics() {
-        registerUsage = new HashMap<Register, Integer>();
+    static public Statistics collect(List<Assembly> assemblies) {
+        Statistics stats = new Statistics();
+        for (Assembly asm : assemblies) {
+            asm.collectStatistics(stats);
+        }
+        return stats;
     }
 
-    // TODO
+    public Statistics() {
+        // TODO
+        registerUsage = new HashMap<Register, Integer>();
+        // insnUsage = new HashMap<String, Integer>();
+        symbolUsage = new HashMap<Symbol, Integer>();
+    }
+
+    public boolean doesRegisterUsed(Register reg) {
+        return numRegisterUsed(reg) > 0;
+    }
+
+    public int numRegisterUsed(Register reg) {
+        return fetchCount(registerUsage, reg);
+    }
+
     public void registerUsed(Register reg) {
         incrementCount(registerUsage, reg);
     }

@@ -19,6 +19,16 @@ public class Location {
         return token;
     }
 
+    // ...
+
+    public String line() {
+        return token.includedLine();
+    }
+
+    public String numberedLine() {
+        return "Line " + token.lineno() + ": " + line();
+    }
+
     public String toString() {
         return sourceName + ":" + token.lineno();
     }

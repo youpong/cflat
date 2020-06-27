@@ -20,6 +20,13 @@ public class LocalScope extends Scope {
         variables = new LinkedHashMap<String, DefinedVariable>();
     }
 
+    // ...
+
+    // 30
+    public List<LocalScope> children() {
+        return children;
+    }
+
     public boolean isDefinedLocally(String name) {
         return variables.containsKey(name);
     }
@@ -44,7 +51,33 @@ public class LocalScope extends Scope {
         return parent.get(name);
     }
 
-    // ...
+    /**
+     * Returns all local variables in this scoep.
+     * The result DOES includes all nested local variables,
+     * while it does NOT include static local variables.
+     */
+    public List<DefinedVariable> allLocalVariables() {
+        List<DefinedVariable> result = new ArrayList<DefinedVariable>();
+        for (LocalScope s : allLocalScopes()) {
+            result.addAll(s.localVariables());
+        }
+        return result;
+    }
+
+    /**
+     * Returns local variables defined in this scope.
+     * Does NOT include children's local variables.
+     * Does NOT include static local variables.
+     */
+    public List<DefinedVariable> localVariables() {
+        List<DefinedVariable> result = new ArrayList<DefinedVariable>();
+        for (DefinedVariable var : variables.values()) {
+            if (!var.isPrivate()) {
+                result.add(var);
+            }
+        }
+        return result;
+    }
 
     /**
      * Returns all static local variables defined in this scope.

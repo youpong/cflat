@@ -2,6 +2,7 @@ package cflat.ir;
 
 import cflat.ast.Location;
 
+// TODO: test
 abstract public class Stmt implements Dumpable {
     protected Location location;
 
@@ -9,7 +10,8 @@ abstract public class Stmt implements Dumpable {
         this.location = loc;
     }
 
-    // abstract
+    abstract public <S, E> S accept(IRVisitor<S, E> visitor);
+
     public Location location() {
         return location;
     }

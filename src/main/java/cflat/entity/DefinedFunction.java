@@ -16,7 +16,8 @@ public class DefinedFunction extends Function {
     protected LocalScope scope;
     protected List<Stmt> ir;
 
-    public DefinedFunction(boolean priv, TypeNode type, String name, Params params, BlockNode body) {
+    public DefinedFunction(boolean priv, TypeNode type, String name, Params params,
+            BlockNode body) {
         super(priv, type, name);
         this.params = params;
         this.body = body;
@@ -45,7 +46,19 @@ public class DefinedFunction extends Function {
     public void setScope(LocalScope scope) {
         this.scope = scope;
     }
-    // public List<DefinedVariable> localVariables()
+
+    public LocalScope lvarScope() {
+        return body().scope();
+    }
+
+    /**
+     * Returns funcion local variables.
+     * Does NOT include parameters.
+     * Does NOT include static local variables.
+     */
+    public List<DefinedVariable> localVariables() {
+        return scope.allLocalVariables();
+    }
 
     protected void _dump(Dumper d) {
         d.printMember("name", name);
