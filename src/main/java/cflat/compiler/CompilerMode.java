@@ -17,6 +17,8 @@ enum CompilerMode {
     DumpReference("--dump-reference"),
     DumpIR(       "--dump-ir"),
     DumpAsm(      "--dump-asm"),
+    //    PrintAsm("--print-asm"),
+    Compile(      "-S"),
     Assemble(     "-c"),
     Link("--link");
     // @formatter:on

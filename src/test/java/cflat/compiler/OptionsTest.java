@@ -7,6 +7,28 @@ import org.junit.jupiter.api.Test;
 import cflat.exception.OptionParseError;
 
 public class OptionsTest {
+    @Test
+    public void testAsmFileNameOf0() {
+        String[] args = {"-S", "-o", "bar.s", "sample/foo.cb"};
+
+        Options opts = Options.parse(args);
+        SourceFile sf = opts.sourceFiles().get(0);
+
+        assertEquals(CompilerMode.Compile, opts.mode());
+        assertEquals("bar.s", opts.asmFileNameOf(sf));
+    }
+
+    @Test
+    public void testAsmFileNameOf1() {
+        String[] args = {"-S", "sample/foo.cb"};
+
+        Options opts = Options.parse(args);
+        SourceFile sf = opts.sourceFiles().get(0);
+
+        assertEquals(CompilerMode.Compile, opts.mode());
+        assertEquals("foo.s", opts.asmFileNameOf(sf));
+    }
+
     /**
      * test opt.sourceFiles()
      */

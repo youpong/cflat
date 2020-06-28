@@ -18,7 +18,7 @@ public class Options {
 
     private CompilerMode mode;
     private Platform platform = new X86Linux();
-    // private String outputFileName;
+    private String outputFileName;
     // private boolean verbose = false;
     private LibraryLoader loader = new LibraryLoader();
     private boolean debugParser = false;
@@ -45,20 +45,16 @@ public class Options {
     }
 
     String asmFileNameOf(SourceFile src) {
-        /* TODO
         if (outputFileName != null && mode == CompilerMode.Compile) {
             return outputFileName;
         }
-        */
         return src.asmFileName();
     }
 
     String objFileNameOf(SourceFile src) {
-        /* TODO
         if (outputFileName != null && mode == CompilerMode.Assemble) {
             return outputFileName;
         }
-        */
         return src.objFileName();
     }
 
