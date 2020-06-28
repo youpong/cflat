@@ -76,8 +76,6 @@ public class Options {
 
     // 137
     void parseArgs(String[] origArgs) {
-        // TODO: set sourceFiles
-        // sourceFiles = new ArrayList<SourceFile>();
         ldArgs = new ArrayList<LdArg>();
         ListIterator<String> args = Arrays.asList(origArgs).listIterator();
         while (args.hasNext()) {
@@ -88,7 +86,8 @@ public class Options {
             } else if (arg.startsWith("-")) {
                 if (CompilerMode.isModeOption(arg)) {
                     if (mode != null) {
-                        parseError(mode.toOption() + " option and " + arg + " option is exclusive");
+                        parseError(mode.toOption() + " option and " + arg
+                                + " option is exclusive");
                     }
                     mode = CompilerMode.fromOption(arg);
                 } else if (arg.equals("--debug-parser")) {
@@ -134,10 +133,13 @@ public class Options {
 
     void printUsage(PrintStream out) {
         String msg = "Usage: cbc [options] file...\n" + "Global Options:\n"
-                + "  --check-syntax  Check syntax and quit.\n" + "  --dump-tokens   Dumps tokens and quit.\n"
+                + "  --check-syntax  Check syntax and quit.\n"
+                + "  --dump-tokens   Dumps tokens and quit.\n"
                 + "  --dump-ast      Dumps AST and quit.\n"
                 + "  --dump-semantic Dumps AST after semantic checks and quit.\n"
-                + "  --dump-ir       Dumps IR and quit.\n" + "  --version       Shows compiler version.";
+                + "  --dump-ir       Dumps IR and quit.\n"
+                + "  --dump-asm      Dumps AssemblyCode and quit.\n"
+                + "  --version       Shows compiler version.";
         out.println(msg);
     }
 }

@@ -7,10 +7,19 @@ import java.util.*;
  * enum of compiler modes.
  */
 enum CompilerMode {
-    CheckSyntax("--check-syntax"), DumpTokens("--dump-tokens"), DumpAST("--dump-ast"), DumpStmt(
-            "--dump-stmt"), DumpExpr("--dump-expr"), DumpSemantic("--dump-semantic"), DumpReference(
-                    "--dump-reference"), DumpIR("--dump-ir"), DumpAsm("--dump-asm"), Assemble("-c");
+    // @formatter:off
+    CheckSyntax(  "--check-syntax"),
+    DumpTokens(   "--dump-tokens"),
+    DumpAST(      "--dump-ast"),
+    DumpStmt(     "--dump-stmt"),
+    DumpExpr(     "--dump-expr"),
+    DumpSemantic( "--dump-semantic"),
+    DumpReference("--dump-reference"),
+    DumpIR(       "--dump-ir"),
+    DumpAsm(      "--dump-asm"),
+    Assemble(     "-c");
     // Link("--link");
+    // @formatter:on
 
     static public boolean isModeOption(String opt) {
         for (CompilerMode mode : CompilerMode.values()) {

@@ -1,9 +1,11 @@
 package cflat.compiler;
 
+import java.io.File;
+
 public class SourceFile implements LdArg {
     static final String EXT_CFLAT_SOURCE = ".cb";
     static final String EXT_ASSEMBLY_SOURCE = ".s";
-
+    static final String EXT_OBJECT_FILE = ".o";
     // ...
 
     private final String originalName;
@@ -44,18 +46,22 @@ public class SourceFile implements LdArg {
         return extName(currentName).equals(EXT_ASSEMBLY_SOURCE);
     }
 
+    // ...
+
     // 81
     public String asmFileName() {
-        // TODO
-        return null;
+        return replaceExt(EXT_ASSEMBLY_SOURCE);
     }
 
     public String objFileName() {
-        // TODO
-        return null;
+        return replaceExt(EXT_OBJECT_FILE);
     }
 
-    // ...
+    //    String linkedFileName(String newExt)
+
+    private String replaceExt(String ext) {
+        return new File(originalName).getName().replaceFirst("\\.[^.]*$", "") + ext;
+    }
 
     private String extName(String path) {
         int idx = path.lastIndexOf(".");

@@ -45,6 +45,7 @@
 	  <useIncrementalCompilation>true</useIncrementalCompilation>
 	  <compilerArgs>
 	    <arg>-Xdiags:verbose</arg>
+	    <!--arg>-g</arg-->
 	  </compilerArgs>
 	</configuration>
       </plugin>

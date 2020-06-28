@@ -93,7 +93,8 @@ public class Compiler {
     }
 
     // TODO: test
-    public void compile(String srcPath, String destPath, Options opts) throws CompileException {
+    public void compile(String srcPath, String destPath, Options opts)
+            throws CompileException {
         AST ast = parseFile(srcPath, opts);
         if (dumpAST(ast, opts.mode()))
             return;
@@ -112,12 +113,15 @@ public class Compiler {
         writeFile(destPath, asm);
     }
 
-    public AST parseFile(String path, Options opts) throws SyntaxException, FileException {
-        return Parser.parseFile(new File(path), opts.loader(), errorHandler, opts.doesDebugParser());
+    public AST parseFile(String path, Options opts)
+            throws SyntaxException, FileException {
+        return Parser.parseFile(new File(path), opts.loader(), errorHandler,
+                opts.doesDebugParser());
     }
 
     // TODO: test
-    public AST semanticAnalyze(AST ast, TypeTable types, Options opts) throws SemanticException {
+    public AST semanticAnalyze(AST ast, TypeTable types, Options opts)
+            throws SemanticException {
         new LocalResolver(errorHandler).resolve(ast);
         new TypeResolver(types, errorHandler).resolve(ast);
         types.semanticCheck(errorHandler);
@@ -149,21 +153,21 @@ public class Compiler {
 
     private boolean dumpAST(AST ast, CompilerMode mode) {
         switch (mode) {
-        case DumpTokens:
+        case DumpTokens :
             ast.dumpTokens(System.out);
             return true;
-        case DumpAST:
+        case DumpAST :
             ast.dump();
             return true;
-        case DumpStmt:
+        case DumpStmt :
             // TODO: implement
             findStmt(ast).dump();
             return true;
-        case DumpExpr:
+        case DumpExpr :
             // TODO: implement
             findExpr(ast).dump();
             return true;
-        default:
+        default :
             return false;
         }
     }
@@ -186,12 +190,12 @@ public class Compiler {
 
     private boolean dumpSemant(AST ast, CompilerMode mode) {
         switch (mode) {
-        case DumpReference:
+        case DumpReference :
             return true;
-        case DumpSemantic:
+        case DumpSemantic :
             ast.dump();
             return true;
-        default:
+        default :
             return false;
         }
     }
