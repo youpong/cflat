@@ -7,19 +7,49 @@ import org.junit.jupiter.api.Test;
 import cflat.exception.OptionParseError;
 
 public class OptionsTest {
+
+    //
+    // test asmFileNameOf/objFileNameOf
+    //
+
     @Test
-    public void testAsmFileNameOf0() {
-        String[] args = {"-S", "-o", "bar.s", "sample/foo.cb"};
+    public void testXXXFileNameOf00() {
+        String[] args = {"-c", "-obar.o", "sample/foo.cb"}; // -opath
+
+        Options opts = Options.parse(args);
+        SourceFile sf = opts.sourceFiles().get(0);
+
+        assertEquals(CompilerMode.Assemble, opts.mode());
+        assertEquals("foo.s", opts.asmFileNameOf(sf));
+        assertEquals("bar.o", opts.objFileNameOf(sf));
+    }
+
+    @Test
+    public void testXXXFileNameOf01() {
+        String[] args = {"-c", "sample/foo.cb"};
+
+        Options opts = Options.parse(args);
+        SourceFile sf = opts.sourceFiles().get(0);
+
+        assertEquals(CompilerMode.Assemble, opts.mode());
+        assertEquals("foo.s", opts.asmFileNameOf(sf));
+        assertEquals("foo.o", opts.objFileNameOf(sf));
+    }
+
+    @Test
+    public void testXXXFileNameOf10() {
+        String[] args = {"-S", "-o", "bar.s", "sample/foo.cb"}; // -o path
 
         Options opts = Options.parse(args);
         SourceFile sf = opts.sourceFiles().get(0);
 
         assertEquals(CompilerMode.Compile, opts.mode());
         assertEquals("bar.s", opts.asmFileNameOf(sf));
+        assertEquals("foo.o", opts.objFileNameOf(sf));
     }
 
     @Test
-    public void testAsmFileNameOf1() {
+    public void testXXXFileNameOf11() {
         String[] args = {"-S", "sample/foo.cb"};
 
         Options opts = Options.parse(args);
@@ -27,6 +57,7 @@ public class OptionsTest {
 
         assertEquals(CompilerMode.Compile, opts.mode());
         assertEquals("foo.s", opts.asmFileNameOf(sf));
+        assertEquals("foo.o", opts.objFileNameOf(sf));
     }
 
     /**
@@ -105,4 +136,18 @@ public class OptionsTest {
         });
         assertEquals("no input file", e.getMessage());
     }
+
+    /**
+     * Error: missing argument for -o
+     */
+    @Test
+    public void testNextArg() {
+        String[] args = {"-o"}; // -o requires arg
+
+        Error e = assertThrows(OptionParseError.class, () -> {
+            Options.parse(args);
+        });
+        assertEquals("missing argument for -o", e.getMessage());
+    }
+
 }

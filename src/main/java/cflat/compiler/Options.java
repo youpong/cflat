@@ -94,6 +94,8 @@ public class Options {
                     mode = CompilerMode.fromOption(arg);
                 } else if (arg.equals("--debug-parser")) {
                     debugParser = true;
+                } else if (arg.startsWith("-o")) {
+                    outputFileName = getOptArg(arg, args);
                 } else if (arg.equals("--help")) {
                     printUsage(System.out);
                     System.exit(0);
@@ -133,6 +135,25 @@ public class Options {
         return result;
     }
 
+    private String getOptArg(String opt, ListIterator<String> args) {
+        String path = opt.substring(2);
+        if (path.length() != 0) { // -Ipath
+            return path;
+        } else { // -I path
+            return nextArg(opt, args);
+        }
+    }
+
+    private String nextArg(String opt, ListIterator<String> args) {
+        if (!args.hasNext()) {
+            parseError("missing argument for " + opt);
+        }
+        return args.next();
+    }
+
+    //    private List<String> parseCommaSeparatedOptions(String opt)
+
+    // 327
     void printUsage(PrintStream out) {
         String msg = "Usage: cbc [options] file...\n" + "Global Options:\n"
                 + "  --check-syntax  Check syntax and quit.\n"
