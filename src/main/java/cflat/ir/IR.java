@@ -23,8 +23,9 @@ public class IR {
     ToplevelScope scope;
     ConstantTable constantTable;
 
-    public IR(Location source, List<DefinedVariable> defvars, List<DefinedFunction> defuns,
-            List<UndefinedFunction> funcdecls, ToplevelScope scope, ConstantTable constantTable) {
+    public IR(Location source, List<DefinedVariable> defvars,
+            List<DefinedFunction> defuns, List<UndefinedFunction> funcdecls,
+            ToplevelScope scope, ConstantTable constantTable) {
         super();
         this.source = source;
         this.defvars = defvars;

@@ -8,14 +8,16 @@ abstract public class TextUtils {
         try {
             return dumpString(str, Parser.SOURCE_ENCODING);
         } catch (UnsupportedEncodingException ex) {
-            throw new Error(Parser.SOURCE_ENCODING + " is not supported: " + ex.getMessage());
+            throw new Error(
+                    Parser.SOURCE_ENCODING + " is not supported: " + ex.getMessage());
         }
     }
 
     static final private byte vtab = 013;
 
     // TODO: test
-    static public String dumpString(String string, String encoding) throws UnsupportedEncodingException {
+    static public String dumpString(String string, String encoding)
+            throws UnsupportedEncodingException {
         byte[] src = string.getBytes(encoding);
         StringBuffer buf = new StringBuffer();
         buf.append("\"");

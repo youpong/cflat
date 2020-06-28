@@ -16,7 +16,8 @@ public class Switch extends Stmt {
     protected Label defaultLabel;
     protected Label endLabel;
 
-    public Switch(Location loc, Expr cond, List<Case> cases, Label defaultLabel, Label endLabel) {
+    public Switch(Location loc, Expr cond, List<Case> cases, Label defaultLabel,
+            Label endLabel) {
         super(loc);
         this.cond = cond;
         this.cases = cases;

@@ -221,7 +221,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
                     // static variables
                     var.setIR(transformExpr(var.initializer()));
                 } else {
-                    assign(var.location(), ref(var), transformExpr(var.initializer()));
+                    assign(var.location(), ref(var),
+                            transformExpr(var.initializer()));
                 }
             }
         }
@@ -372,7 +373,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 
     public Void visit(LabelNode node) {
         try {
-            stmts.add(new LabelStmt(node.location(), defineLabel(node.name(), node.location())));
+            stmts.add(new LabelStmt(node.location(),
+                    defineLabel(node.name(), node.location())));
             if (node.stmt() != null) {
                 transformStmt(node.stmt());
             }
@@ -388,7 +390,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     }
 
     public Void visit(ReturnNode node) {
-        stmts.add(new Return(node.location(), node.expr() == null ? null : transformExpr(node.expr())));
+        stmts.add(new Return(node.location(),
+                node.expr() == null ? null : transformExpr(node.expr())));
         return null;
     }
 
@@ -408,7 +411,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     private Label defineLabel(String name, Location loc) throws SemanticException {
         JumpEntry ent = getJumpEntry(name);
         if (ent.isDefined) {
-            throw new SemanticException("duplicated jump labels in " + name + "(): " + name);
+            throw new SemanticException(
+                    "duplicated jump labels in " + name + "(): " + name);
         }
         ent.isDefined = true;
         ent.location = loc;
@@ -514,7 +518,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     public Expr visit(PrefixOpNode node) {
         // ++expr -> expr += 1
         Type t = node.expr().type();
-        return transformOpAssign(node.location(), binOp(node.operator()), t, transformExpr(node.expr()), imm(t, 1));
+        return transformOpAssign(node.location(), binOp(node.operator()), t,
+                transformExpr(node.expr()), imm(t, 1));
     }
 
     public Expr visit(SuffixOpNode node) {
@@ -545,7 +550,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     }
 
     // TODO: test
-    private Expr transformOpAssign(Location loc, Op op, Type lhsType, Expr lhs, Expr rhs) {
+    private Expr transformOpAssign(Location loc, Op op, Type lhsType, Expr lhs,
+            Expr rhs) {
         if (lhs.isVar()) {
             // cont(lhs += rhs) -> lhs = lhs + rhs; cont(lhs)
             assign(loc, lhs, bin(op, lhsType, lhs, rhs));
@@ -562,7 +568,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     // TODO: test
     private Bin bin(Op op, Type leftType, Expr left, Expr right) {
         if (isPointerArithmetic(op, leftType)) {
-            return new Bin(left.type(), op, left, new Bin(right.type(), Op.MUL, right, ptrBaseSize(leftType)));
+            return new Bin(left.type(), op, left,
+                    new Bin(right.type(), Op.MUL, right, ptrBaseSize(leftType)));
         } else {
             return new Bin(left.type(), op, left, right);
         }
@@ -591,10 +598,12 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
             return new Bin(asmType(t), Op.S_DIV, tmp, ptrBaseSize(l));
         } else if (isPointerArithmetic(op, l)) {
             // ptr + int -> ptr + (int * ptrBaseSize)
-            return new Bin(asmType(t), op, left, new Bin(asmType(r), Op.MUL, right, ptrBaseSize(l)));
+            return new Bin(asmType(t), op, left,
+                    new Bin(asmType(r), Op.MUL, right, ptrBaseSize(l)));
         } else if (isPointerArithmetic(op, r)) {
             // int + ptr -> (int * ptrBaseSize) + ptr
-            return new Bin(asmType(t), op, new Bin(asmType(l), Op.MUL, left, ptrBaseSize(r)), right);
+            return new Bin(asmType(t), op,
+                    new Bin(asmType(l), Op.MUL, left, ptrBaseSize(r)), right);
         } else {
             // int + int
             return new Bin(asmType(t), op, left, right);
@@ -606,7 +615,8 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
             // +expr -> expr
             return transformExpr(node.expr());
         } else {
-            return new Uni(asmType(node.type()), Op.internUnary(node.operator()), transformExpr(node.expr()));
+            return new Uni(asmType(node.type()), Op.internUnary(node.operator()),
+                    transformExpr(node.expr()));
         }
     }
 
@@ -683,10 +693,10 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 
     private boolean isPointerArithmetic(Op op, Type operandType) {
         switch (op) {
-        case ADD:
-        case SUB:
+        case ADD :
+        case SUB :
             return operandType.isPointer();
-        default:
+        default :
             return false;
         }
     }

@@ -63,8 +63,10 @@ public class TypeChecker extends Visitor {
         if (expr.type().isSameType(targetType)) {
             return expr;
         } else if (expr.type().isCastableTo(targetType)) {
-            if (!expr.type().isCompatible(targetType) && !isSafeIntegerCast(expr, targetType)) {
-                warn(expr, "incompatible implicit cast from " + expr.type() + " to " + targetType);
+            if (!expr.type().isCompatible(targetType)
+                    && !isSafeIntegerCast(expr, targetType)) {
+                warn(expr, "incompatible implicit cast from " + expr.type() + " to "
+                        + targetType);
             }
             return new CastNode(targetType, expr);
         } else {
@@ -139,12 +141,14 @@ public class TypeChecker extends Visitor {
         super.visit(node);
         if (node.operator().equals("+") || node.operator().equals("-")) {
             expectsSameIntegerOrPointerDiff(node);
-        } else if (node.operator().equals("*") || node.operator().equals("/") || node.operator().equals("%")
-                || node.operator().equals("&") || node.operator().equals("|") || node.operator().equals("^")
+        } else if (node.operator().equals("*") || node.operator().equals("/")
+                || node.operator().equals("%") || node.operator().equals("&")
+                || node.operator().equals("|") || node.operator().equals("^")
                 || node.operator().equals("<<") || node.operator().equals(">>")) {
             expectsSameInteger(node);
-        } else if (node.operator().equals("==") || node.operator().equals("!=") || node.operator().equals("<")
-                || node.operator().equals("<=") || node.operator().equals(">") || node.operator().equals(">=")) {
+        } else if (node.operator().equals("==") || node.operator().equals("!=")
+                || node.operator().equals("<") || node.operator().equals("<=")
+                || node.operator().equals(">") || node.operator().equals(">=")) {
             expectsComparableScalars(node);
         } else {
             throw new Error("unknown binary operator: " + node.operator());
@@ -218,7 +222,8 @@ public class TypeChecker extends Visitor {
             // needs no cast
             return slave;
         } else {
-            warn(slave, "incompatible implicit cast from " + slave.type() + " to " + master.type());
+            warn(slave, "incompatible implicit cast from " + slave.type() + " to "
+                    + master.type());
             return new CastNode(master.type(), slave);
         }
     }
@@ -243,7 +248,8 @@ public class TypeChecker extends Visitor {
         Type u_int = typeTable.unsignedInt();
         Type s_long = typeTable.signedLong();
         Type u_long = typeTable.unsignedLong();
-        if ((l.isSameType(u_int) && r.isSameType(s_long)) || (r.isSameType(u_int) && l.isSameType(s_long))) {
+        if ((l.isSameType(u_int) && r.isSameType(s_long))
+                || (r.isSameType(u_int) && l.isSameType(s_long))) {
             return u_long;
         } else if (l.isSameType(u_long) && r.isSameType(u_long)) {
             return u_long;

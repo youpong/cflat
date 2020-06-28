@@ -36,10 +36,8 @@ public class Options {
         return mode.requires(CompilerMode.Assemble);
     }
 
-    /** returns false always now */
     boolean isLinkRequired() {
-        return false;
-        // return mode.requires(CompilerMode.Link);
+        return mode.requires(CompilerMode.Link);
     }
 
     List<SourceFile> sourceFiles() {
@@ -47,12 +45,20 @@ public class Options {
     }
 
     String asmFileNameOf(SourceFile src) {
-        // TODO: CompileMode.Compile
+        /* TODO
+        if (outputFileName != null && mode == CompilerMode.Compile) {
+            return outputFileName;
+        }
+        */
         return src.asmFileName();
     }
 
     String objFileNameOf(SourceFile src) {
-        // TODO: CompileMode.Assemble
+        /* TODO
+        if (outputFileName != null && mode == CompilerMode.Assemble) {
+            return outputFileName;
+        }
+        */
         return src.objFileName();
     }
 

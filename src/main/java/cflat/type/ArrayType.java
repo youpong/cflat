@@ -21,7 +21,8 @@ public class ArrayType extends Type {
     }
 
     public boolean isAllocatedArray() {
-        return length != undefined && (!baseType.isArray() || baseType.isAllocatedArray());
+        return length != undefined
+                && (!baseType.isArray() || baseType.isAllocatedArray());
     }
 
     public boolean isIncompleteArray() {
@@ -57,7 +58,8 @@ public class ArrayType extends Type {
         if (target.baseType().isVoid()) {
             return true;
         }
-        return baseType.isCompatible(target.baseType()) && baseType.size() == target.baseType().size();
+        return baseType.isCompatible(target.baseType())
+                && baseType.size() == target.baseType().size();
     }
 
     public boolean isCastableTo(Type target) {

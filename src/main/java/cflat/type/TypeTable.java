@@ -13,18 +13,24 @@ public class TypeTable {
     }
 
     // TODO: implement
-    static private TypeTable newTable(int charsize, int shortsize, int intsize, int longsize, int ptrsize) {
+    static private TypeTable newTable(int charsize, int shortsize, int intsize,
+            int longsize, int ptrsize) {
         TypeTable table = new TypeTable(intsize, longsize, ptrsize);
         table.put(new VoidTypeRef(), new VoidType());
         table.put(IntegerTypeRef.charRef(), new IntegerType(charsize, true, "char"));
-        table.put(IntegerTypeRef.shortRef(), new IntegerType(shortsize, true, "short"));
+        table.put(IntegerTypeRef.shortRef(),
+                new IntegerType(shortsize, true, "short"));
         table.put(IntegerTypeRef.intRef(), new IntegerType(intsize, true, "int"));
         table.put(IntegerTypeRef.longRef(), new IntegerType(longsize, true, "long"));
 
-        table.put(IntegerTypeRef.ucharRef(), new IntegerType(charsize, false, "unsigned char"));
-        table.put(IntegerTypeRef.ushortRef(), new IntegerType(shortsize, false, "unsigned short"));
-        table.put(IntegerTypeRef.uintRef(), new IntegerType(intsize, false, "unsigned int"));
-        table.put(IntegerTypeRef.ulongRef(), new IntegerType(longsize, false, "unsigned long"));
+        table.put(IntegerTypeRef.ucharRef(),
+                new IntegerType(charsize, false, "unsigned char"));
+        table.put(IntegerTypeRef.ushortRef(),
+                new IntegerType(shortsize, false, "unsigned short"));
+        table.put(IntegerTypeRef.uintRef(),
+                new IntegerType(intsize, false, "unsigned int"));
+        table.put(IntegerTypeRef.ulongRef(),
+                new IntegerType(longsize, false, "unsigned long"));
         return table;
     }
 
@@ -65,12 +71,14 @@ public class TypeTable {
                 return t;
             } else if (ref instanceof ArrayTypeRef) {
                 ArrayTypeRef aref = (ArrayTypeRef) ref;
-                Type t = new ArrayType(get(aref.baseType()), aref.length(), pointerSize);
+                Type t = new ArrayType(get(aref.baseType()), aref.length(),
+                        pointerSize);
                 table.put(aref, t);
                 return t;
             } else if (ref instanceof FunctionTypeRef) {
                 FunctionTypeRef fref = (FunctionTypeRef) ref;
-                Type t = new FunctionType(get(fref.returnType()), fref.params().internTypes(this));
+                Type t = new FunctionType(get(fref.returnType()),
+                        fref.params().internTypes(this));
                 table.put(fref, t);
                 return t;
             }
@@ -193,7 +201,8 @@ public class TypeTable {
         Map<String, Slot> seen = new HashMap<String, Slot>();
         for (Slot s : t.members()) {
             if (seen.containsKey(s.name())) {
-                h.error(t.location(), t.toString() + " has duplicated member: " + s.name());
+                h.error(t.location(),
+                        t.toString() + " has duplicated member: " + s.name());
             }
             seen.put(s.name(), s);
         }
@@ -207,7 +216,8 @@ public class TypeTable {
     static final protected Object checking = new Object();
     static final protected Object checked = new Object();
 
-    protected void _checkRecursiveDefinition(Type t, Map<Type, Object> marks, ErrorHandler h) {
+    protected void _checkRecursiveDefinition(Type t, Map<Type, Object> marks,
+            ErrorHandler h) {
         if (marks.get(t) == checking) {
             h.error(((NamedType) t).location(), "recursive type definition: " + t);
             return;

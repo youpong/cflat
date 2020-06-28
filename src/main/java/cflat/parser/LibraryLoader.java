@@ -30,9 +30,11 @@ public class LibraryLoader {
     }
     // public void loader() {}
 
-    public Declarations loadLibrary(String libid, ErrorHandler handler) throws CompileException {
+    public Declarations loadLibrary(String libid, ErrorHandler handler)
+            throws CompileException {
         if (loadingLibraries.contains(libid)) {
-            throw new SemanticException("recursive import from " + loadingLibraries.getLast() + ": " + libid);
+            throw new SemanticException("recursive import from "
+                    + loadingLibraries.getLast() + ": " + libid);
         }
         loadingLibraries.addLast(libid);
         Declarations decls = loadedLibraries.get(libid);

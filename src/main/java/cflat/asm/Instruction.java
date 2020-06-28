@@ -13,18 +13,20 @@ public class Instruction extends Assembly {
     }
 
     public Instruction(String mnemonic, String suffix, Operand a1) {
-        this(mnemonic, suffix, new Operand[] { a1 }, false);
+        this(mnemonic, suffix, new Operand[]{a1}, false);
     }
 
     public Instruction(String mnemonic, String suffix, Operand a1, Operand a2) {
-        this(mnemonic, suffix, new Operand[] { a1, a2 }, false);
+        this(mnemonic, suffix, new Operand[]{a1, a2}, false);
     }
 
-    public Instruction(String mnemonic, String suffix, Operand a1, Operand a2, boolean reloc) {
-        this(mnemonic, suffix, new Operand[] { a1, a2 }, reloc);
+    public Instruction(String mnemonic, String suffix, Operand a1, Operand a2,
+            boolean reloc) {
+        this(mnemonic, suffix, new Operand[]{a1, a2}, reloc);
     }
 
-    public Instruction(String mnemonic, String suffix, Operand[] operands, boolean reloc) {
+    public Instruction(String mnemonic, String suffix, Operand[] operands,
+            boolean reloc) {
         this.mnemonic = mnemonic;
         this.suffix = suffix;
         this.operands = operands;

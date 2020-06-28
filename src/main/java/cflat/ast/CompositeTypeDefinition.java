@@ -6,7 +6,8 @@ import java.util.*;
 abstract public class CompositeTypeDefinition extends TypeDefinition {
     protected List<Slot> members;
 
-    public CompositeTypeDefinition(Location loc, TypeRef ref, String name, List<Slot> membs) {
+    public CompositeTypeDefinition(Location loc, TypeRef ref, String name,
+            List<Slot> membs) {
         super(loc, ref, name);
         this.members = membs;
     }

@@ -22,8 +22,8 @@ public class ToplevelScope extends Scope {
     public void declareEntity(Entity entity) throws SemanticException {
         Entity e = entities.get(entity.name());
         if (e != null) {
-            throw new SemanticException(
-                    "duplicated declaration: " + entity.name() + ": " + e.location() + " and " + entity.location());
+            throw new SemanticException("duplicated declaration: " + entity.name()
+                    + ": " + e.location() + " and " + entity.location());
         }
         entities.put(entity.name(), entity);
     }
@@ -32,8 +32,8 @@ public class ToplevelScope extends Scope {
     public void defineEntity(Entity entity) throws SemanticException {
         Entity e = entities.get(entity.name());
         if (e != null && e.isDefined()) {
-            throw new SemanticException(
-                    "duplicated definition: " + entity.name() + ": " + e.location() + " and " + entity.location());
+            throw new SemanticException("duplicated definition: " + entity.name()
+                    + ": " + e.location() + " and " + entity.location());
         }
         entities.put(entity.name(), entity);
     }
@@ -48,7 +48,8 @@ public class ToplevelScope extends Scope {
     // TODO: implement
     public void checkReferences(ErrorHandler h) {
         for (Entity ent : entities.values()) {
-            if (ent.isDefined() && ent.isPrivate() && !ent.isConstant() && !ent.isRefered()) {
+            if (ent.isDefined() && ent.isPrivate() && !ent.isConstant()
+                    && !ent.isRefered()) {
                 h.warn(ent.location(), "unused variable: " + ent.name());
             }
         }

@@ -86,8 +86,8 @@ public class AST extends Node {
     }
 
     public IR ir() {
-        return new IR(source, declarations.defvars(), declarations.defuns(), declarations.funcdecls(), scope,
-                constantTable);
+        return new IR(source, declarations.defvars(), declarations.defuns(),
+                declarations.funcdecls(), scope, constantTable);
     }
 
     protected void _dump(Dumper d) {

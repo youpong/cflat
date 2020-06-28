@@ -32,27 +32,27 @@ class Register extends cflat.asm.Register {
 
     private String typeName() {
         switch (type) {
-        case INT8:
+        case INT8 :
             return lowerByteRegister();
-        case INT16:
+        case INT16 :
             return baseName();
-        case INT32:
+        case INT32 :
             return "e" + baseName();
-        case INT64:
+        case INT64 :
             return "r" + baseName();
-        default:
+        default :
             throw new Error("unknown register Type: " + type);
         }
     }
 
     private String lowerByteRegister() {
         switch (_class) {
-        case AX:
-        case BX:
-        case CX:
-        case DX:
+        case AX :
+        case BX :
+        case CX :
+        case DX :
             return baseName().substring(0, 1) + "l";
-        default:
+        default :
             throw new Error("does not have lower-byte register: " + _class);
         }
     }

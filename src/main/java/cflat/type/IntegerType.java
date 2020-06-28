@@ -29,7 +29,9 @@ public class IntegerType extends Type {
     }
 
     public long maxValue() {
-        return isSigned ? (long) Math.pow(2, size * 8 - 1) - 1 : (long) Math.pow(2, size * 8) - 1;
+        return isSigned
+                ? (long) Math.pow(2, size * 8 - 1) - 1
+                : (long) Math.pow(2, size * 8) - 1;
     }
 
     public boolean isInDomain(long i) {

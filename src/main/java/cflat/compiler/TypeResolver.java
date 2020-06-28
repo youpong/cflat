@@ -35,7 +35,10 @@ import java.util.*;
 /**
  * 型名の解決 型の名前(TypeRef) を型(Type) へ解決する。
  */
-public class TypeResolver extends Visitor implements EntityVisitor<Void>, DeclarationVisitor<Void> {
+public class TypeResolver extends Visitor
+        implements
+            EntityVisitor<Void>,
+            DeclarationVisitor<Void> {
 
     private TypeTable typeTable;
     private ErrorHandler errorHandler;

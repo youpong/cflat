@@ -17,8 +17,8 @@ enum CompilerMode {
     DumpReference("--dump-reference"),
     DumpIR(       "--dump-ir"),
     DumpAsm(      "--dump-asm"),
-    Assemble(     "-c");
-    // Link("--link");
+    Assemble(     "-c"),
+    Link("--link");
     // @formatter:on
 
     static public boolean isModeOption(String opt) {

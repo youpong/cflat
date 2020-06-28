@@ -6,7 +6,8 @@ public class ForNode extends StmtNode {
     protected StmtNode incr;
     protected StmtNode body;
 
-    public ForNode(Location loc, ExprNode init, ExprNode cond, ExprNode incr, StmtNode body) {
+    public ForNode(Location loc, ExprNode init, ExprNode cond, ExprNode incr,
+            StmtNode body) {
         super(loc);
         this.init = new ExprStmtNode(init.location(), init);
         this.cond = cond;

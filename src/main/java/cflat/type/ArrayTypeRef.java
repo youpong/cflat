@@ -29,10 +29,12 @@ public class ArrayTypeRef extends TypeRef {
 
     // TODO: baseType を比較しなくていいの？
     public boolean equals(Object other) {
-        return (other instanceof ArrayTypeRef) && (length == ((ArrayTypeRef) other).length);
+        return (other instanceof ArrayTypeRef)
+                && (length == ((ArrayTypeRef) other).length);
     }
 
     public String toString() {
-        return baseType.toString() + "[" + (length == undefined ? "" : "" + length) + "]";
+        return baseType.toString() + "[" + (length == undefined ? "" : "" + length)
+                + "]";
     }
 }

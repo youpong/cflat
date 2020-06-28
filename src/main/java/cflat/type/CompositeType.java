@@ -51,8 +51,8 @@ abstract public class CompositeType extends NamedType {
 
     protected boolean compareTypesBy(String cmpMethod, Type t, Type tt) {
         try {
-            Method cmp = Type.class.getMethod(cmpMethod, new Class[] { Type.class });
-            Boolean b = (Boolean) cmp.invoke(t, new Object[] { tt });
+            Method cmp = Type.class.getMethod(cmpMethod, new Class[]{Type.class});
+            Boolean b = (Boolean) cmp.invoke(t, new Object[]{tt});
             return b.booleanValue();
         } catch (NoSuchMethodException ex) {
             throw new Error(ex.getMessage());

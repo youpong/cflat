@@ -183,7 +183,8 @@ class DereferenceChecker extends Visitor {
 
     private void checkMemberRef(Location loc, Type t, String memb) {
         if (!t.isCompositeType()) {
-            semanticError(loc, "accessing member '" + memb + "' for non-struct/union: " + t);
+            semanticError(loc,
+                    "accessing member '" + memb + "' for non-struct/union: " + t);
         }
         CompositeType type = t.getCompositeType();
         if (!type.hasMember(memb)) {
