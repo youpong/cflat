@@ -9,7 +9,7 @@ import cflat.exception.SemanticException;
 import cflat.exception.SyntaxException;
 import cflat.ir.IR;
 import cflat.parser.Parser;
-import cflat.sysdep.x86.AssemblyCode;
+import cflat.sysdep.AssemblyCode;
 import cflat.type.TypeTable;
 import cflat.utils.ErrorHandler;
 import java.io.*;
@@ -135,8 +135,7 @@ public class Compiler {
     }
 
     public AssemblyCode generateAssembly(IR ir, Options opts) {
-        // TODO
-        return null;
+        return opts.codeGenerator(errorHandler).generate(ir);
     }
 
     public void writeFile(String destPath, AssemblyCode asm) {

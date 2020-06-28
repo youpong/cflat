@@ -2,9 +2,12 @@ package cflat.compiler;
 
 import cflat.exception.OptionParseError;
 import cflat.parser.LibraryLoader;
+import cflat.sysdep.CodeGenerator;
+import cflat.sysdep.CodeGeneratorOptions;
 import cflat.sysdep.Platform;
 import cflat.sysdep.X86Linux;
 import cflat.type.TypeTable;
+import cflat.utils.ErrorHandler;
 import java.io.*;
 import java.util.*;
 
@@ -22,7 +25,7 @@ public class Options {
     // private boolean verbose = false;
     private LibraryLoader loader = new LibraryLoader();
     private boolean debugParser = false;
-    // private CodeGeneratorOptions genOptions = new CodeGeneratorOptions();
+    private CodeGeneratorOptions genOptions = new CodeGeneratorOptions();
     // private AssemblerOptions asOptions = new AssemblerOptions();
     // private LinkerOptions ldOptions = new LinkerOptions();
     private List<LdArg> ldArgs;
@@ -72,6 +75,10 @@ public class Options {
     // TODO: test
     TypeTable typeTable() {
         return platform.typeTable();
+    }
+
+    CodeGenerator codeGenerator(ErrorHandler h) {
+        return platform.codeGenerator(genOptions, h);
     }
 
     // ...
