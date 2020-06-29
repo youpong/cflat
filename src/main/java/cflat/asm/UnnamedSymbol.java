@@ -5,7 +5,9 @@ public class UnnamedSymbol extends BaseSymbol {
         super();
     }
 
-    // ...
+    public String name() {
+        throw new Error("unnamed symbol");
+    }
 
     public String toSource() {
         throw new Error("UnnamedSymbol#toSource() called");

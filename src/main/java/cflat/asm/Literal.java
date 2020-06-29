@@ -1,7 +1,7 @@
 package cflat.asm;
 
 public interface Literal extends Comparable<Literal> {
-    // public String toSource();
+    public String toSource();
     public String toSource(SymbolTable table);
 
     public String dump();

@@ -7,11 +7,13 @@ import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Label;
 import cflat.asm.Literal;
 import cflat.asm.MemoryReference;
+import cflat.asm.NamedSymbol;
 import cflat.asm.Operand;
 import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
 import cflat.entity.ConstantEntry;
+import cflat.entity.ConstantTable;
 import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
 import cflat.entity.Entity;
@@ -102,6 +104,12 @@ public class CodeGenerator
         // TODO
     }
 
+    //    private Symbol symbol(String sym, boolean isPrivate)
+
+    private Symbol globalSymbol(String sym) {
+        return new NamedSymbol(sym);
+    }
+
     // ...
 
     //
@@ -110,8 +118,24 @@ public class CodeGenerator
 
     // 143
     private AssemblyCode generateAssemblyCode(IR ir) {
-        // TODO
-        return null;
+        AssemblyCode file = newAssemblyCode();
+        file._file(ir.fileName());
+        if (ir.isGlobalVariableDefined()) {
+            generateDataSection(file, ir.definedGlobalVariables());
+        }
+        if (ir.isStringLiteralDefined()) {
+            generateReadOnlyDataSection(file, ir.constantTable());
+        }
+        if (ir.isFunctionDefined()) {
+            generateTextSection(file, ir.definedFunctions());
+        }
+        if (ir.isCommonSymbolDefined()) {
+            generateCommonSymbols(file, ir.definedCommonSymbols());
+        }
+        if (options.isPositionIndependent()) {
+            PICThunk(file, GOTBaseReg());
+        }
+        return file;
     }
 
     private AssemblyCode newAssemblyCode() {
@@ -119,9 +143,140 @@ public class CodeGenerator
                 new SymbolTable(LABEL_SYMBOL_BASE), options.isVerboseAsm());
     }
 
+    private void generateDataSection(AssemblyCode file, List<DefinedVariable> gvars) {
+        file._data();
+        for (DefinedVariable var : gvars) {
+            Symbol sym = globalSymbol(var.symbolString());
+            if (!var.isPrivate()) {
+                file._globl(sym);
+            }
+            file._align(var.alignment());
+            file._type(sym, "@object");
+            file._size(sym, var.allocSize());
+            file.label(sym);
+            generateImmediate(file, var.type().allocSize(), var.ir());
+        }
+    }
+
+    private void generateImmediate(AssemblyCode file, long size, Expr node) {
+        if (node instanceof Int) {
+            Int expr = (Int) node;
+            switch ((int) size) {
+            case 1 :
+                file._byte(expr.value());
+                break;
+            case 2 :
+                file._value(expr.value());
+                break; // ? file._word
+            case 4 :
+                file._long(expr.value());
+                break;
+            case 8 :
+                file._quad(expr.value());
+                break;
+            default :
+                throw new Error("entry size must be 1,2,4,8");
+            }
+        } else if (node instanceof Str) {
+            Str expr = (Str) node;
+            switch ((int) size) {
+            case 4 :
+                file._long(expr.symbol());
+                break;
+            case 8 :
+                file._quad(expr.symbol());
+                break;
+            default :
+                throw new Error("pointer size must be 4,8");
+            }
+        } else {
+            throw new Error("unknown literal node type" + node.getClass());
+        }
+    }
+
+    /** Generates .rodata entries (constant strings) */
+    private void generateReadOnlyDataSection(AssemblyCode file,
+            ConstantTable constants) {
+        file._section(".rodata");
+        for (ConstantEntry ent : constants) {
+            file.label(ent.symbol());
+            file._string(ent.value());
+        }
+    }
+
+    private void generateTextSection(AssemblyCode file,
+            List<DefinedFunction> functions) {
+        file._text();
+        for (DefinedFunction func : functions) {
+            Symbol sym = globalSymbol(func.name());
+            if (!func.isPrivate()) {
+                file._globl(sym);
+            }
+            file._type(sym, "@function");
+            file.label(sym);
+            compileFunctionBody(file, func);
+            file._size(sym, ".-" + sym.toSource());
+        }
+    }
+
+    /** Generates BSS entries */
+    private void generateCommonSymbols(AssemblyCode file,
+            List<DefinedVariable> variables) {
+        for (DefinedVariable var : variables) {
+            Symbol sym = globalSymbol(var.symbolString());
+            if (var.isPrivate()) {
+                file._local(sym);
+            }
+            file._comm(sym, var.allocSize(), var.alignment());
+        }
+    }
+
+    //
+    // PIC/PIE related constants and codes
+    //
+
     // ...
 
-    // 338
+    private Register GOTBaseReg() {
+        return bx();
+    }
+
+    // ...
+
+    private Symbol PICThunkSymbol(Register reg) {
+        return new NamedSymbol("__i686.get_pc_thunk." + reg.baseName());
+    }
+
+    static private final String PICThunkSectionFlags = SectionFlag_allocatable
+            + SectionFlag_executable + SectionFlag_sectiongroup;
+
+    /**
+     * Output PIC thunk.
+     * ELF section declaration format is:
+     *
+     * .section NAME, FLAGS, TYPE, flag_arguments
+     *
+     * FLAGS, TYPE, flag_arguments are optional.
+     * For "M" flag (a member of a section group),
+     * following format is used:
+     *
+     * .section NAME, "...M", TYPE, section_group_name, linkage
+     */
+    private void PICThunk(AssemblyCode file, Register reg) {
+        Symbol sym = PICThunkSymbol(reg);
+        file._section(".text" + "." + sym.toSource(),
+                "\"" + PICThunkSectionFlags + "\"", SectionType_bits, // This section contains data
+                sym.toSource(), // The name of section group
+                Linkage_linkonce); // Only 1 copy should be generated
+        file._globl(sym);
+        file._hidden(sym);
+        file._type(sym, SymbolType_function);
+        file.label(sym);
+        file.mov(mem(sp()), reg); // fetch saved EIP to the GOT base register
+        file.ret();
+    }
+
+    //
     // Compile Function
     //
 
@@ -714,7 +869,10 @@ public class CodeGenerator
         return ax(Type.INT8);
     }
 
-    // private Register bx() { return bx(naturalType); }
+    private Register bx() {
+        return bx(naturalType);
+    }
+
     private Register cx() {
         return cx(naturalType);
     }
@@ -734,9 +892,10 @@ public class CodeGenerator
         return new Register(RegisterClass.AX, t);
     }
 
-    /*
-     * private Register bx(Type t) { return new Register(RegisterClass.BX, t); }
-     */
+    private Register bx(Type t) {
+        return new Register(RegisterClass.BX, t);
+    }
+
     private Register cx(Type t) {
         return new Register(RegisterClass.CX, t);
     }

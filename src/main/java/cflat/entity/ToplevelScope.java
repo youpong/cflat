@@ -80,7 +80,16 @@ public class ToplevelScope extends Scope {
         return result;
     }
 
-    // ...
+    public List<DefinedVariable> definedGlobalScopeVariables() {
+        List<DefinedVariable> result = new ArrayList<DefinedVariable>();
+        for (Entity ent : entities.values()) {
+            if (ent instanceof DefinedVariable) {
+                result.add((DefinedVariable) ent);
+            }
+        }
+        result.addAll(staticLocalVariables());
+        return result;
+    }
 
     public List<DefinedVariable> staticLocalVariables() {
         if (staticLocalVariables == null) {

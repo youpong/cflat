@@ -59,7 +59,9 @@ abstract public class Entity implements cflat.ast.Dumpable {
         return type().allocSize();
     }
 
-    // alignment()
+    public long alignment() {
+        return type().alignment();
+    }
 
     public void refered() {
         nRefered++;

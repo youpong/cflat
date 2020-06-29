@@ -2,6 +2,7 @@ package cflat.ir;
 
 import cflat.asm.ImmediateValue;
 import cflat.asm.MemoryReference;
+import cflat.asm.Symbol;
 import cflat.asm.Type;
 import cflat.entity.ConstantEntry;
 
@@ -19,7 +20,9 @@ public class Str extends Expr {
 
     // public ConstantEntry entry() { return entry; }
 
-    // ...
+    public Symbol symbol() {
+        return entry.symbol();
+    }
 
     public boolean isConstant() {
         return true;

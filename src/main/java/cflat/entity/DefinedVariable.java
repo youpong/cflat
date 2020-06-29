@@ -34,13 +34,16 @@ public class DefinedVariable extends Variable {
         this.sequence = seq;
     }
 
-    // public String symbolString();
+    public String symbolString() {
+        return (sequence < 0) ? name : (name + "." + sequence);
+    }
 
     public boolean hasInitializer() {
         return (initializer != null);
     }
 
-    // public boolean isInitialized()
+    // public boolean isInitialized() {
+
     public ExprNode initializer() {
         return initializer;
     }

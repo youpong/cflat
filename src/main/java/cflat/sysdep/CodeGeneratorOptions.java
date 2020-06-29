@@ -2,15 +2,17 @@ package cflat.sysdep;
 
 public class CodeGeneratorOptions {
     protected int optimizeLevel;
-
-    // ...
-
+    protected boolean generatePIC;
+    protected boolean generatePIE;
     protected boolean verboseAsm;
 
     // ...
 
     public CodeGeneratorOptions() {
-        this.verboseAsm = false;
+        optimizeLevel = 0;
+        generatePIC = false;
+        generatePIE = false;
+        verboseAsm = false;
     }
 
     // ...
@@ -27,6 +29,10 @@ public class CodeGeneratorOptions {
 
     public boolean isVerboseAsm() {
         return verboseAsm;
+    }
+
+    public boolean isPositionIndependent() {
+        return generatePIC || generatePIE;
     }
 
     // ...

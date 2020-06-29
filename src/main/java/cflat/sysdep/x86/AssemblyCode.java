@@ -3,15 +3,19 @@ package cflat.sysdep.x86;
 import cflat.asm.AbsoluteAddress;
 import cflat.asm.Assembly;
 import cflat.asm.Comment;
+import cflat.asm.Directive;
 import cflat.asm.DirectMemoryReference;
 import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Instruction;
+import cflat.asm.IntegerLiteral;
 import cflat.asm.Label;
+import cflat.asm.Literal;
 import cflat.asm.Operand;
 import cflat.asm.Statistics;
 import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
+import cflat.utils.TextUtils;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +96,11 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 
     // ...
 
-    // 106
+    // 102
+    protected void directive(String direc) {
+        assemblies.add(new Directive(direc));
+    }
+
     protected void insn(String op) {
         assemblies.add(new Instruction(op));
     }
@@ -140,11 +148,100 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     // directives
     //
 
-    // ...
+    void _file(String name) {
+        directive(".file\t" + TextUtils.dumpString(name));
+    }
+
+    void _text() {
+        directive("\t.text");
+    }
+
+    void _data() {
+        directive("\t.data");
+    }
+
+    void _section(String name) {
+        directive("\t.section\t" + name);
+    }
+
+    void _section(String name, String flags, String type, String group,
+            String linkage) {
+        directive("\t.section\t" + name + "," + flags + "," + type + "," + group + ","
+                + linkage);
+    }
+
+    void _globl(Symbol sym) {
+        directive(".globl " + sym.name());
+    }
+
+    void _local(Symbol sym) {
+        directive(".local " + sym.name());
+    }
+
+    void _hidden(Symbol sym) {
+        directive("\t.hidden\t" + sym.name());
+    }
+
+    void _comm(Symbol sym, long size, long alignment) {
+        directive("\t.comm\t" + sym.name() + "," + size + "," + alignment);
+    }
+
+    void _align(long n) {
+        directive("\t.align\t" + n);
+    }
+
+    void _type(Symbol sym, String type) {
+        directive("\t.type\t" + sym.name() + "," + type);
+    }
+
+    void _size(Symbol sym, long size) {
+        _size(sym, new Long(size).toString());
+    }
+
+    void _size(Symbol sym, String size) {
+        directive("\t.size\t" + sym.name() + "," + size);
+    }
+
+    void _byte(long val) {
+        directive(".byte\t" + new IntegerLiteral((byte) val).toSource());
+    }
+
+    void _value(long val) {
+        directive(".value\t" + new IntegerLiteral((short) val).toSource());
+    }
+
+    void _long(long val) {
+        directive(".long\t" + new IntegerLiteral((int) val).toSource());
+    }
+
+    void _quad(long val) {
+        directive(".quad\t" + new IntegerLiteral(val).toSource());
+    }
+    /*
+    void _byte(Literal val) {
+        directive(".byte\t" + val.toSource());
+    }
+
+    void _value(Literal val) {
+        directive(".value\t" + val.toSource());
+    }
+    */
+    void _long(Literal val) {
+        directive(".long\t" + val.toSource());
+    }
+
+    void _quad(Literal val) {
+        directive(".quad\t" + val.toSource());
+    }
+
+    void _string(String str) {
+        directive("\t.string\t" + TextUtils.dumpString(str));
+    }
 
     //
     // Virtual Stack
     //
+
     class VirtualStack {
         private long offset;
         private long max;
@@ -282,17 +379,19 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 
     // void pop(Register reg)
 
-    // call function by relative address
+    /** call function by relative address */
     void call(Symbol sym) {
         insn("call", new DirectMemoryReference(sym));
     }
 
-    // call function by absolute address
+    /** call function by absolute address */
     void callAbsolute(Register reg) {
         insn("call", new AbsoluteAddress(reg));
     }
 
-    // void ret()
+    void ret() {
+        insn("ret");
+    }
 
     void mov(Register src, Register dest) {
         insn(naturalType, "mov", src, dest);
