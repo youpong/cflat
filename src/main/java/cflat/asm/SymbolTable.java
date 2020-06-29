@@ -7,13 +7,20 @@ public class SymbolTable {
     protected String base;
     protected Map<UnnamedSymbol, String> map;
     protected long seq = 0;
-
+    /*
+    static public SymbolTable dummy() {
+    return dummy;
+    }
+    */
     public SymbolTable(String base) {
         this.base = base;
         this.map = new HashMap<UnnamedSymbol, String>();
     }
 
-    // ...
+    public Symbol newSymbol() {
+        return new NamedSymbol(newString());
+    }
+
     public String symbolString(UnnamedSymbol sym) {
         String str = map.get(sym);
         if (str != null) {

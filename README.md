@@ -28,5 +28,5 @@ $ java -classpath target/classes cflat.compiler.Compiler [options] [files...]
 
 # How to use debugger
 ```
-$ jdb -classpath target/classes cflat.compiler.Compiler [options] [files...]
+$ jdb -classpath target/classes -sourcepath src/main/java:src/test/java cflat.compiler.Compiler [options] [files...]
 ```

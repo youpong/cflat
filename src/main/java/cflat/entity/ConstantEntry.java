@@ -18,11 +18,11 @@ public class ConstantEntry {
     public String value() {
         return value;
     }
-    /*
+
     public void setSymbol(Symbol sym) {
-    this.symbol = sym;
+        this.symbol = sym;
     }
-    */
+
     public Symbol symbol() {
         if (symbol == null) {
             throw new Error("must not happen: symbol == null");
@@ -30,7 +30,9 @@ public class ConstantEntry {
         return symbol;
     }
 
-    //    public void setMemref(MemoryReference mem) {
+    public void setMemref(MemoryReference mem) {
+        this.memref = mem;
+    }
 
     public MemoryReference memref() {
         if (this.memref == null) {
@@ -39,7 +41,9 @@ public class ConstantEntry {
         return this.memref;
     }
 
-    // ...
+    public void setAddress(ImmediateValue imm) {
+        this.address = imm;
+    }
 
     public ImmediateValue address() {
         return this.address;

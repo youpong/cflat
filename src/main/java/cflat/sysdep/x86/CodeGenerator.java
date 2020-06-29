@@ -9,6 +9,7 @@ import cflat.asm.Literal;
 import cflat.asm.MemoryReference;
 import cflat.asm.NamedSymbol;
 import cflat.asm.Operand;
+import cflat.asm.SuffixedSymbol;
 import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
@@ -93,7 +94,14 @@ public class CodeGenerator
     }
 
     private void locateStringLiteral(ConstantEntry ent, SymbolTable syms) {
-        // TODO
+        ent.setSymbol(syms.newSymbol());
+        if (options.isPositionIndependent()) {
+            Symbol offset = localGOTSymbol(ent.symbol());
+            ent.setMemref(mem(offset, GOTBaseReg()));
+        } else {
+            ent.setMemref(mem(ent.symbol()));
+            ent.setAddress(imm(ent.symbol()));
+        }
     }
 
     private void locateGlobalVariable(Entity ent) {
@@ -239,6 +247,12 @@ public class CodeGenerator
 
     private Register GOTBaseReg() {
         return bx();
+    }
+
+    // ...
+
+    private Symbol localGOTSymbol(Symbol base) {
+        return new SuffixedSymbol(base, "@GOTOFF");
     }
 
     // ...
