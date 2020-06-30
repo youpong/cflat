@@ -38,9 +38,14 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
         this.verbose = verbose;
     }
 
-    // ...
+    List<Assembly> assemblies() {
+        return assemblies;
+    }
 
-    // 34
+    void addAll(List<Assembly> assemblies) {
+        this.assemblies.addAll(assemblies);
+    }
+
     public String toSource() {
         StringBuffer buf = new StringBuffer();
         for (Assembly asm : assemblies) {
@@ -378,7 +383,9 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
         insn("push", typeSuffix(naturalType), reg);
     }
 
-    // void pop(Register reg)
+    void pop(Register reg) {
+        insn("pop", typeSuffix(naturalType), reg);
+    }
 
     /** call function by relative address */
     void call(Symbol sym) {

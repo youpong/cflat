@@ -275,7 +275,12 @@ public class CodeGenerator
     // PIC/PIE related constants and codes
     //
 
-    // ...
+    static private final Symbol GOT = new NamedSymbol("_GLOBAL_OFFSET_TABLE_");
+
+    private void loadGOTBaseAddress(AssemblyCode file, Register reg) {
+        file.call(PICThunkSymbol(reg));
+        file.add(imm(GOT), reg);
+    }
 
     private Register GOTBaseReg() {
         return bx();
@@ -508,12 +513,35 @@ public class CodeGenerator
 
     private void generateFunctionBody(AssemblyCode file, AssemblyCode body,
             StackFrameInfo frame) {
-        // TODO
+        file.virtualStack.reset();
+        prologue(file, frame.saveRegs, frame.frameSize());
+        if (options.isPositionIndependent() && body.doesUses(GOTBaseReg())) {
+            loadGOTBaseAddress(file, GOTBaseReg());
+        }
+        file.addAll(body.assemblies());
+        epilogue(file, frame.saveRegs);
+        file.virtualStack.fixOffset(0);
     }
 
-    // ...
+    private void prologue(AssemblyCode file, List<Register> saveRegs,
+            long frameSize) {
+        file.push(bp());
+        file.mov(sp(), bp());
+        for (Register reg : saveRegs) {
+            file.virtualPush(reg);
+        }
+        extendStack(file, frameSize);
+    }
 
-    // 567
+    private void epilogue(AssemblyCode file, List<Register> savedRegs) {
+        for (Register reg : ListUtils.reverse(savedRegs)) {
+            file.virtualPop(reg);
+        }
+        file.mov(bp(), sp());
+        file.pop(bp());
+        file.ret();
+    }
+
     /** return addr and saved bp */
     static final private long PARAM_START_WORD = 2;
 
@@ -562,7 +590,11 @@ public class CodeGenerator
         asm.virtualStack.fixOffset(-len);
     }
 
-    // private void extendStack(AssemblyCode file, long len)
+    private void extendStack(AssemblyCode file, long len) {
+        if (len > 0) {
+            file.sub(imm(len), sp());
+        }
+    }
 
     private void rewindStack(AssemblyCode file, long len) {
         if (len > 0) {
