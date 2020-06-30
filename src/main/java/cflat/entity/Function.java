@@ -24,7 +24,13 @@ abstract public class Function extends Entity {
     }
 
     // public boolean isVoid()
-    // public void setCallingSymbol(Symbol sym)
+
+    public void setCallingSymbol(Symbol sym) {
+        if (this.callingSymbol != null) {
+            throw new Error("must not happen: Function#callingSymbol was set again");
+        }
+        this.callingSymbol = sym;
+    }
 
     public Symbol callingSymbol() {
         if (this.callingSymbol == null) {

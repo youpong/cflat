@@ -119,7 +119,8 @@ public class CodeGenerator
     }
 
     private void locateFunction(Function func) {
-        // TODO
+        func.setCallingSymbol(callingSymbol(func));
+        locateGlobalVariable(func);
     }
 
     private Symbol symbol(String sym, boolean isPrivate) {
@@ -134,7 +135,18 @@ public class CodeGenerator
         return new NamedSymbol(sym);
     }
 
-    // ...
+    private Symbol callingSymbol(Function func) {
+        if (func.isPrivate()) {
+            return privateSymbol(func.symbolString());
+        } else {
+            Symbol sym = globalSymbol(func.symbolString());
+            return shouldUsePLT(func) ? PLTSymbol(sym) : sym;
+        }
+    }
+
+    private boolean shouldUsePLT(Entity ent) {
+        return options.isPositionIndependent() && !optimizeGvarAccess(ent);
+    }
 
     private boolean optimizeGvarAccess(Entity ent) {
         return options.isPIERequired() && ent.isDefined();
@@ -277,7 +289,9 @@ public class CodeGenerator
         return new SuffixedSymbol(base, "@GOTOFF");
     }
 
-    // ...
+    private Symbol PLTSymbol(Symbol base) {
+        return new SuffixedSymbol(base, "@PLT");
+    }
 
     private Symbol PICThunkSymbol(Register reg) {
         return new NamedSymbol("__i686.get_pc_thunk." + reg.baseName());

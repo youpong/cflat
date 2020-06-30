@@ -43,10 +43,10 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     // 34
     public String toSource() {
         StringBuffer buf = new StringBuffer();
-        /*
-         * TODO for (Assembly asm : assemblies) {
-         * buf.append(asm.toSource(labelSymbols)); buf.append("\n"); }
-         */
+        for (Assembly asm : assemblies) {
+            buf.append(asm.toSource(labelSymbols));
+            buf.append("\n");
+        }
         return buf.toString();
     }
 
@@ -221,7 +221,8 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     void _byte(Literal val) {
         directive(".byte\t" + val.toSource());
     }
-
+    */
+    /*
     void _value(Literal val) {
         directive(".value\t" + val.toSource());
     }
