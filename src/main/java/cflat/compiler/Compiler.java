@@ -110,7 +110,7 @@ public class Compiler {
             return;
         if (printAsm(asm, opts.mode()))
             return;
-        writeFile(destPath, asm);
+        writeFile(destPath, asm.toSource());
     }
 
     public AST parseFile(String path, Options opts)
@@ -138,8 +138,27 @@ public class Compiler {
         return opts.codeGenerator(errorHandler).generate(ir);
     }
 
-    public void writeFile(String destPath, AssemblyCode asm) {
-        // TODO
+    // TODO
+    public void writeFile(String path, String str) throws FileException {
+        if (path.equals("-")) {
+            System.out.print(str);
+            return;
+        }
+        try {
+            BufferedWriter f = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(path)));
+            try {
+                f.write(str);
+            } finally {
+                f.close();
+            }
+        } catch (FileNotFoundException ex) {
+            errorHandler.error("file not found: " + path);
+            throw new FileException("file error");
+        } catch (IOException ex) {
+            errorHandler.error("IO error" + ex.getMessage());
+            throw new FileException("file error");
+        }
     }
 
     public void assemble(String srcPath, String destPath, Options opts) {
@@ -207,13 +226,24 @@ public class Compiler {
         return false;
     }
 
-    // TODO: implement
     private boolean dumpAsm(AssemblyCode asm, CompilerMode mode) {
-        return false;
+        if (mode == CompilerMode.DumpAsm) {
+            asm.dump(System.out);
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    // TODO: implement
     private boolean printAsm(AssemblyCode asm, CompilerMode mode) {
+        /* TODO
+        if (mode == CompilerMode.PrintAsm) {
+            System.out.print(asm.toSource());
+            return true;
+        } else {
+            return false;
+        }
+        */
         return false;
     }
 
