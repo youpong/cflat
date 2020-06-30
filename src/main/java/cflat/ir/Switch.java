@@ -25,6 +25,22 @@ public class Switch extends Stmt {
         this.endLabel = endLabel;
     }
 
+    public Expr cond() {
+        return cond;
+    }
+
+    public List<Case> cases() {
+        return cases;
+    }
+
+    public Label defaultLabel() {
+        return defaultLabel;
+    }
+    /*
+    public Label endLabel() {
+    return endLabel;
+    }
+    */
     public <S, E> S accept(IRVisitor<S, E> visitor) {
         return visitor.visit(this);
     }

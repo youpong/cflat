@@ -14,9 +14,10 @@ public class ExprStmt extends Stmt {
         this.expr = expr;
     }
 
-    /*
-     * public Expr expr() { return expr; }
-     */
+    public Expr expr() {
+        return expr;
+    }
+
     public <S, E> S accept(IRVisitor<S, E> visitor) {
         return visitor.visit(this);
     }

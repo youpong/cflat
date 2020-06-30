@@ -25,6 +25,7 @@ import cflat.entity.Variable;
 import cflat.ir.Addr;
 import cflat.ir.Assign;
 import cflat.ir.Bin;
+import cflat.ir.Case;
 import cflat.ir.CJump;
 import cflat.ir.Call;
 import cflat.ir.Expr;
@@ -645,7 +646,7 @@ public class CodeGenerator
     }
 
     public Void visit(ExprStmt stmt) {
-        // TODO
+        compile(stmt.expr());
         return null;
     }
 
@@ -669,7 +670,14 @@ public class CodeGenerator
     }
 
     public Void visit(Switch node) {
-        // TODO
+        compile(node.cond());
+        Type t = node.cond().type();
+        for (Case c : node.cases()) {
+            as.mov(imm(c.value), cx());
+            as.cmp(cx(t), ax(t));
+            as.je(c.label);
+        }
+        as.jmp(node.defaultLabel());
         return null;
     }
 
