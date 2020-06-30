@@ -6,20 +6,20 @@ import org.junit.jupiter.api.Test;
 
 public class CompilerModeTest {
     @Test
-    public void testIsModeOption() {
+    public void isModeOption() {
         CompilerMode m = CompilerMode.CheckSyntax;
         assertTrue(CompilerMode.isModeOption(m.toOption()));
         assertTrue(!CompilerMode.isModeOption(""));
     }
 
     @Test
-    public void testFromOption() {
+    public void fromOption() {
         CompilerMode m = CompilerMode.CheckSyntax;
         assertEquals("--check-syntax", m.toOption());
     }
 
     @Test
-    public void testRequires() {
+    public void requires() {
         CompilerMode m0 = CompilerMode.CheckSyntax;
         CompilerMode m1 = CompilerMode.DumpTokens;
 

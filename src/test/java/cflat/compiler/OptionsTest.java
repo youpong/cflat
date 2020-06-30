@@ -13,7 +13,7 @@ public class OptionsTest {
     //
 
     @Test
-    public void testXXXFileNameOf00() {
+    public void xxxFileNameOf00() {
         String[] args = {"-c", "-obar.o", "sample/foo.cb"}; // -opath
 
         Options opts = Options.parse(args);
@@ -25,7 +25,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void testXXXFileNameOf01() {
+    public void xxxFileNameOf01() {
         String[] args = {"-c", "sample/foo.cb"};
 
         Options opts = Options.parse(args);
@@ -37,7 +37,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void testXXXFileNameOf10() {
+    public void xxxFileNameOf10() {
         String[] args = {"-S", "-o", "bar.s", "sample/foo.cb"}; // -o path
 
         Options opts = Options.parse(args);
@@ -49,7 +49,7 @@ public class OptionsTest {
     }
 
     @Test
-    public void testXXXFileNameOf11() {
+    public void xxxFileNameOf11() {
         String[] args = {"-S", "sample/foo.cb"};
 
         Options opts = Options.parse(args);
@@ -64,7 +64,7 @@ public class OptionsTest {
      * test opt.sourceFiles()
      */
     @Test
-    public void testParseArgs() {
+    public void parseArgs() {
         String path = "sample/foo.cb";
         String[] args = {path};
 
@@ -77,7 +77,7 @@ public class OptionsTest {
      * test isXXXRequired0
      */
     @Test
-    public void testXXXRequired0() {
+    public void isXXXequired0() {
         String[] args = {"--dump-asm", "sample/foo.cb"};
 
         Options opts = Options.parse(args);
@@ -90,7 +90,7 @@ public class OptionsTest {
      * test isXXXRequired1
      */
     @Test
-    public void testXXXRequired1() {
+    public void isXXXequired1() {
         String[] args = {"-c", "sample/foo.cb"};
 
         Options opts = Options.parse(args);
@@ -103,7 +103,7 @@ public class OptionsTest {
      * test isXXXRequired2
      */
     @Test
-    public void testXXXRequired2() {
+    public void isXXXRequired2() {
         String[] args = {"--link", "sample/foo.cb"};
 
         Options opts = Options.parse(args);
@@ -116,7 +116,7 @@ public class OptionsTest {
      * Error: exclusive option
      */
     @Test
-    public void testParseArgs2() {
+    public void parseArgs2() {
         String[] args = {"--check-syntax", "--check-syntax"};
         Error e = assertThrows(OptionParseError.class, () -> {
             Options.parse(args);
@@ -129,7 +129,7 @@ public class OptionsTest {
      * Error: no input file
      */
     @Test
-    public void testParseArgs3() {
+    public void parseArgs3() {
         String[] args = {"--check-syntax"};
         Error e = assertThrows(OptionParseError.class, () -> {
             Options.parse(args);
@@ -141,7 +141,7 @@ public class OptionsTest {
      * Error: missing argument for -o
      */
     @Test
-    public void testNextArg() {
+    public void nextArg() {
         String[] args = {"-o"}; // -o requires arg
 
         Error e = assertThrows(OptionParseError.class, () -> {
