@@ -1,5 +1,6 @@
 package cflat.entity;
 
+import cflat.asm.ImmediateValue;
 import cflat.asm.MemoryReference;
 import cflat.asm.Operand;
 import cflat.ast.Dumper;
@@ -27,7 +28,9 @@ abstract public class Entity implements cflat.ast.Dumpable {
         return name;
     }
 
-    // public String symbolString()
+    public String symbolString() {
+        return name();
+    }
 
     abstract public boolean isDefined();
 
@@ -80,9 +83,14 @@ abstract public class Entity implements cflat.ast.Dumpable {
         return memref();
     }
 
-    // ...
+    public void setAddress(MemoryReference mem) {
+        this.address = mem;
+    }
 
-    // 91
+    public void setAddress(ImmediateValue imm) {
+        this.address = imm;
+    }
+
     public Operand address() {
         checkAddress();
         return address;

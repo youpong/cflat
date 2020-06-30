@@ -105,20 +105,40 @@ public class CodeGenerator
     }
 
     private void locateGlobalVariable(Entity ent) {
-        // TODO
+        Symbol sym = symbol(ent.symbolString(), ent.isPrivate());
+        if (options.isPositionIndependent()) {
+            if (ent.isPrivate() || optimizeGvarAccess(ent)) {
+                ent.setMemref(mem(localGOTSymbol(sym), GOTBaseReg()));
+            } else {
+                ent.setAddress(mem(globalGOTSymbol(sym), GOTBaseReg()));
+            }
+        } else {
+            ent.setMemref(mem(sym));
+            ent.setAddress(imm(sym));
+        }
     }
 
     private void locateFunction(Function func) {
         // TODO
     }
 
-    //    private Symbol symbol(String sym, boolean isPrivate)
+    private Symbol symbol(String sym, boolean isPrivate) {
+        return isPrivate ? privateSymbol(sym) : globalSymbol(sym);
+    }
 
     private Symbol globalSymbol(String sym) {
         return new NamedSymbol(sym);
     }
 
+    private Symbol privateSymbol(String sym) {
+        return new NamedSymbol(sym);
+    }
+
     // ...
+
+    private boolean optimizeGvarAccess(Entity ent) {
+        return options.isPIERequired() && ent.isDefined();
+    }
 
     //
     // generateAssemblyCode
@@ -249,7 +269,9 @@ public class CodeGenerator
         return bx();
     }
 
-    // ...
+    private Symbol globalGOTSymbol(Symbol base) {
+        return new SuffixedSymbol(base, "@GOT");
+    }
 
     private Symbol localGOTSymbol(Symbol base) {
         return new SuffixedSymbol(base, "@GOTOFF");

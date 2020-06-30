@@ -36,4 +36,8 @@ public class CodeGeneratorOptions {
     }
 
     // ...
+
+    public boolean isPIERequired() {
+        return generatePIE;
+    }
 }
