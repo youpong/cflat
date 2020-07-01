@@ -236,15 +236,12 @@ public class Compiler {
     }
 
     private boolean printAsm(AssemblyCode asm, CompilerMode mode) {
-        /* TODO
         if (mode == CompilerMode.PrintAsm) {
             System.out.print(asm.toSource());
             return true;
         } else {
             return false;
         }
-        */
-        return false;
     }
 
     private void errorExit(String msg) {
