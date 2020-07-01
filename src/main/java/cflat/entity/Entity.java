@@ -80,7 +80,7 @@ abstract public class Entity implements cflat.ast.Dumpable {
 
     public MemoryReference memref() {
         checkAddress();
-        return memref();
+        return memref;
     }
 
     public void setAddress(MemoryReference mem) {
