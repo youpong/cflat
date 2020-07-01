@@ -160,16 +160,22 @@ public class Options {
 
     //    private List<String> parseCommaSeparatedOptions(String opt)
 
-    // 327
     void printUsage(PrintStream out) {
-        String msg = "Usage: cbc [options] file...\n" + "Global Options:\n"
-                + "  --check-syntax  Check syntax and quit.\n"
-                + "  --dump-tokens   Dumps tokens and quit.\n"
-                + "  --dump-ast      Dumps AST and quit.\n"
-                + "  --dump-semantic Dumps AST after semantic checks and quit.\n"
-                + "  --dump-ir       Dumps IR and quit.\n"
-                + "  --dump-asm      Dumps AssemblyCode and quit.\n"
-                + "  --version       Shows compiler version.";
+    // @formatter:off
+        String msg = "Usage: cbc [options] file...\n"
+                   + "Global Options:\n"
+                   + "  --check-syntax  Check syntax and quit.\n"
+                   + "  --dump-tokens   Dumps tokens and quit.\n"
+                   + "  --dump-ast      Dumps AST and quit.\n"
+                   + "  --dump-semantic Dumps AST after semantic checks and quit.\n"
+                   + "  --dump-ir       Dumps IR and quit.\n"
+                   + "  --dump-asm      Dumps AssemblyCode and quit.\n"
+                   + "  --print-asm     Prints assemblu code and quit.\n"
+                   + "  -S              Generates an assembly file and quit.\n"
+                   + "  -o PATH         Places output in file PATH.\n"
+                   + "  --help          Prints this message and quit.\n";
+                // + "  --version       Shows compiler version.";
+    // @formatter:on
         out.println(msg);
     }
 }
