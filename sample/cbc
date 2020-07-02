@@ -1,0 +1,9 @@
+#!/bin/bash
+
+base_dir=${0%%/*}
+
+java -jar ${base_dir}/../target/cbc-0.1-SNAPSHOT.jar "$@"
+
+#for i in "$@"; do
+#echo $i
+#done
