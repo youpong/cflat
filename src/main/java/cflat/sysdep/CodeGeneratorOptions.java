@@ -21,11 +21,9 @@ public class CodeGeneratorOptions {
         return optimizeLevel;
     }
 
-    /*
-     * public void generateVerboseAsm() {
-     * this.verboseAsm = true;
-     * }
-     */
+    public void generateVerboseAsm() {
+        this.verboseAsm = true;
+    }
 
     public boolean isVerboseAsm() {
         return verboseAsm;

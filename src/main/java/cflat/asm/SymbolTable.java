@@ -7,11 +7,14 @@ public class SymbolTable {
     protected String base;
     protected Map<UnnamedSymbol, String> map;
     protected long seq = 0;
-    /*
+
+    static private final String DUMMY_SYMBOL_BASE = "L";
+    static private final SymbolTable dummy = new SymbolTable(DUMMY_SYMBOL_BASE);
+
     static public SymbolTable dummy() {
-    return dummy;
+        return dummy;
     }
-    */
+
     public SymbolTable(String base) {
         this.base = base;
         this.map = new HashMap<UnnamedSymbol, String>();

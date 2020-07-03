@@ -103,6 +103,9 @@ public class Options {
                     debugParser = true;
                 } else if (arg.startsWith("-o")) {
                     outputFileName = getOptArg(arg, args);
+                } else if (arg.equals("-fverbose-asm")
+                        || arg.equals("--verbose-asm")) {
+                    genOptions.generateVerboseAsm();
                 } else if (arg.equals("--help")) {
                     printUsage(System.out);
                     System.exit(0);
@@ -173,8 +176,16 @@ public class Options {
                    + "  --print-asm     Prints assemblu code and quit.\n"
                    + "  -S              Generates an assembly file and quit.\n"
                    + "  -o PATH         Places output in file PATH.\n"
-                   + "  --help          Prints this message and quit.\n";
-                // + "  --version       Shows compiler version.";
+                // + "  --version       Shows compiler version."
+                   + "  --help          Prints this message and quit.\n"
+                   + "\n"
+	    //   + "Optimization Option:\n"
+	    //   + "Parser Optons:\n"
+                   + "Code Generator Options:\n"
+                   + "  -fverbose-asm   Generate assembly with verbose comments.\n"
+	    //   + "Assembler Optoins:\n"
+	    //   + "Linker Options:\n"
+	    ;
     // @formatter:on
         out.println(msg);
     }

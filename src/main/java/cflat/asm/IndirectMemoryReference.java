@@ -40,7 +40,9 @@ public class IndirectMemoryReference extends MemoryReference {
         base.collectStatistics(stats);
     }
 
-    // ...
+    public String toString() {
+        return toSource(SymbolTable.dummy());
+    }
 
     public String toSource(SymbolTable table) {
         if (!fixed) {
