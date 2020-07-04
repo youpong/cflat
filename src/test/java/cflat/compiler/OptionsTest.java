@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import cflat.exception.OptionParseError;
+import java.util.Iterator;
 
 public class OptionsTest {
 
@@ -61,16 +62,32 @@ public class OptionsTest {
     }
 
     /**
-     * test opt.sourceFiles()
+     * test opt.sourceFiles() 1 file
      */
     @Test
-    public void parseArgs() {
+    public void sourceFiles1() {
         String path = "sample/foo.cb";
         String[] args = {path};
 
         Options opt = Options.parse(args);
         SourceFile f = opt.sourceFiles().get(0);
         assertEquals(path, f.path());
+    }
+
+    /**
+     * test opt.sourceFiles() 3 files
+     */
+    @Test
+    public void sourceFiles2() {
+        String[] args = {"sample/foo.cb", "sample/bar.s", "sample/baz.o"};
+        SourceFile f;
+
+        Options opts = Options.parse(args);
+        Iterator<SourceFile> ite = opts.sourceFiles().iterator();
+
+        assertEquals("sample/foo.cb", ite.next().path());
+        assertEquals("sample/bar.s", ite.next().path());
+        assertEquals("sample/baz.o", ite.next().path());
     }
 
     /**
@@ -148,6 +165,33 @@ public class OptionsTest {
             Options.parse(args);
         });
         assertEquals("missing argument for -o", e.getMessage());
+    }
+
+    /**
+     * Error: -o option requires only 1 input (except linking)
+     */
+    @Test
+    public void only1Input() {
+        String[] args = {"-c", "-o", "foo.s", "foo0.cb", "foo1.cb"};
+
+        Error e = assertThrows(OptionParseError.class, () -> {
+            Options.parse(args);
+        });
+        assertEquals("-o option requires only 1 input (except linking)",
+                e.getMessage());
+    }
+
+    /**
+     * Error: unknown file type
+     */
+    @Test
+    public void unknownFileType() {
+        String[] args = {"foo.cc"};
+
+        Error e = assertThrows(OptionParseError.class, () -> {
+            Options.parse(args);
+        });
+        assertEquals("unknown file type: foo.cc", e.getMessage());
     }
 
 }

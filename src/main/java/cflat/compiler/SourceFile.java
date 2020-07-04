@@ -8,6 +8,14 @@ public class SourceFile implements LdArg {
     static final String EXT_OBJECT_FILE = ".o";
     // ...
 
+    // @formatter:off    
+    static final String[] KNOWN_EXTENSIONS = {
+	EXT_CFLAT_SOURCE,
+	EXT_ASSEMBLY_SOURCE,
+	EXT_OBJECT_FILE
+    };
+    // @formatter:on
+
     private final String originalName;
     private String currentName;
 
@@ -35,7 +43,14 @@ public class SourceFile implements LdArg {
         this.currentName = name;
     }
 
-    // ...
+    boolean isKnownFileType() {
+        String ext = extName(originalName);
+        for (String e : KNOWN_EXTENSIONS) {
+            if (e.equals(ext))
+                return true;
+        }
+        return false;
+    }
 
     // 57
     boolean isCflatSource() {

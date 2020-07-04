@@ -131,9 +131,22 @@ public class Options {
             ldArgs.add(new SourceFile(args.next()));
         }
 
+        if (mode == null) {
+            mode = CompilerMode.Link;
+        }
+
         sourceFiles = selectSourceFiles(ldArgs);
         if (sourceFiles.isEmpty()) {
             parseError("no input file");
+        }
+
+        for (SourceFile src : sourceFiles) {
+            if (!src.isKnownFileType()) {
+                parseError("unknown file type: " + src.path());
+            }
+        }
+        if (outputFileName != null && sourceFiles.size() > 1 && !isLinkRequired()) {
+            parseError("-o option requires only 1 input (except linking)");
         }
     }
 
