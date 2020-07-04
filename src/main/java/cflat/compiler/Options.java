@@ -2,6 +2,8 @@ package cflat.compiler;
 
 import cflat.exception.OptionParseError;
 import cflat.parser.LibraryLoader;
+import cflat.sysdep.Assembler;
+import cflat.sysdep.AssemblerOptions;
 import cflat.sysdep.CodeGenerator;
 import cflat.sysdep.CodeGeneratorOptions;
 import cflat.sysdep.Platform;
@@ -26,7 +28,7 @@ public class Options {
     private LibraryLoader loader = new LibraryLoader();
     private boolean debugParser = false;
     private CodeGeneratorOptions genOptions = new CodeGeneratorOptions();
-    // private AssemblerOptions asOptions = new AssemblerOptions();
+    private AssemblerOptions asOptions = new AssemblerOptions();
     // private LinkerOptions ldOptions = new LinkerOptions();
     private List<LdArg> ldArgs;
     private List<SourceFile> sourceFiles;
@@ -79,6 +81,14 @@ public class Options {
 
     CodeGenerator codeGenerator(ErrorHandler h) {
         return platform.codeGenerator(genOptions, h);
+    }
+
+    Assembler assembler(ErrorHandler h) {
+        return platform.assembler(h);
+    }
+
+    AssemblerOptions asOptions() {
+        return asOptions;
     }
 
     // ...

@@ -5,6 +5,7 @@ import cflat.ast.ExprNode;
 import cflat.ast.StmtNode;
 import cflat.exception.CompileException;
 import cflat.exception.FileException;
+import cflat.exception.IPCException;
 import cflat.exception.SemanticException;
 import cflat.exception.SyntaxException;
 import cflat.ir.IR;
@@ -161,8 +162,9 @@ public class Compiler {
         }
     }
 
-    public void assemble(String srcPath, String destPath, Options opts) {
-        // TODO
+    public void assemble(String srcPath, String destPath, Options opts)
+            throws IPCException {
+        opts.assembler(errorHandler).assemble(srcPath, destPath, opts.asOptions());
     }
 
     public void link(Options opts) {

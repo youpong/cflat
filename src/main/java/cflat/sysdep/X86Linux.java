@@ -18,5 +18,13 @@ public class X86Linux implements Platform {
         return Type.INT32;
     }
 
-    // ...
+    public Assembler assembler(ErrorHandler h) {
+        return new GNUAssembler(h);
+    }
+
+    /*
+    public Linker linker(ErrorHandler h) {
+    return new GNULinker(h);
+    }
+    */
 }
