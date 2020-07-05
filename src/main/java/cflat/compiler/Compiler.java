@@ -167,8 +167,22 @@ public class Compiler {
         opts.assembler(errorHandler).assemble(srcPath, destPath, opts.asOptions());
     }
 
-    public void link(Options opts) {
-        // TODO
+    public void link(Options opts) throws IPCException {
+        if (!opts.isGeneratingSharedLibrary()) {
+            generateExecutable(opts);
+        } else {
+            generateSharedLibrary(opts);
+        }
+    }
+
+    public void generateExecutable(Options opts) throws IPCException {
+        opts.linker(errorHandler).generateExecutable(opts.ldArgs(),
+                opts.exeFileName(), opts.ldOptions());
+    }
+
+    public void generateSharedLibrary(Options opts) throws IPCException {
+        opts.linker(errorHandler).generateSharedLibrary(opts.ldArgs(),
+                opts.soFileName(), opts.ldOptions());
     }
 
     private boolean dumpAST(AST ast, CompilerMode mode) {

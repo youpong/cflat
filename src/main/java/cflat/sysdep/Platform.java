@@ -8,5 +8,5 @@ public interface Platform {
 
     CodeGenerator codeGenerator(CodeGeneratorOptions opts, ErrorHandler h);
     Assembler assembler(ErrorHandler h);
-    // Linker linker(ErrorHandler h);
+    Linker linker(ErrorHandler h);
 }

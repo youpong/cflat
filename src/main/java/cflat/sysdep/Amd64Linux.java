@@ -4,18 +4,21 @@ import cflat.type.TypeTable;
 import cflat.utils.ErrorHandler;
 import cflat.asm.Type;
 
-// TODO: test
-public class X86Linux implements Platform {
+// TODO: implement
+public class Amd64Linux implements Platform {
     public TypeTable typeTable() {
-        return TypeTable.ilp32();
+        //        return TypeTable.ilp32();
+        return null;
     }
 
     public CodeGenerator codeGenerator(CodeGeneratorOptions opts, ErrorHandler h) {
-        return new cflat.sysdep.x86.CodeGenerator(opts, naturalType(), h);
+        //        return new cflat.sysdep.x86.CodeGenerator(opts, naturalType(), h);
+        return null;
     }
 
     private Type naturalType() {
-        return Type.INT32;
+        //return Type.INT32;
+        return null;
     }
 
     public Assembler assembler(ErrorHandler h) {

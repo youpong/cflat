@@ -72,7 +72,9 @@ public class SourceFile implements LdArg {
         return replaceExt(EXT_OBJECT_FILE);
     }
 
-    //    String linkedFileName(String newExt)
+    String linkedFileName(String newExt) {
+        return replaceExt(newExt);
+    }
 
     private String replaceExt(String ext) {
         return new File(originalName).getName().replaceFirst("\\.[^.]*$", "") + ext;

@@ -6,6 +6,8 @@ import cflat.sysdep.Assembler;
 import cflat.sysdep.AssemblerOptions;
 import cflat.sysdep.CodeGenerator;
 import cflat.sysdep.CodeGeneratorOptions;
+import cflat.sysdep.Linker;
+import cflat.sysdep.LinkerOptions;
 import cflat.sysdep.Platform;
 import cflat.sysdep.X86Linux;
 import cflat.type.TypeTable;
@@ -29,7 +31,7 @@ public class Options {
     private boolean debugParser = false;
     private CodeGeneratorOptions genOptions = new CodeGeneratorOptions();
     private AssemblerOptions asOptions = new AssemblerOptions();
-    // private LinkerOptions ldOptions = new LinkerOptions();
+    private LinkerOptions ldOptions = new LinkerOptions();
     private List<LdArg> ldArgs;
     private List<SourceFile> sourceFiles;
 
@@ -63,6 +65,27 @@ public class Options {
         return src.objFileName();
     }
 
+    String exeFileName() {
+        return linkedFileName("");
+    }
+
+    String soFileName() {
+        return linkedFileName(".so");
+    }
+
+    static private final String DEFAULT_LINKER_OUTPUT = "a.out";
+
+    private String linkedFileName(String newExt) {
+        if (outputFileName != null) {
+            return outputFileName;
+        }
+        if (sourceFiles.size() == 1) {
+            return sourceFiles.get(0).linkedFileName(newExt);
+        } else {
+            return DEFAULT_LINKER_OUTPUT;
+        }
+    }
+
     // ...
 
     // 93
@@ -91,9 +114,26 @@ public class Options {
         return asOptions;
     }
 
-    // ...
+    Linker linker(ErrorHandler h) {
+        return platform.linker(h);
+    }
 
-    // 137
+    LinkerOptions ldOptions() {
+        return ldOptions;
+    }
+
+    List<String> ldArgs() {
+        List<String> result = new ArrayList<String>();
+        for (LdArg arg : ldArgs) {
+            result.add(arg.toString());
+        }
+        return result;
+    }
+
+    boolean isGeneratingSharedLibrary() {
+        return ldOptions.generatingSharedLibrary;
+    }
+
     void parseArgs(String[] origArgs) {
         ldArgs = new ArrayList<LdArg>();
         ListIterator<String> args = Arrays.asList(origArgs).listIterator();
