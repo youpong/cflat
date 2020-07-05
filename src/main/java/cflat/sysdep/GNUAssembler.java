@@ -19,6 +19,7 @@ class GNUAssembler implements Assembler {
 
         cmd.add("as");
         cmd.addAll(opts.args);
+        cmd.add("--32"); // Target i386 option
         cmd.add("-o");
         cmd.add(destPath);
         cmd.add(srcPath);
