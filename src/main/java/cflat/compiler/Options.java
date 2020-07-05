@@ -26,7 +26,7 @@ public class Options {
     private CompilerMode mode;
     private Platform platform = new X86Linux();
     private String outputFileName;
-    // private boolean verbose = false;
+    private boolean verbose = false;
     private LibraryLoader loader = new LibraryLoader();
     private boolean debugParser = false;
     private CodeGeneratorOptions genOptions = new CodeGeneratorOptions();
@@ -86,9 +86,16 @@ public class Options {
         }
     }
 
-    // ...
+    /*
+    String outputFileName() {
+    return this.outputFileName;
+    }
+    */
 
-    // 93
+    boolean isVerboseMode() {
+        return this.verbose;
+    }
+
     boolean doesDebugParser() {
         return this.debugParser;
     }
@@ -156,6 +163,10 @@ public class Options {
                 } else if (arg.equals("-fverbose-asm")
                         || arg.equals("--verbose-asm")) {
                     genOptions.generateVerboseAsm();
+                } else if (arg.equals("-v")) {
+                    verbose = true;
+                    asOptions.verbose = true;
+                    ldOptions.verbose = true;
                 } else if (arg.equals("--help")) {
                     printUsage(System.out);
                     System.exit(0);
@@ -239,7 +250,8 @@ public class Options {
                    + "  --print-asm     Prints assemblu code and quit.\n"
                    + "  -S              Generates an assembly file and quit.\n"
                    + "  -o PATH         Places output in file PATH.\n"
-                // + "  --version       Shows compiler version."
+                   + "  -v              Turn on verbose mode.\n"	    
+                // + "  --version       Shows compiler version.\n"
                    + "  --help          Prints this message and quit.\n"
                    + "\n"
 	    //   + "Optimization Option:\n"
