@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 class GNULinker implements Linker {
-    static final private String LINKER = "/usr/bin/ld";
-    static final private String DYNAMIC_LINKER = "/lib/ld-linux.so.2";
-    static final private String C_RUNTIME_INIT = "/usr/lib/crti.o";
-    static final private String C_RUNTIME_START = "/usr/lib/crt1.o";
+    // @formatter:off
+    static final private String LINKER              = "/usr/bin/ld";
+    static final private String DYNAMIC_LINKER      = "/lib/ld-linux.so.2";
+    static final private String C_RUNTIME_INIT      = "/usr/lib32/crti.o";
+    static final private String C_RUNTIME_START     = "/usr/lib32/crt1.o";
     static final private String C_RUNTIME_START_PIE = "/usr/lib/Scrt1.o";
-    static final private String C_RUNTIME_FINI = "/usr/lib/crtn.o";
-
+    static final private String C_RUNTIME_FINI      = "/usr/lib32/crtn.o";
+    // @formatter:on
     ErrorHandler errorHandler;
 
     GNULinker(ErrorHandler errorHandler) {
@@ -24,6 +25,18 @@ class GNULinker implements Linker {
             LinkerOptions opts) throws IPCException {
         List<String> cmd = new ArrayList<String>();
         cmd.add(LINKER);
+        /* 
+	 * LD supports these emulation mode
+	 *  * elf_x86_64
+         *  * elf32_x86_64
+         *  * elf_i386
+         *  * elf_iamcu
+         *  * elf_l1om
+         *  * elf_k1om
+         *  * i386pepn
+         *  * i386pe
+	 */
+        cmd.add("-melf_i386");
         cmd.add("-dynamic-linker");
         cmd.add(DYNAMIC_LINKER);
         if (opts.generatingPIE) {
@@ -36,7 +49,7 @@ class GNULinker implements Linker {
         cmd.addAll(args);
         if (!opts.noDefaultLibs) {
             cmd.add("-lc");
-            cmd.add("-lcbc");
+            //cmd.add("-lcbc");
         }
         if (!opts.noStartFiles) {
             cmd.add(C_RUNTIME_FINI);
