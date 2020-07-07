@@ -1,5 +1,8 @@
 package cflat.asm;
 
+/**
+ * Base Symbol
+ */
 abstract public class BaseSymbol implements Symbol {
 
     public boolean isZero() {

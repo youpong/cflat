@@ -2,6 +2,9 @@ package cflat.asm;
 
 import cflat.utils.TextUtils;
 
+/**
+ * suffixed symbol used in Position independent code
+ */
 public class SuffixedSymbol implements Symbol {
     protected Symbol base;
     protected String suffix;
@@ -33,7 +36,10 @@ public class SuffixedSymbol implements Symbol {
         return base.toSource(table) + suffix;
     }
 
-    // ...
+    // TODO: test
+    public String toString() {
+        return base.toString() + suffix;
+    }
 
     public int compareTo(Literal lit) {
         return -(lit.compareTo(this));

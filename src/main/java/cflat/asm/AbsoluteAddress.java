@@ -1,7 +1,7 @@
 package cflat.asm;
 
 /**
- * operand of absolute address
+ * operand of absolute address like *%eax in call *%eax
  */
 public class AbsoluteAddress extends Operand {
     protected Register register;

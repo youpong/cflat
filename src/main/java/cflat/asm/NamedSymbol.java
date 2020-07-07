@@ -2,6 +2,9 @@ package cflat.asm;
 
 import cflat.utils.TextUtils;
 
+/**
+ * named symbol appears in C flat souce code.
+ */
 public class NamedSymbol extends BaseSymbol {
     protected String name;
 
@@ -20,11 +23,12 @@ public class NamedSymbol extends BaseSymbol {
     public String toSource(SymbolTable table) {
         return name;
     }
-    /* TODO
+
+    // TODO: test
     public String toString() {
-    return "#" + name;
+        return "#" + name;
     }
-    */
+
     public int compareTo(Literal lit) {
         return -(lit.compareTo(this));
     }

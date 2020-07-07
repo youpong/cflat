@@ -1,5 +1,8 @@
 package cflat.asm;
 
+/**
+ * internal generated symbol like .L0
+ */
 public class UnnamedSymbol extends BaseSymbol {
     public UnnamedSymbol() {
         super();
@@ -17,7 +20,9 @@ public class UnnamedSymbol extends BaseSymbol {
         return table.symbolString(this);
     }
 
-    // ...
+    public String toString() {
+        return super.toString();
+    }
 
     public int compareTo(Literal lit) {
         return -(lit.compareTo(this));
@@ -29,7 +34,6 @@ public class UnnamedSymbol extends BaseSymbol {
 
     // ...
 
-    // 44
     public String dump() {
         return "(UnnamedSymbol @" + Integer.toHexString(hashCode()) + ")";
     }

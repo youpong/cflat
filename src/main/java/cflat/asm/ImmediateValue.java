@@ -1,7 +1,7 @@
 package cflat.asm;
 
 /**
- * Operand of Immediate value
+ * Operand of Immediate value lie $0
  */
 public class ImmediateValue extends Operand {
     protected Literal expr;

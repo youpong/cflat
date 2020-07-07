@@ -1,5 +1,8 @@
 package cflat.asm;
 
+/**
+ * Integer Literal
+ */
 public class IntegerLiteral implements Literal {
     protected long value;
 
@@ -7,8 +10,20 @@ public class IntegerLiteral implements Literal {
         this.value = n;
     }
 
-    // ...
+    // TODO: test
+    public boolean equals(Object other) {
+        return (other instanceof IntegerLiteral) && equals((IntegerLiteral) other);
+    }
 
+    // TODO: test    
+    public boolean equals(IntegerLiteral other) {
+        return other.value == this.value;
+    }
+    /*
+    public long value() {
+    return value;
+    }
+    */
     public boolean isZero() {
         return value == 0;
     }
@@ -27,7 +42,10 @@ public class IntegerLiteral implements Literal {
         // does nothing
     }
 
-    // ...
+    // TODO: test
+    public String toString() {
+        return new Long(value).toString();
+    }
 
     public int compareTo(Literal lit) {
         return -(lit.cmp(this));
