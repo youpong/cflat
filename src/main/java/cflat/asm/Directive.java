@@ -2,17 +2,20 @@ package cflat.asm;
 
 import cflat.utils.TextUtils;
 
+/**
+ * Directive
+ */
 public class Directive extends Assembly {
     protected String content;
 
     public Directive(String content) {
         this.content = content;
     }
-    /* TODO
+
     public boolean isDirective() {
-    return true;
+        return true;
     }
-    */
+
     public String toSource(SymbolTable table) {
         return this.content;
     }

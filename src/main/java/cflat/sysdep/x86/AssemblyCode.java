@@ -20,6 +20,9 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * manage list of Assembly instance.
+ */
 public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     final Type naturalType;
     final long stackWordSize;

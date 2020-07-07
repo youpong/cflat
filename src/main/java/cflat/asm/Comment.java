@@ -2,6 +2,9 @@ package cflat.asm;
 
 import cflat.utils.TextUtils;
 
+/**
+ * Comment
+ */
 public class Comment extends Assembly {
     protected String string;
     protected int indentLevel;
@@ -15,9 +18,9 @@ public class Comment extends Assembly {
         this.indentLevel = indentLevel;
     }
 
-    /*
-     * public boolean isComment() { return true; }
-     */
+    public boolean isComment() {
+        return true;
+    }
 
     public String toSource(SymbolTable table) {
         return "\t" + indent() + "# " + string;

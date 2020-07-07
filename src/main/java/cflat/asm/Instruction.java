@@ -2,6 +2,9 @@ package cflat.asm;
 
 import cflat.utils.TextUtils;
 
+/**
+ * Instruction
+ */
 public class Instruction extends Assembly {
     protected String mnemonic;
     protected String suffix;
@@ -31,6 +34,13 @@ public class Instruction extends Assembly {
         this.suffix = suffix;
         this.operands = operands;
         this.needRelocation = reloc;
+    }
+
+    //    public Instruction build(String mnemonic, Operand o1)
+    //    public Instruction build(String mnemonic, Operand o1, Operand o2)
+
+    public boolean isInstruction() {
+        return true;
     }
 
     // ...

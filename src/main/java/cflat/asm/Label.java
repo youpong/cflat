@@ -1,5 +1,8 @@
 package cflat.asm;
 
+/**
+ * Label
+ */
 public class Label extends Assembly {
     protected Symbol symbol;
 
@@ -15,9 +18,9 @@ public class Label extends Assembly {
         return symbol;
     }
 
-    /*
-     * public boolean isLabel() { return true; }
-     */
+    public boolean isLabel() {
+        return true;
+    }
 
     public String toSource(SymbolTable table) {
         return symbol.toSource(table) + ":";

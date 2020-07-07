@@ -26,8 +26,8 @@ class GNULinker implements Linker {
         List<String> cmd = new ArrayList<String>();
         cmd.add(LINKER);
         /* 
-	 * LD supports these emulation mode
-	 *  * elf_x86_64
+        * LD supports these emulation mode
+        *  * elf_x86_64
          *  * elf32_x86_64
          *  * elf_i386
          *  * elf_iamcu
@@ -35,7 +35,7 @@ class GNULinker implements Linker {
          *  * elf_k1om
          *  * i386pepn
          *  * i386pe
-	 */
+        */
         cmd.add("-melf_i386");
         cmd.add("-dynamic-linker");
         cmd.add(DYNAMIC_LINKER);
