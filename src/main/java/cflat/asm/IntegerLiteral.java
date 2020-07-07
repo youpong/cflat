@@ -31,7 +31,7 @@ public class IntegerLiteral implements Literal {
     // ...
 
     public String toSource() {
-        return new Long(value).toString();
+        return Long.valueOf(value).toString();
     }
 
     public String toSource(SymbolTable table) {
@@ -44,7 +44,7 @@ public class IntegerLiteral implements Literal {
 
     // TODO: test
     public String toString() {
-        return new Long(value).toString();
+        return Long.valueOf(value).toString();
     }
 
     public int compareTo(Literal lit) {
@@ -52,12 +52,12 @@ public class IntegerLiteral implements Literal {
     }
 
     public int cmp(IntegerLiteral i) {
-        return new Long(value).compareTo(new Long(i.value));
+        return Long.valueOf(value).compareTo(Long.valueOf(i.value));
     }
 
     // ...
 
     public String dump() {
-        return "(IntegerLiteral " + new Long(value).toString() + ")";
+        return "(IntegerLiteral " + Long.valueOf(value).toString() + ")";
     }
 }

@@ -86,6 +86,7 @@
 	  <useIncrementalCompilation>true</useIncrementalCompilation>
 	  <compilerArgs>
 	    <arg>-Xdiags:verbose</arg>
+	    <arg>-Xlint:deprecation</arg>
 	    <!--arg>-g</arg-->
 	  </compilerArgs>
 	</configuration>
