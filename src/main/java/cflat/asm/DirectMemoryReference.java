@@ -1,5 +1,8 @@
 package cflat.asm;
 
+/**
+ * operand of direct memory reference.
+ */
 public class DirectMemoryReference extends MemoryReference {
     protected Literal value;
 
@@ -7,7 +10,11 @@ public class DirectMemoryReference extends MemoryReference {
         this.value = val;
     }
 
-    // ...
+    /*
+    public Literal value() {
+    return value;
+    }
+    */
 
     public void collectStatistics(Statistics stats) {
         value.collectStatistics(stats);
@@ -17,7 +24,10 @@ public class DirectMemoryReference extends MemoryReference {
         throw new Error("DirectMemoryReference#fixOffset");
     }
 
-    // ...
+    // TODO: test
+    public String toString() {
+        return toSource(SymbolTable.dummy());
+    }
 
     public String toSource(SymbolTable table) {
         return this.value.toSource(table);

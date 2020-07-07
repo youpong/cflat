@@ -1,14 +1,19 @@
 package cflat.asm;
 
+/**
+ * operand of absolute address
+ */
 public class AbsoluteAddress extends Operand {
     protected Register register;
 
     public AbsoluteAddress(Register reg) {
         this.register = reg;
     }
-
-    // public Operand register()
-
+    /*
+    public Operand register() {
+    return register;
+    }
+    */
     public void collectStatistics(Statistics stats) {
         register.collectStatistics(stats);
     }

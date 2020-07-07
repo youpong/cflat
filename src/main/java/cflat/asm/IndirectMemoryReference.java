@@ -1,5 +1,8 @@
 package cflat.asm;
 
+/**
+ * operand of indirect memory reference
+ */
 public class IndirectMemoryReference extends MemoryReference {
     Literal offset;
     Register base;
@@ -22,8 +25,11 @@ public class IndirectMemoryReference extends MemoryReference {
         this.base = base;
         this.fixed = fixed;
     }
-
-    // ...
+    /*
+    public Literal offset() {
+    return offset;
+    }
+    */
 
     public void fixOffset(long diff) {
         if (fixed) {
@@ -34,7 +40,11 @@ public class IndirectMemoryReference extends MemoryReference {
         this.fixed = true;
     }
 
-    // ...
+    /*
+    public Register base() {
+    return base;
+    }
+    */
 
     public void collectStatistics(Statistics stats) {
         base.collectStatistics(stats);

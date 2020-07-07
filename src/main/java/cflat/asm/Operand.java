@@ -1,15 +1,26 @@
 package cflat.asm;
 
+/**
+ * operand of instruction
+ */
 abstract public class Operand implements OperandPattern {
     abstract public String toSource(SymbolTable table);
 
     abstract public String dump();
 
-    /*
-     * public boolean isRegister() { return false; }
-     */
+    public boolean isRegister() {
+        return false;
+    }
 
-    // ...
+    public boolean isMemoryReference() {
+        return false;
+    }
+
+    /*
+    public IntegerLiteral integerLiteral() {
+    return null;
+    }
+    */
 
     abstract public void collectStatistics(Statistics stats);
 
