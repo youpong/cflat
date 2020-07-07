@@ -1,3 +1,4 @@
+// -*- mode: c; -*-
 enum {
       TOKEN_STRING = 256,
       TOKEN_CHAR,
