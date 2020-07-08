@@ -1,0 +1,13 @@
+int inc(int n) {
+  return n + 1;
+}
+
+int main(void) {
+  int n;
+  int result;
+
+  n = 41;
+  result = inc(n);
+  
+  return result;
+}
