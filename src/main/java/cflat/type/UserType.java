@@ -14,6 +14,7 @@ public class UserType extends NamedType {
     public Type realType() {
         return real.type();
     }
+
     // toString()
 
     //

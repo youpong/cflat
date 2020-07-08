@@ -8,6 +8,8 @@ public class PointerTypeRef extends TypeRef {
         this.baseType = baseType;
     }
 
+    //    isPointer()
+
     public TypeRef baseType() {
         return baseType;
     }

@@ -29,6 +29,10 @@ public class PointerType extends Type {
         return size;
     }
 
+    public Type baseType() {
+        return baseType;
+    }
+
     //
     public boolean isSameType(Type other) {
         if (!other.isPointer())

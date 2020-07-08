@@ -19,6 +19,14 @@ public class ArrayTypeRef extends TypeRef {
         this.length = length;
     }
 
+    //    isArray()
+
+    // TODO: baseType を比較しなくていいの？
+    public boolean equals(Object other) {
+        return (other instanceof ArrayTypeRef)
+                && (length == ((ArrayTypeRef) other).length);
+    }
+
     public TypeRef baseType() {
         return baseType;
     }
@@ -27,11 +35,7 @@ public class ArrayTypeRef extends TypeRef {
         return length;
     }
 
-    // TODO: baseType を比較しなくていいの？
-    public boolean equals(Object other) {
-        return (other instanceof ArrayTypeRef)
-                && (length == ((ArrayTypeRef) other).length);
-    }
+    // isLengthUndefined
 
     public String toString() {
         return baseType.toString() + "[" + (length == undefined ? "" : "" + length)
