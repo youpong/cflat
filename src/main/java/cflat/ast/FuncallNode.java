@@ -1,6 +1,7 @@
 package cflat.ast;
 
-import cflat.exception.SemanticException;
+import cflat.exception.SemanticError;
+import cflat.type.FunctionType;
 import cflat.type.Type;
 import java.util.*;
 
@@ -16,26 +17,45 @@ public class FuncallNode extends ExprNode {
         this.args = args;
     }
 
-    // TODO: implement
-    public Type type() {
-        return null;
-        /*
-         * try { return functionType().returnType(); } catch(ClassCastException err) { throw new
-         * SemanticException(err.getMessage()); }
-         */
-    }
-
-    /*
-     * public FunctionType functionType() { return expr.type().getPointerType().baseType().getFunctionType(); }
-     */
     public ExprNode expr() {
         return expr;
     }
 
+    // TODO: implement
+    /**
+     * Returns a type of return value of the function which is refered by expr. This
+     * method expects expr.type().isCallable() is true.
+     */
+    public Type type() {
+        try {
+            return functionType().returnType();
+        } catch (ClassCastException err) {
+            throw new SemanticError(err.getMessage());
+        }
+    }
+
+    /**
+     * Returns a type of function which is refered by expr. This method expects
+     * expr.type().isCallable() is true.
+     */
+    public FunctionType functionType() {
+        return expr.type().getPointerType().baseType().getFunctionType();
+    }
+    /*
+    public long numArgs() {
+    return args.size();
+    }
+    */
     public List<ExprNode> args() {
         return args;
     }
 
+    // called from TypeChecker
+    /*
+    public void replaceArgs(List<ExprNode> args) {
+    this.args = args;
+    }
+    */
     public Location location() {
         return expr.location();
     }

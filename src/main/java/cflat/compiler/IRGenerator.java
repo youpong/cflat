@@ -50,9 +50,11 @@ import cflat.exception.JumpError;
 import cflat.exception.SemanticException;
 import cflat.ir.Assign;
 import cflat.ir.Bin;
-import cflat.ir.CJump;
+import cflat.ir.Call;
 import cflat.ir.Case;
+import cflat.ir.CJump;
 import cflat.ir.Expr;
+import cflat.ir.ExprStmt;
 import cflat.ir.IR;
 import cflat.ir.Int;
 import cflat.ir.Jump;
@@ -68,6 +70,7 @@ import cflat.ir.Var;
 import cflat.type.Type;
 import cflat.type.TypeTable;
 import cflat.utils.ErrorHandler;
+import cflat.utils.ListUtils;
 import java.util.*;
 
 /**
@@ -575,9 +578,21 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
         }
     }
 
-    // TODO: implement
+    // TODO: test
     public Expr visit(FuncallNode node) {
-        return null;
+        List<Expr> args = new ArrayList<Expr>();
+        for (ExprNode arg : ListUtils.reverse(node.args())) {
+            args.add(0, transformExpr(arg));
+        }
+        Expr call = new Call(asmType(node.type()), transformExpr(node.expr()), args);
+        if (isStatement()) {
+            stmts.add(new ExprStmt(node.location(), call));
+            return null;
+        } else {
+            DefinedVariable tmp = tmpVar(node.type());
+            assign(node.location(), ref(tmp), call);
+            return ref(tmp);
+        }
     }
 
     //
