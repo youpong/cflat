@@ -37,6 +37,6 @@ public class ImmediateValue extends Operand {
     }
 
     public String dump() {
-        return "ImmediateValue " + expr.dump() + ")";
+        return "(ImmediateValue " + expr.dump() + ")";
     }
 }

@@ -3,11 +3,5 @@ int inc(int n) {
 }
 
 int main(void) {
-  int n;
-  int result;
-
-  n = 41;
-  result = inc(n);
-  
-  return result;
+  return inc(41);
 }
