@@ -1,0 +1,13 @@
+// -*- mode: c; -*-
+int inc(int n) {
+  return n + 1;
+}
+
+int main(void) {
+  int (*funcp)();
+
+  funcp = inc;
+
+  //  return (*funcp)(41);
+  return 41;
+}
