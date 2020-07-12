@@ -52,6 +52,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * provides DSL(domain specific language)
+ */
 public class CodeGenerator
         implements
             cflat.sysdep.CodeGenerator,
@@ -157,7 +160,6 @@ public class CodeGenerator
     // generateAssemblyCode
     //
 
-    // 143
     private AssemblyCode generateAssemblyCode(IR ir) {
         AssemblyCode file = newAssemblyCode();
         file._file(ir.fileName());
@@ -951,26 +953,32 @@ public class CodeGenerator
         }
     }
 
+    /** %eax */
     private Register ax() {
         return ax(naturalType);
     }
 
+    /** %al(most low 8 bit in register eax) */
     private Register al() {
         return ax(Type.INT8);
     }
 
+    /** %ebx */
     private Register bx() {
         return bx(naturalType);
     }
 
+    /** %ecx */
     private Register cx() {
         return cx(naturalType);
     }
 
+    /** most low 8 bit in register cx */
     private Register cl() {
         return cx(Type.INT8);
     }
 
+    /** %edx */
     private Register dx() {
         return dx(naturalType);
     }
@@ -978,6 +986,7 @@ public class CodeGenerator
     // ...
 
     // 1051
+    /** type t size of register ax */
     private Register ax(Type t) {
         return new Register(RegisterClass.AX, t);
     }
@@ -985,7 +994,7 @@ public class CodeGenerator
     private Register bx(Type t) {
         return new Register(RegisterClass.BX, t);
     }
-
+    /** type t size of register cx */
     private Register cx(Type t) {
         return new Register(RegisterClass.CX, t);
     }
@@ -997,10 +1006,12 @@ public class CodeGenerator
     // ...
 
     // 1076
+    /** %ebp */
     private Register bp() {
         return new Register(RegisterClass.BP, naturalType);
     }
 
+    /** %esp */
     private Register sp() {
         return new Register(RegisterClass.SP, naturalType);
     }

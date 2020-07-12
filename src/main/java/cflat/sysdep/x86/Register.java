@@ -3,6 +3,10 @@ package cflat.sysdep.x86;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
 
+/**
+ * operand of register like %eax.
+ * concrete class of abstract class cflat.asm.Register.
+ */
 class Register extends cflat.asm.Register {
     RegisterClass _class;
     Type type;
@@ -16,6 +20,8 @@ class Register extends cflat.asm.Register {
         return new Register(_class, t);
     }
 
+    // cflat.asm.Register#isRegister() returns true;
+    // So needless to over write.
     // public boolean isRegister() { return true; }
 
     // ...

@@ -10,10 +10,11 @@ LINKER = cc
 
 .PHONY: clean
 
-all: foo gvar inc memb
+all: 42 func gvar memb
 
 clean:
-	rm -rf *.s *.o foo gvar inc memb
+	rm -rf *.s *.o a.out \
+		42 func gvar memb
 
 .cb.s:
 	$(CC) -S $<

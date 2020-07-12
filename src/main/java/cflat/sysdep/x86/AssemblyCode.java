@@ -22,6 +22,7 @@ import java.util.List;
 
 /**
  * manage list of Assembly instance.
+ * provides DSL(domain specific language)
  */
 public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     final Type naturalType;
