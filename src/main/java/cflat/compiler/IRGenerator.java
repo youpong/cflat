@@ -640,9 +640,11 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
     }
 
     // TODO: implement
+    /*
     private Expr transformIndex(ArefNode node) {
         return null;
     }
+    */
 
     public Expr visit(MemberNode node) {
         Expr expr = addressOf(transformExpr(node.expr()));
@@ -707,10 +709,10 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 
     private boolean isPointerArithmetic(Op op, Type operandType) {
         switch (op) {
-        case ADD :
-        case SUB :
+        case ADD:
+        case SUB:
             return operandType.isPointer();
-        default :
+        default:
             return false;
         }
     }

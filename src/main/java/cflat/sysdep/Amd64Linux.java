@@ -14,7 +14,6 @@ public class Amd64Linux implements Platform {
     // TODO: implement
     public CodeGenerator codeGenerator(CodeGeneratorOptions opts, ErrorHandler h) {
         //    return new cflat.sysdep.amd64.CodeGenerator(opts, naturalType(), h);
-
         return null;
     }
 

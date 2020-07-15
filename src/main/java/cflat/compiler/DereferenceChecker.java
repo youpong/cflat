@@ -13,7 +13,6 @@ import cflat.ast.FuncallNode;
 import cflat.ast.LHSNode;
 import cflat.ast.Location;
 import cflat.ast.MemberNode;
-import cflat.ast.Node;
 import cflat.ast.OpAssignNode;
 import cflat.ast.PrefixOpNode;
 import cflat.ast.PtrMemberNode;
@@ -251,10 +250,11 @@ class DereferenceChecker extends Visitor {
         semanticError(loc, "dereferencing non-pointer expression");
     }
 
+    /*
     private void semanticError(Node n, String msg) {
         semanticError(n.location(), msg);
     }
-
+    */
     private void semanticError(Location loc, String msg) {
         errorHandler.error(loc, msg);
         throw new SemanticError("invalid expr");
