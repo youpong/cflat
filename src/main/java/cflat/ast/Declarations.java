@@ -1,8 +1,5 @@
 package cflat.ast;
 
-import cflat.ast.StructNode;
-import cflat.ast.TypedefNode;
-import cflat.ast.UnionNode;
 import cflat.entity.Constant;
 import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;

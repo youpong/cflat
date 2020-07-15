@@ -1,6 +1,5 @@
 package cflat.compiler;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
@@ -80,8 +79,6 @@ public class OptionsTest {
     @Test
     public void sourceFiles2() {
         String[] args = {"sample/foo.cb", "sample/bar.s", "sample/baz.o"};
-        SourceFile f;
-
         Options opts = Options.parse(args);
         Iterator<SourceFile> ite = opts.sourceFiles().iterator();
 

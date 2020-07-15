@@ -1,7 +1,6 @@
 package cflat.compiler;
 
 import cflat.asm.Label;
-import cflat.asm.SymbolTable;
 import cflat.ast.AST;
 import cflat.ast.ASTVisitor;
 import cflat.ast.AddressNode;

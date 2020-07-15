@@ -1,7 +1,5 @@
 package cflat.compiler;
 
-import java.util.*;
-
 // TODO: test
 /**
  * enum of compiler modes.

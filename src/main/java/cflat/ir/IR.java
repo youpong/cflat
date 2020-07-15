@@ -8,7 +8,6 @@ import cflat.entity.Function;
 import cflat.entity.ToplevelScope;
 import cflat.entity.UndefinedFunction;
 import cflat.entity.Variable;
-import cflat.ir.Dumper;
 import java.io.*;
 import java.util.*;
 

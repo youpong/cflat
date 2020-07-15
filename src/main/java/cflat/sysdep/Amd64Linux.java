@@ -11,14 +11,15 @@ public class Amd64Linux implements Platform {
         return null;
     }
 
+    // TODO: implement
     public CodeGenerator codeGenerator(CodeGeneratorOptions opts, ErrorHandler h) {
-        //        return new cflat.sysdep.x86.CodeGenerator(opts, naturalType(), h);
+        //    return new cflat.sysdep.amd64.CodeGenerator(opts, naturalType(), h);
+
         return null;
     }
 
     private Type naturalType() {
-        //return Type.INT32;
-        return null;
+        return Type.INT64;
     }
 
     public Assembler assembler(ErrorHandler h) {

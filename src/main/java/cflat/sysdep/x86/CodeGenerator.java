@@ -1,11 +1,9 @@
 package cflat.sysdep.x86;
 
-import cflat.asm.BaseSymbol;
 import cflat.asm.DirectMemoryReference;
 import cflat.asm.ImmediateValue;
 import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Label;
-import cflat.asm.Literal;
 import cflat.asm.MemoryReference;
 import cflat.asm.NamedSymbol;
 import cflat.asm.Operand;
@@ -1039,11 +1037,11 @@ public class CodeGenerator
     private ImmediateValue imm(Symbol sym) {
         return new ImmediateValue(sym);
     }
-
+    /* this method is never used locally
     private ImmediateValue imm(Literal lit) {
         return new ImmediateValue(lit);
     }
-
+    */
     private void load(MemoryReference mem, Register reg) {
         as.mov(mem, reg);
     }

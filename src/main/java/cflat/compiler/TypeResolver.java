@@ -16,7 +16,6 @@ import cflat.ast.TypeDefinition;
 import cflat.ast.TypeNode;
 import cflat.ast.TypedefNode;
 import cflat.ast.UnionNode;
-import cflat.ast.VariableNode;
 import cflat.entity.Constant;
 import cflat.entity.DefinedFunction;
 import cflat.entity.DefinedVariable;
