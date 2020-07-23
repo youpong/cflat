@@ -7,6 +7,13 @@ import cflat.asm.Type;
 public class Register extends cflat.asm.Register {
 
 	Type type;
+	RegisterClass _class;
+
+	public Register(RegisterClass _class, Type type) {
+		// TODO Auto-generated constructor stub
+		this._class = _class;
+		this.type = type;
+	}
 
 	@Override
 	public String toSource(SymbolTable table) {

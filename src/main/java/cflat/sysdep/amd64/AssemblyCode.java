@@ -10,6 +10,7 @@ import cflat.asm.DirectMemoryReference;
 import cflat.asm.Directive;
 import cflat.asm.Instruction;
 import cflat.asm.Label;
+import cflat.asm.MemoryReference;
 import cflat.asm.Operand;
 import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
@@ -185,7 +186,40 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 	void jmp(Label label) {
 		insn("jmp", new DirectMemoryReference(label.symbol()));
 	}
+	
+	// same
+	public void lea(Operand src, Register dest) {
+		insn(naturalType, "lea", src, dest);
+	}
 
+	public void neg(Register ax) {
+		// TODO Auto-generated method stub
+		
+	}
 
+	public void not(Register ax) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void test(Register ax, Register ax2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sete(Object al) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void movzx(Object al, Register ax) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void movsx(Register ax, Register ax2) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
