@@ -8,6 +8,7 @@ import cflat.asm.Assembly;
 import cflat.asm.Comment;
 import cflat.asm.DirectMemoryReference;
 import cflat.asm.Directive;
+import cflat.asm.ImmediateValue;
 import cflat.asm.Instruction;
 import cflat.asm.Label;
 import cflat.asm.MemoryReference;
@@ -88,6 +89,10 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 	// same
 	protected void insn(Type t, String op, Operand a, Operand b) {
 		assemblies.add(new Instruction(op, typeSuffix(t), a, b));
+	}
+	// same
+	private void insn(Type t, String op, Operand a) {
+		assemblies.add(new Instruction(op, typeSuffix(t), a));
 	}
 	
 	// same
@@ -221,5 +226,56 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void virtualPush(Register ax) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void virtualPop(Register cx) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sal(Register bits, Register base) {
+		insn(base.type, "sal", bits, base);
+	}
+
+	public void shr(Object cl, Register left) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void sar(Object cl, Register left) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void and(Operand right, Register left) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void or(Operand right, Register left) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void xor(Operand right, Register left) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cltd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void idiv(Register base) {
+		// TODO Auto-generated method stub
+		insn(base.type, "idiv", base);
+	}
+
+
 
 }

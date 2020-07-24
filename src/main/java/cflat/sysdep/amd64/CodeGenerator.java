@@ -4,10 +4,12 @@ import cflat.asm.DirectMemoryReference;
 import cflat.asm.ImmediateValue;
 import cflat.asm.IndirectMemoryReference;
 import cflat.asm.Label;
+import cflat.asm.Operand;
 import cflat.asm.Symbol;
 import cflat.asm.SymbolTable;
 import cflat.asm.Type;
 import cflat.entity.DefinedFunction;
+import cflat.entity.Entity;
 import cflat.ir.Addr;
 import cflat.ir.Assign;
 import cflat.ir.Bin;
@@ -21,6 +23,7 @@ import cflat.ir.Int;
 import cflat.ir.Jump;
 import cflat.ir.LabelStmt;
 import cflat.ir.Mem;
+import cflat.ir.Op;
 import cflat.ir.Return;
 import cflat.ir.Stmt;
 import cflat.ir.Str;
@@ -203,9 +206,100 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
 	}
 
 	@Override
-	public Void visit(Bin s) {
+	public Void visit(Bin node) {
 		// TODO Auto-generated method stub
+		Op op = node.op();
+		Type t = node.type();
+		
+		if (node.right().isConstant() && !doesRequireRegisterOperand(op)) {
+			compile(node.left());
+			compileBinaryOp(op, ax(t), node.right().asmValue());
+		} else if (node.right().isConstant()) {
+			compile(node.left());
+			loadConstant(node.right(), cx());
+			compileBinaryOp(op, ax(t), cx(t));
+		} else if (node.right().isVar()) {
+			compile(node.left());
+			loadVariable((Var)node.right(), cx(t));
+			compileBinaryOp(op, ax(t), cx(t));
+		} else if (node.right().isAddr()) {
+			compile(node.left());
+			loadAddress(node.right().getEntityForce(), cx(t));
+			compileBinaryOp(op, ax(t), cx(t));
+		} else if (node.left().isConstant() || node.left().isVar() || node.left().isAddr()) {
+			compile(node.right());
+			as.mov(ax(), cx());
+			compile(node.left());
+			compileBinaryOp(op, ax(t), cx(t));
+		} else {
+			compile(node.right());
+			as.virtualPush(ax());
+			compile(node.left());
+			as.virtualPop(cx());
+			compileBinaryOp(op, ax(t), cx(t));
+		}
 		return null;
+	}
+
+	private void loadVariable(Var var, Register dest) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void loadAddress(Entity var, Register dest) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void compileBinaryOp(Op op, Register left, Operand right) {
+		// TODO Auto-generated method stub
+		switch (op) {
+		case ADD:
+			as.add(right, left);
+			break;
+		case SUB:
+			as.sub(right, left);
+			break;
+		case MUL:
+			as.imul(right, left);
+			break;
+		case S_DIV:
+		case S_MOD:
+			as.cltd();
+			as.idiv(cx(left.type));
+			if (op == Op.S_MOD) {
+				as.mov(dx(), left);
+			}
+			break;
+		case BIT_AND:
+			as.and(right, left);
+			break;
+		case BIT_OR:
+			as.or(right, left);
+			break;
+		case BIT_XOR:
+			as.xor(right, left);
+			break;
+		case BIT_LSHIFT:
+			as.sal(cl(), left);
+			break;
+		case BIT_RSHIFT:
+			as.shr(cl(), left);
+			break;
+		case ARITH_RSHIFT:
+			as.sar(cl(), left);
+			break;
+		default:
+			throw new Error("unknown binary operator: " + op);
+		}
+		
+	}
+
+
+
+	private boolean doesRequireRegisterOperand(Op op) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
@@ -266,6 +360,26 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
 
 	private Register ax(Type t) {
 		return new Register(RegisterClass.AX, t);
+	}
+	
+	private Register cx() {
+		return cx(naturalType);
+	}
+	
+	private Register cl() {
+		return cx(Type.INT8);
+	}
+	
+	private Register cx(Type t) {
+		return new Register(RegisterClass.CX, t);
+	}
+
+	private Register dx() {
+		return dx(naturalType);
+	}
+	
+	private Register dx(Type t) {
+		return new Register(RegisterClass.DX, t);
 	}
 
 }
