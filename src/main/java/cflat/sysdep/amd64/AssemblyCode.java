@@ -276,6 +276,48 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
 		insn(base.type, "idiv", base);
 	}
 
+	public void cmp(Operand a, Register b) {
+		insn(b.type, "cmp", a, b);
+	}
 
+	public void sete(Register reg) {
+		insn("sete", reg);
+	}
+
+	public void setne(Register reg) {
+		insn("setne", reg);
+	}
+
+	public void seta(Register reg) {
+		insn("seta", reg);
+	}
+
+	public void setae(Register reg) {
+		insn("setae", reg);
+	}
+
+	public void setb(Register reg) {
+		insn("setb", reg);
+	}
+
+	public void setbe(Register reg) {
+		insn("setbe", reg);
+	}
+
+	public void setg(Register reg) {
+		insn("setg", reg);
+
+	}
+	public void setge(Register reg) {
+		insn("setge", reg);
+	}
+
+	public void setl(Register reg) {
+		insn("setl", reg);
+	}
+
+	public void setle(Register reg) {
+		insn("setle", reg);		
+	}
 
 }

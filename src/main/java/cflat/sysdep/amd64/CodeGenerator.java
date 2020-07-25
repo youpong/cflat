@@ -290,12 +290,44 @@ public class CodeGenerator implements cflat.sysdep.CodeGenerator, IRVisitor<Void
 			as.sar(cl(), left);
 			break;
 		default:
-			throw new Error("unknown binary operator: " + op);
+			as.cmp(right, ax(left.type));
+			switch (op) {
+			case EQ :
+				as.sete(al());
+				break;
+			case NEQ:
+				as.setne(al());
+				break;
+			case S_GT:
+				as.setg(al());
+				break;
+			case S_GTEQ:
+				as.setge(al());
+				break;
+			case S_LT:
+				as.setl(al());
+				break;
+			case S_LTEQ:
+				as.setle(al());
+				break;
+			case U_GT:
+				as.seta(al());
+				break;
+			case U_GTEQ:
+				as.setae(al());
+				break;
+			case U_LT:
+				as.setb(al());
+				break;
+			case U_LTEQ:
+				as.setbe(al());
+				break;
+			default:
+				throw new Error("unknown binary operator: " + op);
+			}
+			as.movzx(al(),  left);
 		}
-		
 	}
-
-
 
 	private boolean doesRequireRegisterOperand(Op op) {
 		// TODO Auto-generated method stub
