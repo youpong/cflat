@@ -10,11 +10,11 @@ LINKER = cc
 
 .PHONY: clean
 
-all: 42 func gvar memb
+all: 42 func gvar memb if lvar func_ptr
 
 clean:
 	rm -rf *.s *.o a.out \
-		42 func gvar memb
+		42 func gvar memb if lvar func_ptr
 
 .cb.s:
 	$(CC) -S $<

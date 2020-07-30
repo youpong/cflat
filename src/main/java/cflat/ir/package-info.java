@@ -1,5 +1,5 @@
 /**
- * 中間表現
+ * Intermediate Representation(IR)
  */
 @RuntimeAnnotation
 package cflat.ir;

@@ -8,6 +8,5 @@ int main(void) {
 
   funcp = inc;
 
-  //  return (*funcp)(41);
-  return 41;
+  return (*funcp)(41);
 }

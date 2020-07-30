@@ -1,0 +1,9 @@
+// -*- mode: c; -*-
+int main(void) {
+  int lvar = 42;
+
+  return lvar;
+}
+
+
+  
