@@ -1,0 +1,12 @@
+// -*- mode: c; -*-
+int main(void) {
+  int var = 0;
+  
+  if (var == 0) {
+    var = 42;
+  }  else {
+    var = 41;
+  }
+  
+  return var;
+}
