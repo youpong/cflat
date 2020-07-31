@@ -36,6 +36,7 @@ import cflat.sysdep.CodeGeneratorOptions;
 import cflat.sysdep.amd64.ELFConstants;
 import cflat.sysdep.amd64.Register;
 import cflat.utils.ErrorHandler;
+import cflat.utils.ListUtils;
 
 public class CodeGenerator
         implements
@@ -163,18 +164,18 @@ public class CodeGenerator
 
     @Override
     public Void visit(CJump node) {
-    	compile(node.cond());
-    	Type t = node.cond().type();
-    	as.test(ax(t), ax(t));
-    	as.jnz(node.thenLabel());
-    	as.jmp(node.elseLabel());
-    	return null;
+        compile(node.cond());
+        Type t = node.cond().type();
+        as.test(ax(t), ax(t));
+        as.jnz(node.thenLabel());
+        as.jmp(node.elseLabel());
+        return null;
     }
 
     @Override
     public Void visit(Jump node) {
-    	as.jmp(node.label());
-    	return null;
+        as.jmp(node.label());
+        return null;
     }
 
     @Override
@@ -185,8 +186,8 @@ public class CodeGenerator
 
     @Override
     public Void visit(LabelStmt node) {
-    	as.label(node.label());
-       return null;
+        as.label(node.label());
+        return null;
     }
 
     @Override
@@ -375,12 +376,34 @@ public class CodeGenerator
     }
 
     @Override
-    public Void visit(Call s) {
-        // TODO Auto-generated method stub
-        return null;
+    public Void visit(Call node) {
+        // TODO change amd64
+    	for (Expr arg : ListUtils.reverse(node.args())) {
+    		compile(arg);
+    		as.push(ax());
+    	}
+    	if (node.isStaticCall()) {
+    		as.call(node.function().callingSymbol());
+    	} else {
+    		compile(node.expr());
+    		as.callAbsolute(ax());
+    	}
+    	// >4 bytes arguments are not supported.
+    	rewindStack(as, stackSizeFromWordNum(node.numArgs()));
+       return null;
     }
 
-    /**
+    private void rewindStack(AssemblyCode as2, Object stackSizeFromWordNum) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private Object stackSizeFromWordNum(long numArgs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
      * leal 4(%ebp), %eax
      */
     @Override

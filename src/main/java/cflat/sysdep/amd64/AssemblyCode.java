@@ -192,10 +192,10 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
     void jmp(Label label) {
         insn("jmp", new DirectMemoryReference(label.symbol()));
     }
-    
-	public void jnz(Label label) {
-		insn("jnz", new DirectMemoryReference(label.symbol()));
-	}
+
+    public void jnz(Label label) {
+        insn("jnz", new DirectMemoryReference(label.symbol()));
+    }
 
     // same
     public void lea(Operand src, Register dest) {
@@ -325,5 +325,8 @@ public class AssemblyCode implements cflat.sysdep.AssemblyCode {
         insn("setle", reg);
     }
 
+	public void callAbsolute(Register ax) {
+		// TODO Auto-generated method stub
+	}
 
 }
