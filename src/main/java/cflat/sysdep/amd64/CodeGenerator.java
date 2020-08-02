@@ -191,9 +191,12 @@ public class CodeGenerator
     }
 
     @Override
-    public Void visit(Return s) {
-        // TODO Auto-generated method stub
-        return null;
+    public Void visit(Return node) {
+       if (node.expr() != null) {
+    		compile(node.expr());
+    	}
+    	as.jmp(epilogue);
+       return null;
     }
 
     @Override
