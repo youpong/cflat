@@ -709,10 +709,10 @@ public class IRGenerator implements ASTVisitor<Void, Expr> {
 
     private boolean isPointerArithmetic(Op op, Type operandType) {
         switch (op) {
-        case ADD:
-        case SUB:
+        case ADD :
+        case SUB :
             return operandType.isPointer();
-        default:
+        default :
             return false;
         }
     }
